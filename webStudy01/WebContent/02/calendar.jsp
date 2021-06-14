@@ -53,7 +53,6 @@
 	int week = cal.get(Calendar.DAY_OF_WEEK);
 	int startDay = 1;
 	int endDay = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
-	System.out.println(week);
 
 %>
 <html>
@@ -114,6 +113,7 @@
 		</tr>
 		<tr>
 		<% 	
+			// newLine이 7이 되면 tr태그 닫고 0으로 초기화후 새로운 tr태그 시작
 			int newLine = 0;
 			for(int i = 1; i < week; i++){
 		%>
@@ -158,7 +158,7 @@
 
  
 
-  <!-- Modal -->
+  <!-- 원하는 년월 입력 받은 Modal -->
   <div class="modal fade" id="myModal" role="dialog">
     <div class="modal-dialog">
     

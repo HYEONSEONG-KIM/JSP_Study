@@ -47,6 +47,7 @@ public class ImageListServlet extends HttpServlet{
 			options.append(String.format(pattern, name));
 			
 		}
+		// 클래스 로더 사용하므로 imageList.tmpl의 경로를 찾음
 		InputStream is = getClass().getResourceAsStream("imageList.tmpl");
 		BufferedReader reader = new BufferedReader(new InputStreamReader(is));
 		String tmp = null;
