@@ -1,3 +1,4 @@
+<%@page import="java.util.TimeZone"%>
 <%@page import="java.util.Locale"%>
 <%@page import="java.text.DateFormatSymbols"%>
 <%@page import="java.util.Calendar"%>
@@ -10,6 +11,8 @@
 	String yearStr = request.getParameter("year");
 	String monthStr = request.getParameter("month");
 	String language = request.getParameter("language");
+	String locationTime = request.getParameter("locationTime");
+	
 	
 	Locale locale = request.getLocale();
 	if(language != null && !language.isEmpty()){
@@ -19,12 +22,18 @@
 	
 	// 언어를 설정된 지역의 언어로 
 	DateFormatSymbols dfs = DateFormatSymbols.getInstance(locale);
+	
 	Calendar cal = getInstance();
 	Calendar calServer = getInstance();
 	
 	int nowYear = cal.get(YEAR);
 	int nowMonth = cal.get(MONTH);
 	int nowDay = cal.get(DAY_OF_MONTH);
+	
+	if(locationTime != null && !locationTime.isEmpty()){
+		TimeZone time = TimeZone.getTimeZone(locationTime);
+		calServer.setTimeZone(time);
+	}
 	
 	
 	if(yearStr != null && yearStr.matches("\\d{4}")){
@@ -111,6 +120,20 @@
 					String.format(optionPtrn, selected, tag, name)
 				);
 				
+			}
+		%>
+	</select>
+	
+	<select name = "locationTime">
+		<option value>시간대를 선택하세요</option>
+		<%	
+			// Timezone으로 시간대 목록 가져오기
+			String[] localTime = TimeZone.getAvailableIDs();
+			for(String time : localTime){
+				String selected = time.equals(locationTime) ? "selected" : "";
+				out.println(
+					String.format(optionPtrn, selected, time, time)
+				);
 			}
 		%>
 	</select>
