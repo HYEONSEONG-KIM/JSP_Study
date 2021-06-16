@@ -8,9 +8,11 @@
 <%
 	request.setCharacterEncoding("UTF-8");
 	
+	// 클라이언트 요청 파라미터
 	String yearStr = request.getParameter("year");
 	String monthStr = request.getParameter("month");
 	String language = request.getParameter("language");
+	//---------------------------------------------
 	String locationTime = request.getParameter("locationTime");
 	
 	
@@ -24,18 +26,23 @@
 	DateFormatSymbols dfs = DateFormatSymbols.getInstance(locale);
 	
 	Calendar cal = getInstance();
+	//---------------------------------------------
+	// 현재 서버 시각을 표시하기위한 객체
 	Calendar calServer = getInstance();
 	
+	// 오늘 날짜를 구하기위한 변수
 	int nowYear = cal.get(YEAR);
 	int nowMonth = cal.get(MONTH);
 	int nowDay = cal.get(DAY_OF_MONTH);
 	
+	//---------------------------------------------
+	// 세계 시각을 클라이언트가 요청한 시각대로 셋팅
 	if(locationTime != null && !locationTime.isEmpty()){
 		TimeZone time = TimeZone.getTimeZone(locationTime);
 		calServer.setTimeZone(time);
 	}
 	
-	
+	// 클라이언트가 요청한 년월 셋팅
 	if(yearStr != null && yearStr.matches("\\d{4}")){
 		cal.set(YEAR, Integer.parseInt(yearStr));
 	}
@@ -127,6 +134,7 @@
 	<select name = "locationTime">
 		<option value>시간대를 선택하세요</option>
 		<%	
+			//---------------------------------------------
 			// Timezone으로 시간대 목록 가져오기
 			String[] localTime = TimeZone.getAvailableIDs();
 			for(String time : localTime){
