@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import kr.or.ddit.enumtype.BrowserType;
 import kr.or.ddit.enumtype.MimeType;
 import kr.or.ddit.enumtype.OSType;
@@ -32,11 +34,11 @@ public class UserAgentParsingServlet extends HttpServlet{
 		Map<String, Object> target = new HashMap<>();
 		target.put("browser", browser);
 		target.put("os", os);
-		StringBuffer json = new StringBuffer();
-		String PROPPTRN = "\"%s\" : \"%s\" ,";
+		/*StringBuffer json = new StringBuffer();
+		String PROPPTRN = "\"%s\" : \"%s\" ,";*/
 		// Marshalling : native로 표현된 데이터를 공통 표현방식(xml, json)으로 바꾸는 과정
 		// Unmarshalling : 공통 표현 방식으로 표현된 데이터를 native 방식으로 바꾸는 과정
-		json.append("{");
+		/*json.append("{");
 		for(Entry<String,Object> entry :target.entrySet()) {
 			json.append(String.format(PROPPTRN, entry.getKey(), Objects.toString(entry.getValue(), "")));
 		}
@@ -45,7 +47,11 @@ public class UserAgentParsingServlet extends HttpServlet{
 		int lastIdx = json.lastIndexOf(",");
 		if(lastIdx >= 0) {
 			json.deleteCharAt(lastIdx);
-		}
+		}*/
+		
+		ObjectMapper mapper = new ObjectMapper();
+		String json = mapper.writeValueAsString(target);
+		 
 		
 		MimeType mime = MimeType.findMimeType(accept);
 		Object data = null;

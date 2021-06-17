@@ -9,6 +9,7 @@ public enum MimeType {
 	JSON("application/json;charset=UTF-8"), 
 	SCRIPT("text/javascript;charset=UTF-8"), 
 	PLAIN("text/plain;charset=UTF-8"), 
+	XML("application/xml;charset=UTF-8"),
 	HTML("text/html;charset=UTF-8");
 	
 	private String mimeText;

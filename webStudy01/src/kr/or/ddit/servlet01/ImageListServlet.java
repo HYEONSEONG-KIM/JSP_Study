@@ -23,7 +23,7 @@ public class ImageListServlet extends HttpServlet{
 		super.init(config);
 		application = getServletContext();
 		contentsPath = application.getInitParameter("contentsPath");
-		System.out.printf("%s 서블릿 초기화\n", getClass().getName());
+//		System.out.printf("%s 서블릿 초기화\n", getClass().getName());
 	}
 	
 	@Override
