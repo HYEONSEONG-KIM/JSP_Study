@@ -4,3 +4,4 @@
 - [Resource Identify(URI)](https://github.com/HYEONSEONG-KIM/JSP_Study/blob/main/webStudy01/WebContent/03/resourceIdentify.jsp)
 - [Request객체](https://github.com/HYEONSEONG-KIM/JSP_Study/blob/main/webStudy01/WebContent/03/requestDesc.jsp)
 - [Calendar](https://github.com/HYEONSEONG-KIM/JSP_Study/blob/main/webStudy01/WebContent/04/calendarTea.jsp)
+- [Response객체](https://github.com/HYEONSEONG-KIM/JSP_Study/blob/main/webStudy01/WebContent/06/responseDesc.jsp)
