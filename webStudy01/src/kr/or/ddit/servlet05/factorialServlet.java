@@ -21,8 +21,10 @@ public class factorialServlet extends HttpServlet{
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		
-		String type = req.getParameter("mime");
-		int left = Integer.parseInt(req.getParameter("left"));
+		int left = 0;
+		if(req.getParameter("left") != null && !req.getParameter("left").isEmpty()) {
+			left = Integer.parseInt(req.getParameter("left"));
+		}
 		
 		int result = 1;
 		for(int i = 1; i <= left; i++) {

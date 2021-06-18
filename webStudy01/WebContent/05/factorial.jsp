@@ -51,6 +51,7 @@ xml :
 			type = "text"
 		}
 		
+		
 		$.ajax({
 			url : "<%=request.getContextPath()%>" + url,
 			data : formData,
