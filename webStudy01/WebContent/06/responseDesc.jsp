@@ -33,11 +33,12 @@
 			500(Internal Server Error) => 클라이언트에게 서버의 정보를 주지 않기위해 거의 500으로 처리
 	2. Response Header : Meta data, setHeader(name, value);
 		* Content Type : body영역의 데이터 mime
-		* Cache-Control(Http 1.1버전), Pragma(1.0), Expires : 캐시를 제어할 때 사용
+		* Cache-Control(Http 1.1버전), Pragma(1.0), Expires(만료시점 결정->date타입) : 캐시를 제어할 때 사용
 		 <a href = "cacheControl.jsp">캐시 제어 예제</a>
 		* Refresh : auto request
 			<a href = "autoRequest.jsp">Refresh를 통한 자동 요청</a>
-		* Location 
+		* Location : 페이지 이동
+			<a href = "flowControl.jsp">페이지 이동 예제</a>
 	3. response Body 
 
 </pre>

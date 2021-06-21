@@ -1,10 +1,12 @@
 /**
  * 
  */
+// 엘리먼트 없이 가능
 $.customAlert = function(message){
 	alert(message);
 }
 
+// 엘리먼트 없이 불가능
 $.fn.sessionTimer = function(obj){
 	let a = this;
 	const TIMEOUT = obj.timeout;

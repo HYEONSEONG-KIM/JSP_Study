@@ -7,7 +7,7 @@
 <meta http-equiv="Refresh" content="120">
 <title>06/sessionTimer.jsp</title>
 <script type="text/javascript" src = "<%=request.getContextPath() %>/resources/js/jquery-3.6.0.min.js"></script>
-<script type="text/javascript" src = "<%=request.getContextPath() %>/resources/js/custom.js"></script>
+<script type="text/javascript" src = "<%=request.getContextPath() %>/resources/js/custom_tea.js"></script>
 <script type="text/javascript">
 	
 
@@ -20,11 +20,7 @@
 			
 			
 			let element = $("#timerArea").sessionTimer({
-				timeout : sessionTime ,
-				url : "<%=request.getContextPath()%>/sessionExtend",
-				yesBtn : yesBtn,
-				noBtn : noBtn,
-				message : message
+				timeout :"<%=session.getMaxInactiveInterval() %>" 
 			});
 		
 	});
@@ -43,11 +39,7 @@
 	1) 타이머 리셋
 	2) 세션 연장을 위한 새로운 요청 발생(비동기 - /sessionExtend, body가 없는 응답-head)
  <hr>
-	<div id = "messageArea">
-		세션을 연장하겠습니까?
-		<input type = "button" id = "yesBtn" value = "예"/>
-		<input type = "button" id = "noBtn" value = "아니오"/>
-	</div>
+	
 	
  <%-- <script type="text/javascript">
 	
