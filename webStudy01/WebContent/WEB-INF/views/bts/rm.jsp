@@ -10,7 +10,7 @@
 	<div class="people_info section _people_info people_spc"
 		id="people_info_z" data-dss-logarea="x29">
 		<div class="section_head">
-			<h2>인물 정보</h2>
+			<h2>인물 정보<%=request.getAttribute("searchTime") %></h2>
 		</div>
 		<div class="cont_noline" style="z-index: 10">
 			<div class="profile_wrap">
