@@ -7,3 +7,5 @@
 - [Response객체](https://github.com/HYEONSEONG-KIM/JSP_Study/blob/main/webStudy01/WebContent/06/responseDesc.jsp)
 - [입출력](https://github.com/HYEONSEONG-KIM/JSP_Study/blob/main/languageLab/src/kr/or/ddit/io/StreamDesc.java)
 - [implicitObject](https://github.com/HYEONSEONG-KIM/JSP_Study/blob/main/webStudy01/WebContent/07/implicitObject.jsp)
+- [applicationDesc](https://github.com/HYEONSEONG-KIM/JSP_Study/blob/main/webStudy01/WebContent/08/applicationDesc.jsp)
+- [scopeDesc](https://github.com/HYEONSEONG-KIM/JSP_Study/blob/main/webStudy01/WebContent/08/scopeDesc.jsp)
