@@ -9,3 +9,5 @@
 - [implicitObject](https://github.com/HYEONSEONG-KIM/JSP_Study/blob/main/webStudy01/WebContent/07/implicitObject.jsp)
 - [applicationDesc](https://github.com/HYEONSEONG-KIM/JSP_Study/blob/main/webStudy01/WebContent/08/applicationDesc.jsp)
 - [scopeDesc](https://github.com/HYEONSEONG-KIM/JSP_Study/blob/main/webStudy01/WebContent/08/scopeDesc.jsp)
+- [sessionDesc](https://github.com/HYEONSEONG-KIM/JSP_Study/blob/main/webStudy01/WebContent/08/sessionDesc.jsp)
+- [includeDesc](https://github.com/HYEONSEONG-KIM/JSP_Study/blob/main/webStudy01/WebContent/09/includeDesc.jsp)
