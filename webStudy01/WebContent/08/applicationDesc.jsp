@@ -1,3 +1,5 @@
+<%@page import="java.io.IOException"%>
+<%@page import="java.sql.SQLException"%>
 <%@page import="java.nio.file.StandardCopyOption"%>
 <%@page import="java.nio.file.Paths"%>
 <%@page import="java.nio.file.Path"%>
@@ -59,9 +61,14 @@
 		}else{
 			target = Paths.get(destURL.toURI());
 		}
-		InputStream is = application.getResourceAsStream(imageURL);
-		Files.copy(is, target,StandardCopyOption.REPLACE_EXISTING); 
-	
+		try{
+			InputStream is = application.getResourceAsStream(imageURL);
+			Files.copy(is, target,StandardCopyOption.REPLACE_EXISTING); 
+			if(1 == 1) throw new SQLException("강제 발생 예외");
+		}catch(SQLException e){
+			System.err.println(e.getMessage());
+			throw new IOException(e);
+		}
 	%>
 	/resources/images/333.jpg
 	/08/333.png

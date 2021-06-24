@@ -30,8 +30,33 @@
   
   <session-config>
   	<session-timeout>2</session-timeout>
-  	
   </session-config>
+
+  <error-page>
+  	<exception-type>kr.or.ddit.commons.UserNotFoundExcpetion</exception-type>
+  	<location>/error/noUser.jsp</location>
+  </error-page>  
+  
+   <error-page>
+	<error-code>500</error-code>
+  	<location>/error/error500.jsp</location>
+  </error-page>  
+  
+  <!--   <error-page>
+	<error-code>404</error-code>
+  	<location>/error/error404.jsp</location>
+  </error-page> 
+  
+    <error-page>
+	<error-code>401</error-code>
+  	<location>/error/error401.jsp</location>
+  </error-page> 
+  
+    <error-page>
+	<error-code>403</error-code>
+  	<location>/error/error403.jsp</location>
+  </error-page>  -->
+ 
   
 </web-app>
 

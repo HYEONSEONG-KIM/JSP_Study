@@ -12,6 +12,11 @@
 	1. 정적 텍스트(Front-End, client side) : HTML, JavaScript, CSS
 	2. Back-End, Server side
 		1) scriptlet : <% // java code %> , 지역 코드화
+		<%!
+			public String test(){
+			return "테스트";
+		}
+		%>
 		2) expression : <%="출력 데이터" %>
 		3) directive : <%--@ 지시자명  --%>
 			- page : 현재 jsp페이지에 대한 설정정보(mime, import, errorPage...)

@@ -27,6 +27,8 @@ public class LoginCheckServlet extends HttpServlet {
 		boolean valid = true;
 		if(id == null || id.isEmpty()) {
 			valid = false;
+			if(1 == 1)
+			throw new UserNotFoundExcpetion("사용자가 존재하지 않음");
 			errors.put("mem_id","아이디는 필수 입력");
 		}
 		

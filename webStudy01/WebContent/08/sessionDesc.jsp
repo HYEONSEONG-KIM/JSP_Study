@@ -26,6 +26,7 @@
 		- URL : jsessionid와 같은 세션 파라미터의 형태로 주고받는 방법
 			<a href = "sessionDesc.jsp;jsessionid = <%=session.getId()%>">세션을 유지하는 방법</a> 
 		- SSL(Secure Socket Server -> Transfer Layer Secure)
+		=> 어느것도 완전하지 않기에 3가지 존재
 	
 	4. 세션의 소멸 이벤트 : timeout 이내에 새로운 요청이 발생하지 않으면 소멸
 		1) 명시적인 로그아웃

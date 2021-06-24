@@ -15,7 +15,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import kr.or.ddit.enumtype.MimeType;
 
-@WebServlet("/05/factorial")
+@WebServlet("/05/factoria")
 public class factorialServlet extends HttpServlet{
 
 	@Override

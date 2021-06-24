@@ -26,10 +26,11 @@ xml :
 </result>
 
 	
-<form id = "factorialForm" action = "/05/factorial">
-	<input type = "radio" name = "mime" value ="json"/>JSON
-	<input type = "radio" name = "mime" value ="plain"/>PLAIN
-	<input type = "radio" name = "mime" value ="xml"/>XML
+<form id = "factorialForm" action = "<%=request.getContextPath() %>/05/factorial">
+	<input type = "radio" name = "mime" value ="json" data-type = "json" data-success = "parseJson"/>JSON
+	<input type = "radio" name = "mime" value ="plain" 
+	data-type = "text" checked data-success = "parsePlain"/>PLAIN
+	<input type = "radio" name = "mime" value ="xml" data-type = "xml" data-success = "parseXml"/>XML
 	<input type = "number" name = "left" min = "1" max = "10"/>!
 </form>
 	
@@ -38,7 +39,60 @@ xml :
 
 <script type="text/javascript">
 
-	var form = $('#factorialForm');
+	let resultArea = $('#resultArea')
+	
+	function parsePlain(resp){
+		console.log(resp);
+		resultArea.html(resp);
+	}
+	
+	function parseJson(resp){
+		console.log(resp);
+		resultArea.html(resp.expression);
+	}
+	
+	function parseXml(resp){
+		resultArea.html($(resp).find("expression").text())
+	}
+	
+	
+	
+	
+	$("form:first").on('submit', function(event){
+		event.preventDefault();
+		let url = this.action;
+		let data = $(this).serialize();
+		let method = this.method;
+		let radio = $(this).find("[name='mime']:checked");
+		let dataType = $(radio).data("type");
+		let success = eval($(radio).data("success"));
+		console.log(success);
+		
+		
+		console.log(data);
+	 	$.ajax({
+			url : url,
+			data : data,
+			method : method,
+			dataType : dataType,
+			success : success,
+			error : function(errorResp) {
+
+			} 
+
+		});
+		
+		
+		return false;
+		
+	}).find(":input").on('change', function(){
+		$(this.form).submit();
+		
+	});
+	
+	
+	
+	<%-- var form = $('#factorialForm');
 	
 	$(form).submit(function(event){
 		event.preventDefault();
@@ -72,7 +126,7 @@ xml :
 			}
 
 		});
-	})
+	}) --%>
 	
 </script>
 
