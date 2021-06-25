@@ -68,11 +68,7 @@
 	cal.add(MONTH, -1);
 	
 %>
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>04/calendarTea.jsp</title>
+
 <style type="text/css">
 	.sunday{
 		color : red;
@@ -86,10 +82,8 @@
 	}
 
 </style>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 
-</head>
-<body>
+
 <h4>현재 서버의 시각 : <%=String.format(locale, "%tc", calServer) %></h4>
 <h4>
 <a href = "#" class ="moveA" data-year = "<%=beforeYear%>" data-month = "<%=befoerMonth%>">이전달</a>
@@ -97,6 +91,7 @@
 <a href = "#" class ="moveA" data-year = "<%=nextYear%>" data-month = <%=nextMonth %>>다음달</a>
 </h4>
 <form id = calendarForm>
+	<input type ="hidden" name = "service"  value = "CALENDAR"/>
 	<input type = "number" name = "year" placeholder="<%=year %>" value = "<%=year%>"/>
 	<select name = "month">
 		<option value>월선택</option>
@@ -146,7 +141,7 @@
 		%>
 	</select>
 </form>
-<table>
+<table class = "table table-bordered">
 	<thead>
 		<tr>
 			<%
@@ -211,5 +206,3 @@
 		
 	
 </script>
-</body>
-</html>

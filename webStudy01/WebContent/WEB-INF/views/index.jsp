@@ -1,12 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-</head>
-<body>
+
 <h4>웰컴 페이지</h4>
 <%
 	request.setCharacterEncoding("UTF-8");
@@ -27,9 +21,13 @@
 <h4><%=session.getAttribute("authId") %> 님 
 <a href = "<%=request.getContextPath() %>/login/logout.do">로그아웃</a></h4>
 <%} %>
-</body>
-</html>
 
+<script>
+	console.log($)
+	$(function(){
+		console.log($.fn.modal);
+	})
+</script>
 
 
 
