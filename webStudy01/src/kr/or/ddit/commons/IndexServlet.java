@@ -1,5 +1,6 @@
 package kr.or.ddit.commons;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
@@ -41,6 +42,7 @@ public class IndexServlet extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		
 		
 		String service = req.getParameter("service");
 		ServiceInfoVO infoVO = (ServiceInfoVO) application.getAttribute("serviceInfo");
