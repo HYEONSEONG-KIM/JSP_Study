@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <serviceInfo>
+
 	<menuList>
 		<menu>
 			<code>STANDARD</code>
@@ -25,4 +26,5 @@
 			<text>5칙연산기</text>
 		</menu>
 	</menuList>
+	
 </serviceInfo>
