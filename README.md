@@ -13,6 +13,7 @@
 
 
 # Reinforcement
+- [Adapter Pattern](https://github.com/HYEONSEONG-KIM/JSP_Study/tree/main/languageLab/src/kr/or/ddit/designpattern/adapter)
 - [Exception](https://github.com/HYEONSEONG-KIM/JSP_Study/blob/main/languageLab/src/kr/or/ddit/exception/ExceptionDesc.java)
 - [입출력](https://github.com/HYEONSEONG-KIM/JSP_Study/blob/main/languageLab/src/kr/or/ddit/io/StreamDesc.java)
 - [Reflection](https://github.com/HYEONSEONG-KIM/JSP_Study/blob/main/languageLab/src/kr/or/ddit/reflection/ReflectionDesc.java)
