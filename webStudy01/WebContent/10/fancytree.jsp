@@ -29,6 +29,7 @@
 <div id="tree">
     <ul id="treeData" style="display: none;">
 		<%
+		if(fileMap != null && folderName != null){
 			for(int i = 0; i < folderName.size(); i++){
 				String folder = folderName.get(i);
 				out.print(String.format(folderPtn,folder,folder));
@@ -41,31 +42,8 @@
 				}
 				out.print("</ul>");
 			}
+		}
 		%>
-
-
-     <!-- <li id="file01" class="folder">01
-        <ul>
-          <li>first.jsp
-          <li>gugudan.tmpl
-          <li>sample.tmpl
-        </ul>
-        
-        
-       <li id="file02" class="folder">02
-        <ul>
-          <li>calendar.jsp
-          <li>gugudan.jsp
-          <li>standard.jsp
-        </ul>
-        
-        
-        <li id="file03" class="folder">03
-        <ul>
-          <li>parameterProcess.jsp
-          <li>requestDesc.jsp
-          <li>resourceIdentify.jsp
-        </ul>   -->
         
     </ul>
   </div>

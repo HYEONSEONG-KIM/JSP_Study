@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -16,7 +17,6 @@ import javax.servlet.http.HttpServletResponse;
 
 @WebServlet("/fancytree.do")
 public class FancyTreeServlet extends HttpServlet{
-
 	ServletContext application;
 	
 	@Override

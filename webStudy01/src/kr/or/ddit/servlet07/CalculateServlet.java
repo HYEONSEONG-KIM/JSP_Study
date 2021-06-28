@@ -22,7 +22,7 @@ import kr.or.ddit.vo.CalculateVO;
 import kr.or.ddit.vo.OperatorInfoVO;
 import kr.or.ddit.vo.OperatorVO;
 
-@WebServlet("/calculate.do")
+@WebServlet("/calculate")
 public class CalculateServlet extends HttpServlet {
 	
 	

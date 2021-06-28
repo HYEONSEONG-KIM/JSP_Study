@@ -1,77 +1,90 @@
+<%@page import="kr.or.ddit.enumtype.OperatorType"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 
-<form action ="<%=request.getContextPath() %>/calculate.do" method = "post">
-	<input type = "radio" name = "mime" value = "plain" data-type = "text"  data-success = "toPlain" checked/>PLAIN
-	<input type = "radio" name = "mime" value = "json" data-type = "json" data-success = "toJson"/>JSON
+<form name = "calForm" action ="<%=request.getContextPath() %>/calculate.do" method = "post">
+	<input type = "radio" name = "mime" value = "plain" data-type = "text"  data-success = "parsePlain" checked/>PLAIN
+	<input type = "radio" name = "mime" value = "json" data-type = "json" data-success = "parseJson"/>JSON
 	<input class = "form-control" type = "number" name = "left"/>
-	<div id = "operator"></div>
+	
+	<%
+		OperatorType[] operators = OperatorType.values();
+	
+	%>
+	<select name = "operator">
+		<%
+			for(OperatorType tmp : operators){
+		%>
+			<option value = "<%=tmp.name()%>"><%=tmp.getSign()%></option>
+				
+		<%
+			}
+		%>
+	
+		
+	</select>
+
 	<input class = "form-control" type = "number" name = "right"/>
 	<input type = "submit" value = "="/>
 	<span id = "resultArea"></span>
 </form>
 
 <script>
-	
-	let selector = "<select name ='operator'>"
-	$.ajax({
-		url : "<%=request.getContextPath()%>/calculate.do",
-		dataType : "json",
-		success : function(resp) {
-			
-			$.each(resp, function(i,v){
-				console.log(v)
-				selector += "<option value = '" + v.value +"'>" + v.value + "</option>"
-			})
-			selector += "</select>";
-			
-			$('#operator').html(selector);
-			
+	let resultArea = $("#resultArea");
+
+	let functions = {
+		parsePlain:function(resp){
+			resultArea.text(resp);
 		},
-		error : function(errorResp) {
-
+		parseJson:function(resp){
+			resultArea.text(resp.expression);
 		}
+			
+	}
 
-	});
-	
-	function toPlain(resp){
-		$('#resultArea').html(resp);
-	}
-	
-	function toJson(resp){
-		$('#resultArea').html(resp.expression);
-	}
-	
-	
-	$("form:first").on('submit',function(event){
+
+	$("[name='calForm']").on('submit',function(event){
 		event.preventDefault();
 		let url = this.action;
-		let data = $(this).serialize();
+		let formData = new FormData(this);
+		console.log(formData);
+		console.log(formData.keys());
+		let data = {};
+		for(let key of formData.keys()){
+			console.log(key);
+			console.log(formData.getAll(key));
+			let values = formData.getAll(key);
+			data[key] = values && values.length > 1? values : values[0];
+		}
+		console.log(data)
+		
 		let method = this.method;
-		let radio = $(this).find("[name='mime']:checked");
-		let dataType = $(radio).data("type");
-		let success = eval($(radio).data("success"));
+		let dataType = $(this).find("[name = 'mime']:checked").data("type");
+		let success = $(this).find("[name = 'mime']:checked").data('success');
 		
-		console.log(url);
-		console.log(data);
-		console.log(method);
-		console.log(dataType);
-		console.log(success);
+		let options = {}
+		options.url = url;
+		options.method = "post";
+// 		options.data = data;
+		options.dataType = dataType;
+		options.data = JSON.stringify(data);
+		// 보내는 mime body
+		options.contentType = "application/json;charset=utf-8"
+		options.success = functions[success];
+		$.ajax(options);
 		
-		$.ajax({
-			url : url,
-			data : data,
-			method : method,
-			dataType : dataType,
-			success : success,
-			error : function(errorResp) {
-
-			}
-
-		});
-		
+		return false;
 	})
-	
-	
-
 </script>
+
+
+
+
+
+
+
+
+
+
+
+
