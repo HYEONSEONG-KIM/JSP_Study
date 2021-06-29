@@ -36,8 +36,10 @@ public class ServerFileBrowserServlet extends HttpServlet {
 		
 		String accept = req.getHeader("Accept");
 		if(accept.indexOf("json") >= 0) {
+			// 비동기방식으로 파일목록을 응답할때의 코드
 			processJsonRequest(req,resp);
 		}else {
+			// 최초의 UI만 로딩 할때의 응답 코드
 			String dest = "/WEB-INF/views/serverBrowser.jsp";
 			req.getRequestDispatcher(dest).forward(req,resp);
 			

@@ -23,8 +23,10 @@ public class CalculateServlet extends HttpServlet{
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		
+		// post요청시 request의 body가 생성-> 이때 데이터의 형식을 표현하는 것이 content-Type
 		String contentType = req.getHeader("Content-Type");
 		OperateVO operateVO = null;
+		// accpet는 서버에 어떤 형식으로 달라는 요청이 담겨있음
 		String accept = req.getHeader("Accept");
 		
 		if(contentType != null && contentType.contains("json")) {
@@ -36,6 +38,7 @@ public class CalculateServlet extends HttpServlet{
 		
 		Object content = null;
 		
+		// vo객체가 json으로 mashaling이 될때는 자바 빈 규약에 의해 변환
 		if(accept.contains("json")) {
 			resp.setContentType("application/json;charset=utf-8");
 			ObjectMapper mapper = new ObjectMapper();

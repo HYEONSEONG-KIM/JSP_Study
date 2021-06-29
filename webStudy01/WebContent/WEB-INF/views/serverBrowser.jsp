@@ -25,6 +25,7 @@ $("#tree").fancytree({
 		  
 		lazyLoad: function(event, data){
 		      var node = data.node;
+		      console.log(node)
 		      data.result = {
 		    	url: location.pathname,
 		        data: {base:node.key},

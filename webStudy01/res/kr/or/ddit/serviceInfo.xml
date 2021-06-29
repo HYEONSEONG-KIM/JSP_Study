@@ -25,6 +25,16 @@
 			<link>/10/calculator.jsp</link>
 			<text>5칙연산기</text>
 		</menu>
+		
+		<menu>
+			<code>JDBC</code>
+			<href>/11/jdbcDesc.do</href>
+			<text>JDBC</text>
+		</menu>
+		
 	</menuList>
 	
 </serviceInfo>
+
+
+
