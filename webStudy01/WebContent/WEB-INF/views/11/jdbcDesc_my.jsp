@@ -49,54 +49,57 @@
 	<tfoot>
 		<tr>
 			<td colspan = "3">
-				<div id = "searchUI">
-					<input type = "text" name= "search"/>
-					<input type = "button" value = "검색" id = "searchBtn"/>
-				</div>
+				<input type = "text" name= "search" id = "search"/>
+				<input type = "submit" value = "검색"/>
 			</td>
 		</tr>
 	</tfoot>
 </table>
-<form id = "searchForm">
-	<input type = "text" name ="search"/>
-</form>
 <script type="text/javascript">
-	function makeTdFromData(propVO){
+	function makeTdFromData(propVO,search){
+	
+		
+		
+		console.log(search)
 		let tds = [];
-		
-		for(let propName in propVO){
-				
-			console.log(propName)
-			let td = $("<td>").html(propVO[propName])
-			tds.push(td); 
+		var flag = false;
+		if(search != null){
+			for(let propName in propVO){
+				str = propVO[propName]
+				if(str != null){
+				if(str.indexOf(search) != -1){
+					flag = true;
+					if(flag){
+						break;
+					}
+				}
+				}
+			}
+		}else{
+			
+			flag = true;
 		}
+	
 		
-		return tds;
+		
+		if(flag){
+			for(let propName in propVO){
+				
+				console.log(propName)
+				let td = $("<td>").html(propVO[propName])
+				tds.push(td); 
+			}
+			return tds;
+		}else{
+			return
+		} 
 	}
 	
 	let tbody = $("table>tbody");
 	
-	let searchUI = $("#searchUI").on('click','#searchBtn',function(){
-		let inputs = searchUI.find(":input[name]");
-		$(inputs).each(function(idx, input){
-			let name = this.name;
-			let value = $(this).val();
-			searchForm.find("[name='"+name+"']").val(value)
-		})
-		searchForm.submit();
-	});
-	
-	let searchForm = $("#searchForm").on("submit",function(event){
-		event.preventDefault();
-		let url = this.action;
-		let formData = new FormData(this);
-/* 		let data = {};
-		for( let key of formData.key()){
-			data[key] = formData.get(key);
-		} */
-		let data = $(this).serialize();
+	function ajaxFunc(search){
 		$.ajax({
-			data : data,
+			url : "<%=request.getContextPath()%>/11/jdbcDesc.do",
 			dataType : "json",
 			success : function(resp) {
 				
@@ -106,18 +109,33 @@
 				$.each(resp,function(i,v){
 					trs.push($("<tr>").append(makeTdFromData(v)));
 				})
+					localStorage.setItem('DBProperty', JSON.stringify(resp));
 				
 				tbody.append(trs);
 			},
 			error : function(errorResp) {
 			}
 		});
-		return false;
-	}).submit();
+	}
+	ajaxFunc();
 	
+	let searchInput = $('#search');
 	
-	
-
+	 $("[type = 'submit']").on('click',function(){
+		info = JSON.parse(localStorage.getItem("DBProperty"));
+		val = searchInput.val();
+		
+	 	tbody.empty(); 
+	 	let trs = [];
+		$.each(info,function(i,v){
+			trs.push($("<tr>").append(makeTdFromData(v,val)));
+		})
+		tbody.append(trs);
+	}) 
+	/* $("[name='search']").on('keyup',function(){
+		value = $(this).val();
+		ajaxFunc(value);
+	}) */
 </script>
 </body>
 </html>

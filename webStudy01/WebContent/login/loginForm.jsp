@@ -21,9 +21,14 @@
 <%--
 	String failId = (String)session.getAttribute("failId");
 --%>
+<%
+	// flash attribute
+	String message = (String)session.getAttribute("message");
+	session.removeAttribute("message");
+%>
 <div class = "error">
 	<%-- <%=request.getAttribute("errors") %> --%>
-	${errors }
+	<%=message %>
 </div>
 <form name = "loginForm" id = "loginForm" action = "<%=request.getContextPath()%>/login/loginCheck.do" method = "post">
 	<ul>
@@ -41,7 +46,8 @@
 		</li>
 		
 		<li>
-			비밀번호 : <input pattern = "^(?=.*[a-z]+)(?=.*[A-Z]+)(?=.*[0-9]+)(?=.*[!@#\\$%\\^\\&\\*]+).{4,8}$"  type = "text" data-msg-pattern = "형식확인" id= "mem_pass" name = "mem_pass" required/>
+			비밀번호 : <input   type = "text" data-msg-pattern = "형식확인" id= "mem_pass" name = "mem_pass" required/>
+			<!-- pattern = "^(?=.*[a-z]+)(?=.*[A-Z]+)(?=.*[0-9]+)(?=.*[!@#\\$%\\^\\&\\*]+).{4,8}$" -->
 			<input type = "submit" value = "로그인"/>
 		</li>
 	</ul>

@@ -31,11 +31,16 @@ public class DataBasePropertyController extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		
 		String accept = req.getHeader("Accept");
+		String search = req.getParameter("search");
+		DataBasePropertyVO param = new DataBasePropertyVO();
+		param.setProperty_name(search);
+		param.setProperty_value(search);
+		param.setDescription(search);
+		List<DataBasePropertyVO> propList = service.retriveDataBaseProperties(param);
 		
 		if(accept.contains("json")) {
 			
 			resp.setContentType("application/json;charset=utf-8");
-			List<DataBasePropertyVO> propList = service.retriveDataBaseProperties();
 			ObjectMapper mapper= new ObjectMapper();
 			
 			try(
@@ -46,7 +51,7 @@ public class DataBasePropertyController extends HttpServlet {
 			
 		}else {
 			//String dest = "/WEB-INF/views/11/jdbcDesc.jsp";
-			req.setAttribute("contentsPage", "/WEB-INF/views/11/jdbcDesc.jsp" );
+			req.setAttribute("contentsPage", "/WEB-INF/views/11/jdbcDesc_my.jsp" );
 			String dest = "/WEB-INF/views/template.jsp";
 			req.getRequestDispatcher(dest).forward(req, resp);
 		}

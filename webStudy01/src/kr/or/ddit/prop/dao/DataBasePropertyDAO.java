@@ -11,5 +11,5 @@ import kr.or.ddit.vo.DataBasePropertyVO;
  *
  */
 public interface DataBasePropertyDAO {
-	public List<DataBasePropertyVO> selectDataBasePropertyList();
+	public List<DataBasePropertyVO> selectDataBasePropertyList(DataBasePropertyVO param);
 }

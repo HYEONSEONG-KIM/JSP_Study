@@ -11,8 +11,8 @@ public class DataBasePropertyServiceImple implements DataBasePropertyService{
 
 	private DataBasePropertyDAO dao = new DataBasePropertyDaoImpl();
 	@Override
-	public List<DataBasePropertyVO> retriveDataBaseProperties() {
-		List<DataBasePropertyVO> propList = dao.selectDataBasePropertyList();
+	public List<DataBasePropertyVO> retriveDataBaseProperties(DataBasePropertyVO param) {
+		List<DataBasePropertyVO> propList = dao.selectDataBasePropertyList(param);
 		// logic -> information
 		Calendar cal = Calendar.getInstance();
 		String pattern = "%s, %tc";
