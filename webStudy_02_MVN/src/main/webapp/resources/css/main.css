@@ -1,0 +1,25 @@
+@charset "UTF-8";
+header{
+	height: 100px;
+	width: 100%;
+	background-color: blue;
+}
+
+#leftMenu{
+	width: 19%;
+	float : left;	
+	background-color: green;
+}
+
+#contents{
+	width: 80%;
+	float : right;
+	background-color: yellow;
+}
+
+footer{
+	float : left;
+	height: 100px;
+	width: 100%;
+	background-color: pink;
+}
