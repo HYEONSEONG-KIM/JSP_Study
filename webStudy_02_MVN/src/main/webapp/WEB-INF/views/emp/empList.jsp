@@ -10,36 +10,31 @@
 <link rel = "stylesheet" href= "<%=request.getContextPath() %>/resources/js/fancytree/skin-win8/ui.fancytree.min.css">
 <script type="text/javascript" src = "<%=request.getContextPath() %>/resources/js/fancytree/jquery.fancytree-all-deps.min.js"></script>
 <style>
-	table, td, th {
-		border : 1px solid black;
+	#par{
+		display: flex;
+		flex-direction: row;
+		width:100%;
+		
 	}
-	td, th{
-		width: 100px;
-		height: 50px;
+	#tables{
+		margin-left: 100px;
 	}
+	
+	
 </style>
 </head>
 <body>
-<div id = "tree">
+<div id = "par">
+	<div id = "tree"></div>
 
+	<div id= "tables">
+			<table class = "table">
+			
+			</table>
+			<div id = "btn"></div>
+	</div>
 </div>
 
-
-<table>
-	<tr>
-		<th>사원 번호</th>
-		<th>이름</th>
-		<th>직업</th>
-		<th>mgr</th>
-		<th>입사일자</th>
-		<th>sal</th>
-		<th>comm</th>
-		<th>부서 번호</th>
-		<th>부서이름</th>
-	</tr>
-	<tr id = "detailContent">
-	</tr>
-</table>
 <script type="text/javascript">
 	$('#tree').fancytree({
 		source:{
@@ -61,9 +56,10 @@
 	});
 	
 	$('#tree').on('click', '.fancytree-title', function(){
+		
 		let detail = $('#detailContent');
-		detail.empty();
 		empno = $(this).attr('title')
+		
 		let data = {
 			"empno" : empno
 		}
@@ -75,11 +71,20 @@
 			success : function(resp) {
 				let tds = [];
 				for(let name in resp){
-					let td = $("<td>").html(resp[name])
+					let tr =$("<tr>")
+					tds.push(tr); 
+					let th = $("<th>").html(name)
+					tds.push(th);
+					let input = $("<input type = 'text'>").val(resp[name])
+					let td = $("<td>").append(input)
 					tds.push(td); 
-					console.log(resp[name])
 				}
-				detail.html(tds);
+				let modify = $("<input type = 'button' value = '수정' id = 'modify'> ");
+				let deletes = $("<input type = 'button' value = '삭제' id = 'delete'>");
+// 				detail.html(tds);
+				$('.table').html(tds);
+				$('#btn').append(modify)
+				$('#btn').append(deletes)
 			},
 			error : function(errorResp) {
 
@@ -92,3 +97,4 @@
 </script>
 </body>
 </html>
+<jsp:include page="/includee/footer.jsp"></jsp:include>
