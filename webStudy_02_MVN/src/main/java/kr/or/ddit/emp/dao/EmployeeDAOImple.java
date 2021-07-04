@@ -76,6 +76,7 @@ public class EmployeeDAOImple implements EmployeeDAO {
 	    		  empList.add(empVO);
 	    		  
 	    	  }
+	    	  System.out.println(empList);
 	    	  rs.close();
 	    	  return empList;
 	      }catch(SQLException e) {
@@ -131,8 +132,47 @@ public class EmployeeDAOImple implements EmployeeDAO {
 
 	@Override
 	public int updateEmployee(EmployeeVO employee) {
-		// TODO Auto-generated method stub
-		return 0;
+		
+		int empno = employee.getEmpno();
+		StringBuffer sql = new StringBuffer();
+		sql.append("    UPDATE EMP SET    ");
+		sql.append("       ename = ? ,    ");
+		sql.append("       job= ?,        ");
+		sql.append("       hiredate = to_date(?,'YYYY-MM-DD hh24:MI:SS'),  ");
+		sql.append("       sal = ?,       ");
+		sql.append("       comm = ?,      ");
+		sql.append("       deptno = ?     ");
+		if(empno != 7839) {
+			sql.append("      , mgr = ?      ");
+		}		
+			sql.append("      WHERE empno = ? ");
+		
+		
+		try(
+			Connection conn = ConnectionFactory.getConnection();
+			PreparedStatement pstmt = conn.prepareStatement(sql.toString());
+		){
+			System.out.println(employee.getEmpno());
+			pstmt.setString(1, employee.getEname());
+			pstmt.setString(2, employee.getJob());
+			pstmt.setString(3, employee.getHiredate());
+			pstmt.setInt(4, employee.getSal());
+			pstmt.setInt(5, employee.getComm());
+			pstmt.setInt(6, employee.getDeptno());
+			if(empno != 7839) {
+				pstmt.setInt(7, employee.getMgr());
+				pstmt.setInt(8, employee.getEmpno());
+			}else {
+				pstmt.setInt(7, employee.getEmpno());
+			}
+			int result = pstmt.executeUpdate();
+		
+			return result;
+		}catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+		
+		
 	}
 
 	@Override

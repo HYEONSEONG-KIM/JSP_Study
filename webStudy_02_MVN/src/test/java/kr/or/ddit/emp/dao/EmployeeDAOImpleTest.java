@@ -40,14 +40,23 @@ public class EmployeeDAOImpleTest {
 
 	@Test
 	public void testSelectEmployee() {
-		EmployeeVO vo = empDAO.selectEmployee(7369);
-		assertNotNull(vo);
-		System.out.println(vo);
+		fail("Not yet implemented");
 	}
 
 	@Test
 	public void testUpdateEmployee() {
-		fail("Not yet implemented");
+		EmployeeVO vo = new EmployeeVO();
+		vo.setEmpno(7839);
+		vo.setEname("KING");
+		vo.setJob("PRESIDENT");
+		vo.setMgr(0);
+		vo.setHiredate("1981-11-17 00:00:00");
+		vo.setSal(6000);
+		vo.setComm(0);
+		vo.setDeptno(10);
+		
+		System.out.println(empDAO.updateEmployee(vo));
+		
 	}
 
 	@Test

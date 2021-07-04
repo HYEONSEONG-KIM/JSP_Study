@@ -28,9 +28,11 @@
 	<div id = "tree"></div>
 
 	<div id= "tables">
+		<form id = "tableForm">
 			<table class = "table">
 			
 			</table>
+		</form>
 			<div id = "btn"></div>
 	</div>
 </div>
@@ -55,10 +57,12 @@
 		  }
 	});
 	
+	
 	$('#tree').on('click', '.fancytree-title', function(){
 		
 		let detail = $('#detailContent');
 		empno = $(this).attr('title')
+		$('#btn').empty()
 		
 		let data = {
 			"empno" : empno
@@ -75,13 +79,17 @@
 					tds.push(tr); 
 					let th = $("<th>").html(name)
 					tds.push(th);
-					let input = $("<input type = 'text'>").val(resp[name])
+					let input = null;
+					if(name == "empno"){
+						input = $("<input type = 'text' readonly name = '"+  name+"'>").val(resp[name])
+					}else{
+						input = $("<input type = 'text' name = '"+  name+"'>").val(resp[name])
+					}
 					let td = $("<td>").append(input)
 					tds.push(td); 
 				}
 				let modify = $("<input type = 'button' value = '수정' id = 'modify'> ");
 				let deletes = $("<input type = 'button' value = '삭제' id = 'delete'>");
-// 				detail.html(tds);
 				$('.table').html(tds);
 				$('#btn').append(modify)
 				$('#btn').append(deletes)
@@ -91,6 +99,25 @@
 			}
 
 		});
+		
+		$('#btn').on('click', '#modify',function(){
+
+			let url = "<%=request.getContextPath()%>/employee/empUpdate.do";
+			let data = $('#tableForm').serialize();
+			console.log(data)
+		 	$.ajax({
+				url : url,
+				data : data,
+				dataType : "json",
+				success : function(resp) {
+					console.log(resp)
+				},
+				error : function(errorResp) {
+
+				}
+
+			}); 
+		})
 		
 		
 	})

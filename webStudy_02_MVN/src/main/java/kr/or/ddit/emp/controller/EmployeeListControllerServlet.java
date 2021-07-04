@@ -38,6 +38,7 @@ public class EmployeeListControllerServlet extends HttpServlet {
 			List<EmployeeWrapper> wrapperList = service.retrieveEmployeeList(pMap);
 			resp.setContentType("application/json;charset=UTF-8");
 			ObjectMapper mapper = new ObjectMapper();
+			System.out.println(wrapperList);
 			try(
 				PrintWriter out = resp.getWriter();
 			){

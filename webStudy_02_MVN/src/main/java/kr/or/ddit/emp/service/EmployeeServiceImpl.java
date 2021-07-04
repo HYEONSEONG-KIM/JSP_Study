@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import kr.or.ddit.commons.exception.DataNotFoundException;
 import kr.or.ddit.emp.dao.EmployeeDAO;
 import kr.or.ddit.emp.dao.EmployeeDAOImple;
 import kr.or.ddit.enumtype.ServiceResult;
@@ -46,8 +47,17 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Override
 	public ServiceResult modifyEmployee(EmployeeVO employee) {
-		// TODO Auto-generated method stub
-		return null;
+		int result = empDAO.updateEmployee(employee);
+		
+		if(employee == null) {
+			throw new DataNotFoundException("데이터를 찾을 수 없습니다");
+		}
+		
+		if(result > 0) {
+			return ServiceResult.OK;
+		}else{
+			return ServiceResult.FAIL;
+		}
 	}
 
 	@Override
