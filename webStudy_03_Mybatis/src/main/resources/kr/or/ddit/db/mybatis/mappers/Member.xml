@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 여기서 사용할 DAO interface 경로 설정(Mybatis의 경로는 모두 classpath이므로 kr부터의 상대경로(/ 없이) 표시 ) -->
+<mapper namespace="kr.or.ddit.member.dao.MemberDAO">
+
+	<!-- id => 해당 sql을 사용할 메서드 명 (코드 어시스트 치면 나옴) parameterType => 파라미터  resultType => 반환값 타입-->
+	<select id="selectMemberById" parameterType="string" resultType="MemberVO">
+		SELECT MEM_ID, MEM_PASS, MEM_NAME FROM MEMBER WHERE MEM_ID = #{mem_id}
+	</select>
+	
+	<select id="selectMemberList" resultType="MemberVO">
+		SELECT * FROM member       
+	</select>
+
+	<select id="selectMemberDatail" parameterType="string" resultType="MemberVO">
+		SELECT * FROM MEMBER WHERE MEM_ID = #{mem_id}
+	</select>
+	
+	<update id="updateMember" parameterType="MemberVO">
+		UPDATE MEMBER SET 
+		MEM_NAME=#{memName ,jdbcType=VARCHAR},
+		MEM_ZIP=#{memZip, jdbcType=VARCHAR},
+		MEM_ADD1=#{memAdd1, jdbcType=VARCHAR},
+		MEM_ADD2=#{memAdd2, jdbcType=VARCHAR},
+		MEM_HOMETEL=#{memHometel, jdbcType=VARCHAR},
+		MEM_COMTEL=#{memComtel, jdbcType=VARCHAR},
+		MEM_HP=#{memHp, jdbcType=VARCHAR},
+		MEM_MAIL=#{memMail, jdbcType=VARCHAR},
+		MEM_JOB=#{memJob, jdbcType=VARCHAR},
+		MEM_LIKE=#{memLike, jdbcType=VARCHAR},
+		MEM_MEMORIAL=#{memMemorial, jdbcType=VARCHAR},
+		MEM_MEMORIALDAY=TO_DATE(#{memMemorialday, jdbcType=DATE}, 'YYYY-MM-DD HH24:mi:ss')
+		WHERE MEM_ID=#{memId}
+	</update>
+	
+	<update id="deleteMember" parameterType="string">
+		UPDATE MEMBER 
+		SET
+		MEM_DELETE = '1'
+		WHERE MEM_ID = #{mem_id}
+	</update>
+</mapper>
