@@ -7,6 +7,7 @@ import kr.or.ddit.enumtype.ServiceResult;
 import kr.or.ddit.member.dao.MemberDAO;
 import kr.or.ddit.member.dao.MemberDAOImpl;
 import kr.or.ddit.vo.MemberVO;
+import kr.or.ddit.vo.pagingVO;
 
 public class MemberServiceImpl implements MemberService {
 
@@ -27,10 +28,15 @@ public class MemberServiceImpl implements MemberService {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	@Override
+	public int retrieveMemberCount(pagingVO pagingvo) {
+
+		return memberDao.selectTotalRecord(pagingvo);
+	}
 
 	@Override
-	public List<MemberVO> retrieveMemberList() {
-		List<MemberVO> memberList = memberDao.selectMemberList();
+	public List<MemberVO> retrieveMemberList(pagingVO pagingVO) {
+		List<MemberVO> memberList = memberDao.selectMemberList(pagingVO);
 		
 		return memberList;
 	}
@@ -89,5 +95,7 @@ public class MemberServiceImpl implements MemberService {
 		
 		return result;
 	}
+
+
 
 }

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<operatorInfo>
+	<operatorList>
+		<operator>
+			<value>+</value>
+		</operator>
+		
+		<operator>
+			<value>-</value>
+		</operator>
+		
+		<operator>
+			<value>*</value>
+		</operator>
+		
+		<operator>
+			<value>/</value>
+		</operator>
+		
+		<operator>
+			<value>%</value>
+		</operator>
+		
+	</operatorList>
+</operatorInfo>

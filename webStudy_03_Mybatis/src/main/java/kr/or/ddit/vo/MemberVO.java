@@ -1,6 +1,8 @@
 package kr.or.ddit.vo;
 
 import java.io.Serializable;
+import java.util.List;
+import java.util.Set;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -51,8 +53,8 @@ public class MemberVO implements Serializable{
 	private String memMemorial;
 	private String memMemorialday;
 	private Integer memMileage;
-	private String memDelete;
+	private Boolean memDelete;
 	
-	
+	private Set<ProdVO> prodList; // has many 관계 - 1:n 관계
 	
 }

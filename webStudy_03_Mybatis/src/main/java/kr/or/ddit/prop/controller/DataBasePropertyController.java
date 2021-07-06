@@ -33,8 +33,8 @@ public class DataBasePropertyController extends HttpServlet {
 		String accept = req.getHeader("Accept");
 		String search = req.getParameter("search");
 		DataBasePropertyVO param = new DataBasePropertyVO();
-		param.setProperty_name(search);
-		param.setProperty_value(search);
+		param.setPropertyName(search);
+		param.setPropertyValue(search);
 		param.setDescription(search);
 		List<DataBasePropertyVO> propList = service.retriveDataBaseProperties(param);
 		
@@ -51,7 +51,7 @@ public class DataBasePropertyController extends HttpServlet {
 			
 		}else {
 			//String dest = "/WEB-INF/views/11/jdbcDesc.jsp";
-			req.setAttribute("contentsPage", "/WEB-INF/views/11/jdbcDesc_my.jsp" );
+			req.setAttribute("contentsPage", "/WEB-INF/views/11/jdbcDesc.jsp" );
 			String dest = "/WEB-INF/views/template.jsp";
 			req.getRequestDispatcher(dest).forward(req, resp);
 		}

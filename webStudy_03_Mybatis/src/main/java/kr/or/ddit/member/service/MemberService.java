@@ -5,6 +5,7 @@ import java.util.List;
 import kr.or.ddit.commons.UserNotFoundExcpetion;
 import kr.or.ddit.enumtype.ServiceResult;
 import kr.or.ddit.vo.MemberVO;
+import kr.or.ddit.vo.pagingVO;
 
 /**
  *	회원 관리(CRUD) Business Logic Layer 
@@ -19,7 +20,9 @@ public interface MemberService {
 	 */
 	public ServiceResult creatMember(MemberVO member);
 	
-	public List<MemberVO> retrieveMemberList();
+	public int retrieveMemberCount(pagingVO pagingvo);
+	
+	public List<MemberVO> retrieveMemberList(pagingVO pagingVO);
 
 	/**
 	 * 

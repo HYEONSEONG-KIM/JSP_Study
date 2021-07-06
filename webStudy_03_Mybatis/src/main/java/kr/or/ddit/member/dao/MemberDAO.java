@@ -3,6 +3,7 @@ package kr.or.ddit.member.dao;
 import java.util.List;
 
 import kr.or.ddit.vo.MemberVO;
+import kr.or.ddit.vo.pagingVO;
 
 /**
  *	회원관리(CRUD)를 위한 persistence Layer 
@@ -12,7 +13,18 @@ import kr.or.ddit.vo.MemberVO;
 public interface MemberDAO {
 
 	public int insertMember(MemberVO member);
-	public List<MemberVO> selectMemberList();
+	/**
+	 * 페이징 처리를 위해 total record조회
+	 * @param pagingVO
+	 * @return
+	 */
+	public int selectTotalRecord(pagingVO pagingVO);
+	/**
+	 * 페이징 처리를 위해 구간별 데이터를 조회
+	 * @param pagingVO
+	 * @return
+	 */
+	public List<MemberVO> selectMemberList(pagingVO pagingVO);
 	public MemberVO selectMemberDatail(String mem_id);
 	
 	

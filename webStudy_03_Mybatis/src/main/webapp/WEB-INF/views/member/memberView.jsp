@@ -1,3 +1,5 @@
+<%@page import="kr.or.ddit.vo.ProdVO"%>
+<%@page import="java.util.Set"%>
 <%@page import="org.apache.commons.lang3.StringUtils"%>
 <%@page import="kr.or.ddit.vo.MemberVO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -30,6 +32,7 @@
 				alert("<%=deleteMessage%>");
 			</script>
 			<% 
+			// flash Attribute 방식
 			session.removeAttribute("deleteMessage");
 		}
 	
@@ -118,6 +121,53 @@
 			<td><%=member.getMemDelete()%></td>
 		</tr>
 
+		<tr>
+			<th>구매기록</th>
+			<td>
+				<table>
+					<thead>
+						<tr>
+							<th>상품분류</th>
+							<th>거래처명</th>
+							<th>거래처소재지</th>
+							<th>상품명</th>
+							<th>구매가</th>
+							<th>판매가</th>
+							<th>마일리지</th>
+						</tr>
+					</thead>
+					<tbody>
+						<%
+							Set<ProdVO> prodList = member.getProdList();
+							if(prodList.isEmpty()){
+								%>
+								<tr>
+									<td colspan="7">구매 기록 없음</td>
+								</tr>
+								<%
+							}else{
+								for(ProdVO prod : prodList){
+									%>
+									<tr>
+										<td><%=prod.getLprodNm() %></td>
+										<td><%=prod.getBuyer().getBuyerName() %></td>
+										<td><%=prod.getBuyer().getBuyerAdd1() %></td>
+										<td><%=prod.getProdName() %></td>
+										<td><%=prod.getProdCost() %></td>
+										<td><%=prod.getProdPrice() %></td>
+										<td><%=prod.getProdMileage() %></td>
+									</tr>
+									<%
+								}
+							}
+						
+						%>
+					</tbody>				
+				</table>
+			
+			
+			</td>
+		</tr>
 		<%
 			MemberVO authMember = (MemberVO)session.getAttribute("authMember");
 			boolean rendering = member.equals(authMember);

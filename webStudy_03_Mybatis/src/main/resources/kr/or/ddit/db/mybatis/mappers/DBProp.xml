@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.ddit.prop.dao.DataBasePropertyDAO">
+	<select id="selectDataBasePropertyList" parameterType="DataBasePropertyVO" resultType="DataBasePropertyVO">
+		SELECT PROPERTY_NAME, PROPERTY_VALUE, DESCRIPTION 
+		FROM DATABASE_PROPERTIES
+		<!-- trim : 접두어(prefix), 접미어(suffix)를 붙여주거나 지우는 기능
+			prefixOverrides : 실행될 쿼리의 <trim> 문 안에 쿼리 가장 앞에 해당하는 문자들이 있으면 자동으로 지워준다
+		 -->
+		<trim prefix=" WHERE " prefixOverrides="OR">
+			<if test="param!=null">
+				<!-- param은 DAO에 해당 메서드 파라미터에 어노테이션으로 설정 -->
+				<if test="@org.apache.commons.lang3.StringUtils@isNotBlank(param.propertyName)">
+					OR INSTR(PROPERTY_NAME, #{param.propertyName}) > 0
+				</if>
+
+				<if test="@org.apache.commons.lang3.StringUtils@isNotBlank(param.propertyValue)">
+					OR INSTR(PROPERTY_NAME, #{param.propertyValue}) > 0
+				</if>
+
+				<if test="@org.apache.commons.lang3.StringUtils@isNotBlank(param.description)">
+					OR INSTR(PROPERTY_NAME, #{param.description}) > 0
+				</if>
+			</if>
+		</trim>
+	</select>
+</mapper>

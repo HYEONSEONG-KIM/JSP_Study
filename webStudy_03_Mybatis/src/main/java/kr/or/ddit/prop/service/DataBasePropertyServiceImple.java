@@ -17,8 +17,8 @@ public class DataBasePropertyServiceImple implements DataBasePropertyService{
 		Calendar cal = Calendar.getInstance();
 		String pattern = "%s, %tc";
 		for(DataBasePropertyVO prop : propList) {
-			String infoValue = String.format(pattern, prop.getProperty_value(), cal);
-			prop.setProperty_value(infoValue);
+			String infoValue = String.format(pattern, prop.getPropertyValue(), cal);
+			prop.setPropertyValue(infoValue);
 		}
 		return propList;
 	}

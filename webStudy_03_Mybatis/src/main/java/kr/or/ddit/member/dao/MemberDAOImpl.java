@@ -14,6 +14,7 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import kr.or.ddit.db.ConnectionFactory;
 import kr.or.ddit.db.mybatis.CustomSqlSessionFactoryBuilder;
 import kr.or.ddit.vo.MemberVO;
+import kr.or.ddit.vo.pagingVO;
 
 public class MemberDAOImpl implements MemberDAO {
 	
@@ -50,11 +51,22 @@ public class MemberDAOImpl implements MemberDAO {
 	}
 
 	@Override
-	public List<MemberVO> selectMemberList() {
+	public int selectTotalRecord(pagingVO pagingVO) {
+		try(
+				SqlSession sqlSession = sqlSessionFactory.openSession();
+				){
+			MemberDAO mapper = sqlSession.getMapper(MemberDAO.class);
+			return mapper.selectTotalRecord(pagingVO);
+		}
+	}
+	
+	
+	@Override
+	public List<MemberVO> selectMemberList(pagingVO pagingVO) {
 		try(
 			SqlSession sqlSession = sqlSessionFactory.openSession(); 
 		){
-			return sqlSession.selectList("kr.or.ddit.member.dao.MemberDAO.selectMemberList");
+			return sqlSession.selectList("kr.or.ddit.member.dao.MemberDAO.selectMemberList", pagingVO);
 		}
 		
 			
@@ -92,6 +104,7 @@ public class MemberDAOImpl implements MemberDAO {
 		try(
 			SqlSession sqlSession = sqlSessionFactory.openSession();
 		){
+			// 프록시 직접 만들어지는게 아닌 대리객체의 의미
 			MemberDAO mapper = sqlSession.getMapper(MemberDAO.class);
 			int rowcnt = mapper.deleteMember(mem_id);
 			sqlSession.commit();
@@ -99,5 +112,7 @@ public class MemberDAOImpl implements MemberDAO {
 		}
 		
 	}
+
+
 
 }

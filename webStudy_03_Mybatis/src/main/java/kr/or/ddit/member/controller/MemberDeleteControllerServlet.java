@@ -30,7 +30,8 @@ public class MemberDeleteControllerServlet extends HttpServlet{
 		String pass = req.getParameter("memPass");
 		
 		if(StringUtils.isBlank(pass)) {
-			resp.sendError(400);
+			resp.sendError(400,"필수 파라미터 누락");
+			return;
 		}
 		HttpSession session = req.getSession();
 		MemberVO member = (MemberVO) session.getAttribute("authMember");
@@ -43,7 +44,7 @@ public class MemberDeleteControllerServlet extends HttpServlet{
 		case OK:
 			//welcom page -> redirect
 			viewName = "redirect:/index.do";
-			session.removeAttribute("authMember");
+			session.invalidate();
 			break;
 
 		case INVALIDPASSWORD:
@@ -59,7 +60,9 @@ public class MemberDeleteControllerServlet extends HttpServlet{
 			break;
 		}
 		
-		session.setAttribute("deleteMessage", message);
+		if(message != null) {
+			session.setAttribute("deleteMessage", message);
+		}
 		
 		if(viewName.startsWith("redirect:")) {
 			viewName = viewName.substring("redirect:".length());
