@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<result>
+    <left>10</left>
+    <expression>10! = 3628800</expression>
+</result>
