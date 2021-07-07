@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.ddit.prod.dao.ProdDAO">
+
+
+	<resultMap type="ProdVO" id="prodMap" autoMapping="true">
+		<id property="prodId" column="PROD_ID"/>
+		
+	<!-- 	<association property="buyer" autoMapping="true">
+			<id property="buyerId" column="BUYER_ID"/>
+		</association> -->
+		
+		<collection property="memberList" javaType="java.util.List" ofType="MemberVO" autoMapping="true">
+			<id property="memId" column="MEM_ID"/>
+		</collection>
+	
+	</resultMap>
+	
+	<select id="selectProd" parameterType="string" resultMap="prodMap">
+		<!-- MY -->
+			<!-- WITH MEMINFO AS
+		(SELECT DISTINCT MEM_ID, MEM_HP, MEM_MAIL, MEM_MILEAGE, CART_PROD
+		FROM MEMBER A LEFT OUTER JOIN CART B ON A.MEM_ID = B.CART_MEMBER)
+		,PRODINFO AS
+		(
+		SELECT PROD_ID, PROD_NAME, PROD_COST,C.LPROD_NM , B.BUYER_NAME, B.BUYER_ADD1, B.BUYER_CHARGER, B.BUYER_COMTEL, B.BUYER_ID
+		FROM PROD A INNER JOIN BUYER B ON A.PROD_BUYER = B.BUYER_ID
+		    INNER JOIN LPROD C ON A.PROD_LGU = C.LPROD_GU)
+		SELECT MEM_ID, MEM_HP, MEM_MAIL, MEM_MILEAGE, PRODINFO.*
+		FROM MEMINFO INNER JOIN PRODINFO ON MEMINFO.CART_PROD = PRODINFO.PROD_ID
+		WHERE PRODINFO.PROD_ID = #{prod_id} -->
+	<!-- alias에서 ""로 묶으면 has a관계에 따로  association 설정하지 않아도됨
+		alias에서 클래스명.타입명 으로 설정
+	-->
+	WITH CARTMEM AS(
+		SELECT DISTINCT CART_PROD,
+			MEM_ID, MEM_NAME, MEM_HP, MEM_MAIL, MEM_MILEAGE
+		FROM CART INNER JOIN MEMBER ON(CART_MEMBER = MEM_ID)
+	), PRODALL AS (
+		SELECT
+			PROD_ID,  PROD_NAME,  PROD_LGU,  PROD_BUYER,
+			PROD_COST,  PROD_PRICE,  PROD_SALE,  PROD_OUTLINE,
+			PROD_DETAIL,  PROD_IMG,  PROD_TOTALSTOCK,  
+			TO_CHAR(PROD_INSDATE, 'YYYY-MM-DD') PROD_INSDATE,
+			PROD_PROPERSTOCK,  PROD_SIZE,  PROD_COLOR,  PROD_DELIVERY,
+			PROD_UNIT,  PROD_QTYIN,  PROD_QTYSALE,  PROD_MILEAGE,
+			LPROD_NM,  
+			BUYER_NAME "buyer.buyerName", BUYER_CHARGER "buyer.buyerCharger", BUYER_ADD1 "buyer.buyAdd1" 
+		FROM PROD INNER JOIN LPROD ON (PROD_LGU = LPROD_GU)
+		INNER JOIN BUYER ON (PROD_BUYER = BUYER_ID)
+	)
+	SELECT PRODALL.*, CARTMEM.*
+	FROM PRODALL LEFT OUTER JOIN CARTMEM ON (PROD_ID = CART_PROD)
+	WHERE PROD_ID = #{prod_id}
+		
+	
+	</select>
+
+</mapper>

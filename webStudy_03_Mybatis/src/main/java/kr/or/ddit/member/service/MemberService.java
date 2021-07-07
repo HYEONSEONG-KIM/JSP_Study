@@ -5,6 +5,7 @@ import java.util.List;
 import kr.or.ddit.commons.UserNotFoundExcpetion;
 import kr.or.ddit.enumtype.ServiceResult;
 import kr.or.ddit.vo.MemberVO;
+import kr.or.ddit.vo.ZipVO;
 import kr.or.ddit.vo.pagingVO;
 
 /**
@@ -48,6 +49,8 @@ public interface MemberService {
 	 * 
 	 */
 	public ServiceResult removeMember(MemberVO member);
+	
+	public List<ZipVO> retrieveZipList();
 	
 	
 }

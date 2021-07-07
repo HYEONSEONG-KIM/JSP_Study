@@ -9,6 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import kr.or.ddit.vo.MemberVO;
+import kr.or.ddit.vo.ZipVO;
 
 public class MemberDAOImplTest {
 
@@ -24,21 +25,29 @@ public class MemberDAOImplTest {
 	public void test() {
 		MemberDAO dao = MemberDAOImpl.getInstacne();
 		/*MemberVO vo = dao.selectMemberById("a001");
-		assertNotNull(vo);*/
+		System.out.println(vo);*/
+		//assertNotNull(vo);
 //		System.out.println(vo);
 	/*	List<MemberVO> list = dao.selectMemberList();
 		assertNotNull(list);*/
-		/*MemberVO vo = dao.selectMemberDatail("kimgueee");
-		System.out.println(vo);
+		/*MemberVO vo = dao.selectMemberDatail("a001");
+		vo.setMemId("a007");
+		vo.setMemDelete(null);
 		
+		int result = dao.insertMember(vo);
 		
-		vo.setMemName("test");
+		System.out.println(result);*/
+		
+		/*vo.setMemName("test");
 		
 		int result = dao.updateMember(vo);
 		assertEquals(1, result);
-		System.out.println(result);*/
+		System.out.println(result);
 		int rowcnt = dao.deleteMember("a001");
-		assertEquals(1, rowcnt);
+		assertEquals(1, rowcnt);*/
+	
+		List<ZipVO> list = dao.selectZip();
+		assertNotNull(list);
 	}
 
 }

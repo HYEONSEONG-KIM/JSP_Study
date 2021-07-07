@@ -14,6 +14,7 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import kr.or.ddit.db.ConnectionFactory;
 import kr.or.ddit.db.mybatis.CustomSqlSessionFactoryBuilder;
 import kr.or.ddit.vo.MemberVO;
+import kr.or.ddit.vo.ZipVO;
 import kr.or.ddit.vo.pagingVO;
 
 public class MemberDAOImpl implements MemberDAO {
@@ -46,8 +47,15 @@ public class MemberDAOImpl implements MemberDAO {
 
 	@Override
 	public int insertMember(MemberVO member) {
-		// TODO Auto-generated method stub
-		return 0;
+		
+		try(
+				SqlSession sqlSession = sqlSessionFactory.openSession();
+				){
+			MemberDAO mapper = sqlSession.getMapper(MemberDAO.class);
+			int result = mapper.insertMember(member);
+			sqlSession.commit();
+			return result;
+		}
 	}
 
 	@Override
@@ -111,6 +119,17 @@ public class MemberDAOImpl implements MemberDAO {
 			return rowcnt;
 		}
 		
+	}
+
+	@Override
+	public List<ZipVO> selectZip() {
+
+		try(
+				SqlSession sqlSession = sqlSessionFactory.openSession();
+				){
+			MemberDAO mapper = sqlSession.getMapper(MemberDAO.class);
+			return mapper.selectZip();
+		}
 	}
 
 

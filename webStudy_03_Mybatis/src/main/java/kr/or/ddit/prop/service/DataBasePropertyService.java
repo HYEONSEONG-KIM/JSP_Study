@@ -8,7 +8,8 @@ import java.util.List;
  * 
  */
 import kr.or.ddit.vo.DataBasePropertyVO;
+import kr.or.ddit.vo.pagingVO;
 
 public interface DataBasePropertyService {
-	public List<DataBasePropertyVO> retriveDataBaseProperties(DataBasePropertyVO param);
+	public List<DataBasePropertyVO> retriveDataBaseProperties(pagingVO<DataBasePropertyVO> pagingVO);
 }

@@ -1,6 +1,9 @@
 package kr.or.ddit.commons;
 
 import java.io.IOException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -78,6 +81,8 @@ public class LoginCheckServlet extends HttpServlet {
 		}else {
 			//3. 인증
 			try {
+				String encrypted = sha512Encrypting(pass);
+				param.setMemPass(encrypted);
 				Object resultValue = service.authenticate(param);
 				
 				if(resultValue instanceof MemberVO) {
@@ -111,6 +116,21 @@ public class LoginCheckServlet extends HttpServlet {
 		}
 	
 		
+	}
+	
+	private String sha512Encrypting(String plain) {
+		
+		try {
+			MessageDigest md = MessageDigest.getInstance("SHA-512");
+			byte[] input = plain.getBytes();
+			byte[] encrypted = md.digest(input);
+			
+			String encoded = Base64.getEncoder().encodeToString(encrypted);
+			
+			return encoded;
+		} catch (NoSuchAlgorithmException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	

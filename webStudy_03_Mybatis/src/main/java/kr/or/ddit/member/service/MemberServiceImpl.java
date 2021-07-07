@@ -7,6 +7,7 @@ import kr.or.ddit.enumtype.ServiceResult;
 import kr.or.ddit.member.dao.MemberDAO;
 import kr.or.ddit.member.dao.MemberDAOImpl;
 import kr.or.ddit.vo.MemberVO;
+import kr.or.ddit.vo.ZipVO;
 import kr.or.ddit.vo.pagingVO;
 
 public class MemberServiceImpl implements MemberService {
@@ -25,9 +26,22 @@ public class MemberServiceImpl implements MemberService {
 	
 	@Override
 	public ServiceResult creatMember(MemberVO member) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		MemberVO checkMember = memberDao.selectMemberDatail(member.getMemId());
+		
+		if(checkMember != null) {
+			return ServiceResult.PKDUPLICATED;
+		}
+		
+		int result = memberDao.insertMember(member);
+		if(result > 0) {
+			return ServiceResult.OK;
+		}else {
+			return ServiceResult.FAIL;
+		}
 	}
+	
+	
 	@Override
 	public int retrieveMemberCount(pagingVO pagingvo) {
 
@@ -94,6 +108,11 @@ public class MemberServiceImpl implements MemberService {
 		}
 		
 		return result;
+	}
+
+	@Override
+	public List<ZipVO> retrieveZipList() {
+		return memberDao.selectZip();
 	}
 
 

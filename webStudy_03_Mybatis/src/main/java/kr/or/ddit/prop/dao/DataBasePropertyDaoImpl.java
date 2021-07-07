@@ -15,18 +15,29 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import kr.or.ddit.db.ConnectionFactory;
 import kr.or.ddit.db.mybatis.CustomSqlSessionFactoryBuilder;
 import kr.or.ddit.vo.DataBasePropertyVO;
+import kr.or.ddit.vo.pagingVO;
 
 public class DataBasePropertyDaoImpl implements DataBasePropertyDAO {
 
 	private SqlSessionFactory sqlSessionFactory = CustomSqlSessionFactoryBuilder.getSqlSessionFactory();
 	
 	@Override
-	public List<DataBasePropertyVO> selectDataBasePropertyList(DataBasePropertyVO param) {
+	public List<DataBasePropertyVO> selectDataBasePropertyList(pagingVO<DataBasePropertyVO> pagingVO) {
 		try(
 				SqlSession sqlSession = sqlSessionFactory.openSession();
 				){
 			DataBasePropertyDAO mapper = sqlSession.getMapper(DataBasePropertyDAO.class);
-			return mapper.selectDataBasePropertyList(param);
+			return mapper.selectDataBasePropertyList(pagingVO);
+		}
+	}
+
+	@Override
+	public int selectTotalRecored(pagingVO<DataBasePropertyVO> pagingVO) {
+		try(
+				SqlSession sqlSession = sqlSessionFactory.openSession();
+				){
+			DataBasePropertyDAO mapper = sqlSession.getMapper(DataBasePropertyDAO.class);
+			return mapper.selectTotalRecored(pagingVO);
 		}
 	}
 

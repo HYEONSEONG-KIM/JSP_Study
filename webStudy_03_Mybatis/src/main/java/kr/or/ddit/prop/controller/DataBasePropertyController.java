@@ -10,11 +10,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import kr.or.ddit.prop.service.DataBasePropertyService;
 import kr.or.ddit.prop.service.DataBasePropertyServiceImple;
 import kr.or.ddit.vo.DataBasePropertyVO;
+import kr.or.ddit.vo.pagingVO;
 
 /**
  * 요청을 받고, 분석하고, 로직을 사용하고, 로직으로부터 MODEL데이터 확보
@@ -32,11 +35,24 @@ public class DataBasePropertyController extends HttpServlet {
 		
 		String accept = req.getHeader("Accept");
 		String search = req.getParameter("search");
+		String pageParam = req.getParameter("page");
+		int currentPage = 1;
+		
+		if(StringUtils.isNumeric(pageParam)) {
+			currentPage = Integer.parseInt(pageParam);
+		}
+		pagingVO<DataBasePropertyVO> pagingVO = new pagingVO<>(5, 2);
+		pagingVO.setCurrentPage(currentPage);
+		
+		System.out.println(search);
 		DataBasePropertyVO param = new DataBasePropertyVO();
 		param.setPropertyName(search);
 		param.setPropertyValue(search);
 		param.setDescription(search);
-		List<DataBasePropertyVO> propList = service.retriveDataBaseProperties(param);
+		pagingVO.setDetailSearch(param);
+		List<DataBasePropertyVO> propList = service.retriveDataBaseProperties(pagingVO);
+		
+	
 		
 		if(accept.contains("json")) {
 			
@@ -46,7 +62,7 @@ public class DataBasePropertyController extends HttpServlet {
 			try(
 				PrintWriter out = resp.getWriter();
 			){
-				mapper.writeValue(out, propList);
+				mapper.writeValue(out, pagingVO);
 			}
 			
 		}else {

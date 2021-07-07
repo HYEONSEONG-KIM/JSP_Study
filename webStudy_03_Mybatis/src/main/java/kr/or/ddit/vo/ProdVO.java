@@ -1,5 +1,8 @@
 package kr.or.ddit.vo;
 
+import java.util.List;
+import java.util.Set;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -19,6 +22,8 @@ public class ProdVO {
 	private String prodBuyer;
 	//****
 	private BuyerVO buyer; // has a 관계 => 1 : 1 관계
+	
+	private List<MemberVO> memberList;
 	
 	private Integer prodCost;
 	private Integer prodPrice;

@@ -49,6 +49,9 @@
 	<tfoot>
 		<tr>
 			<td colspan = "3">
+			<div id = "pagingArea">
+				
+			</div>
 				<div id = "searchUI">
 					<input type = "text" name= "search"/>
 					<input type = "button" value = "검색" id = "searchBtn"/>
@@ -59,8 +62,21 @@
 </table>
 <form id = "searchForm">
 	<input type = "text" name ="search"/>
+	<input type = "text" name ="page"/>
 </form>
 <script type="text/javascript">
+	$(document).ajaxError(function(event, xhr, options, error){
+		console.log(event);
+		console.log(xhr);
+		console.log(options);
+		console.log(error);
+		
+	}).ajaxComplete(function(event, xhr, options){
+		searchForm.find("[name='page']").val("");
+		searchForm.get(0).reset();
+	});
+	
+
 	function makeTdFromData(propVO){
 		let tds = [];
 		
@@ -85,6 +101,13 @@
 		})
 		searchForm.submit();
 	});
+
+	let pagingArea = $("#pagingArea").on("click", ".pageLink", function(event){
+		event.preventDefault();
+		let page = $(this).data("page");
+		searchForm.find("[name = 'page']").val(page);
+		searchForm.submit();
+	});
 	
 	let searchForm = $("#searchForm").on("submit",function(event){
 		event.preventDefault();
@@ -99,17 +122,18 @@
 			data : data,
 			dataType : "json",
 			success : function(resp) {
+				let dataList = resp.dataList;
 				
 				value = ""
 				tbody.empty();
+				pagingArea.empty();
 				let trs = [];
-				$.each(resp,function(i,v){
+				$.each(dataList,function(i,v){
 					trs.push($("<tr>").append(makeTdFromData(v)));
 				})
 				
 				tbody.append(trs);
-			},
-			error : function(errorResp) {
+				pagingArea.html(resp.pagingHTML);
 			}
 		});
 		return false;

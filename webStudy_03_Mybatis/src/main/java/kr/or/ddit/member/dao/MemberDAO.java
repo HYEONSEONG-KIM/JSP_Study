@@ -3,6 +3,7 @@ package kr.or.ddit.member.dao;
 import java.util.List;
 
 import kr.or.ddit.vo.MemberVO;
+import kr.or.ddit.vo.ZipVO;
 import kr.or.ddit.vo.pagingVO;
 
 /**
@@ -36,6 +37,9 @@ public interface MemberDAO {
 	public MemberVO selectMemberById(String mem_id);
 	public int updateMember(MemberVO member);
 	public int deleteMember(String mem_id);
+
+	
+	public List<ZipVO> selectZip();
 }
 
 
