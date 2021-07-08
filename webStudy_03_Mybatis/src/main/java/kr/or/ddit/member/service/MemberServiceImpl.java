@@ -6,6 +6,7 @@ import kr.or.ddit.commons.UserNotFoundExcpetion;
 import kr.or.ddit.enumtype.ServiceResult;
 import kr.or.ddit.member.dao.MemberDAO;
 import kr.or.ddit.member.dao.MemberDAOImpl;
+import kr.or.ddit.utils.EncryptUtils;
 import kr.or.ddit.vo.MemberVO;
 import kr.or.ddit.vo.ZipVO;
 import kr.or.ddit.vo.pagingVO;
@@ -13,6 +14,7 @@ import kr.or.ddit.vo.pagingVO;
 public class MemberServiceImpl implements MemberService {
 
 	MemberDAO memberDao = MemberDAOImpl.getInstacne();
+	private AuthenticateService authService = new AuthenticateServiceImpl();
 	
 	// singleton
 	private MemberServiceImpl() {}
@@ -32,6 +34,9 @@ public class MemberServiceImpl implements MemberService {
 		if(checkMember != null) {
 			return ServiceResult.PKDUPLICATED;
 		}
+		String plain = member.getMemPass();
+		String encoded = EncryptUtils.encryptSha512Base64(plain);
+		member.setMemPass(encoded);
 		
 		int result = memberDao.insertMember(member);
 		if(result > 0) {
@@ -70,12 +75,11 @@ public class MemberServiceImpl implements MemberService {
 
 	@Override
 	public ServiceResult modifyMember(MemberVO member) {
-		MemberVO savedMember = retrieveMember(member.getMemId());
-		String savedPass = savedMember.getMemPass();
-		String inputPass = member.getMemPass();
+		
+		Object authResult = authService.authenticate(member);
 		ServiceResult result = null;
 		
-		if(savedPass.equals(inputPass)) {
+		if(authResult instanceof MemberVO) {
 			int rowcnt = memberDao.updateMember(member);
 			if(rowcnt > 0) {
 				result = ServiceResult.OK;
@@ -83,19 +87,19 @@ public class MemberServiceImpl implements MemberService {
 				result = ServiceResult.FAIL;
 			}
 		}else {
-			result = ServiceResult.INVALIDPASSWORD;
+			result = (ServiceResult) authResult;
 		}
 		return result;
 	}
 
 	@Override
 	public ServiceResult removeMember(MemberVO member) {
-		MemberVO savedMember = retrieveMember(member.getMemId());
-		String savedPass = savedMember.getMemPass();
-		String inputPass = member.getMemPass();
+		
+		Object authResult = authService.authenticate(member);
+		
 		ServiceResult result = null;
 		
-		if(savedPass.equals(inputPass)) {
+		if(authResult instanceof MemberVO) {
 			int rowcnt =memberDao.deleteMember(member.getMemId());
 			if(rowcnt > 0) {
 				result = ServiceResult.OK;

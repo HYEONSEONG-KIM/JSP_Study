@@ -55,5 +55,106 @@
 		
 	
 	</select>
+	
+	
+	<sql id="sameCondition">
+		FROM PROD INNER JOIN LPROD ON (PROD_LGU = LPROD_GU)
+	              INNER JOIN BUYER ON (PROD_BUYER = BUYER_ID)
+		<trim prefix=" WHERE " prefixOverrides="AND">
+			<if test="detailSearch != null">
+				<if test="@org.apache.commons.lang3.StringUtils@isNotBlank(detailSearch.prodLgu)">
+					AND PROD_LGU = #{detailSearch.prodLgu} 
+				</if>
+				<if test="@org.apache.commons.lang3.StringUtils@isNotBlank(detailSearch.prodBuyer)">
+					AND PROD_BUYER = #{detailSearch.prodBuyer} 
+				</if>
+				<if test="@org.apache.commons.lang3.StringUtils@isNotBlank(detailSearch.prodName)">
+					AND INSTR(PROD_NAME, #{detailSearch.prodName}) > 0 
+				</if>
+			</if>
+		</trim>
+	</sql>
+
+	<select id="selectTotalRecord" parameterType="PagingVO" resultType="int">
+		SELECT COUNT(*)
+		<include refid="sameCondition" />
+	</select>
+	<select id="selectProdList" parameterType="PagingVO" resultType="ProdVO">
+		WITH PRODALL AS(
+		    SELECT PROD_ID, PROD_NAME, PROD_LGU,
+		        PROD_COST, PROD_PRICE, PROD_MILEAGE, PROD_SALE
+		        , LPROD_NM
+		        , BUYER_NAME "buyer.buyerName"    
+		    <include refid="sameCondition" />
+		    ORDER BY PROD_LGU ASC , PROD_ID DESC
+		)
+		SELECT A.*
+		FROM (
+		    SELECT ROWNUM RNUM, PRODALL.*
+		    FROM PRODALL
+		) A
+		WHERE RNUM BETWEEN #{startRow} AND #{endRow}
+	</select>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<!-- <sql id="searchFrag">
+		<trim prefix="WHERE" prefixOverrides="AND">
+			
+		
+			<if test="detailSearch != null">
+				<if test="@org.apache.commons.lang3.StringUtils@isNotBlank(detailSearch.prodName)">
+						AND INSTR(PROD_NAME, #{detailSearch.prodName}) > 0
+				</if>
+				
+				<if test="@org.apache.commons.lang3.StringUtils@isNotBlank(detailSearch.prodLgu)">
+						AND INSTR(PROD_LGU, #{detailSearch.prodLgu}) > 0
+				</if>
+				
+				<if test="@org.apache.commons.lang3.StringUtils@isNotBlank(detailSearch.prodBuyer)">
+						AND INSTR(PROD_BUYER, #{detailSearch.prodBuyer}) > 0
+				</if>
+			
+			</if>
+		
+		</trim>
+	
+	</sql>
+	
+	
+	<select id="selectTotalRecord" parameterType="pagingVO" resultType="int">
+		SELECT COUNT(*)
+		FROM PROD
+		<include refid="searchFrag"></include>
+	
+	</select>
+	
+	
+	
+	<select id="selectProdList" parameterType="pagingVO" resultType="ProdVO">
+			SELECT A.*
+			FROM 
+			(
+				SELECT ROWNUM RNUM, B.*
+				FROM 
+			(
+				SELECT *
+				FROM PROD
+				<include refid="searchFrag"></include>
+				ORDER BY PROD_INSDATE DESC
+			) B
+			) A
+			WHERE RNUM BETWEEN ${startRow} AND ${endRow}
+	</select>
+	
+	 -->
+	
 
 </mapper>

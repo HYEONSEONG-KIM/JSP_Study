@@ -36,6 +36,7 @@
 		<mapper resource="kr/or/ddit/db/mybatis/mappers/Employee.xml"/>
 		<mapper resource="kr/or/ddit/db/mybatis/mappers/DBProp.xml"/>
 		<mapper resource="kr/or/ddit/db/mybatis/mappers/Prod.xml"/>
+		<mapper resource="kr/or/ddit/db/mybatis/mappers/Others.xml"/>
 	</mappers>
 
 </configuration>

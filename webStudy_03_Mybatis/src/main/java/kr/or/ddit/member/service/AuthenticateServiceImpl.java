@@ -4,6 +4,7 @@ import kr.or.ddit.commons.UserNotFoundExcpetion;
 import kr.or.ddit.enumtype.ServiceResult;
 import kr.or.ddit.member.dao.MemberDAO;
 import kr.or.ddit.member.dao.MemberDAOImpl;
+import kr.or.ddit.utils.EncryptUtils;
 import kr.or.ddit.vo.MemberVO;
 
 public class AuthenticateServiceImpl implements AuthenticateService {
@@ -20,7 +21,7 @@ public class AuthenticateServiceImpl implements AuthenticateService {
 		
 		String savedPass = savedMember.getMemPass();
 		String inputPass = param.getMemPass();
-		boolean valid = savedPass.equals(inputPass);
+		boolean valid = EncryptUtils.matches(inputPass, savedPass);
 		if(valid) {
 			resultValue = savedMember;
 		}else {
