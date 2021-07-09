@@ -52,7 +52,7 @@ public class ProdDAOImplTest {
 			
 		}
 		*/
-		pagingVO<ProdVO> pagingVO = new pagingVO<>(5,5);
+	/*	pagingVO<ProdVO> pagingVO = new pagingVO<>(5,5);
 		ProdVO prod = new ProdVO();
 		prod.setProdBuyer("P30201");
 		prod.setProdLgu("P101");
@@ -64,7 +64,26 @@ public class ProdDAOImplTest {
 
 		pagingVO.setDataList(dao.selectProdList(pagingVO));
 		assertNotNull(pagingVO.getDataList());
+		*/
+		
+		
+		ProdVO insertVO = dao.selectProd("P101000001");
+		insertVO.setProdId(null);
+		
+		int result = dao.insertProd(insertVO);
+		assertEquals(1, result);
 		
 	}
 
 }
+
+
+
+
+
+
+
+
+
+
+

@@ -1,8 +1,7 @@
-<%@page import="java.util.List"%>
-<%@page import="kr.or.ddit.vo.MemberVO"%>
-<%@page import="kr.or.ddit.vo.ProdVO"%>
+
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core"  prefix="c"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,59 +10,56 @@
 <title>Insert title here</title>
 </head>
 <body>
-<%
-	ProdVO prod = (ProdVO)request.getAttribute("prod");
-	List<MemberVO> member = prod.getMemberList();
-%>
-<table class = 'table'>
 
+<table class = 'table'>
+	
 		<tr>
 			<th>상품 분류 번호</th>
-			<td><%=prod.getProdId()%></td>
+			<td>${prod.prodId}</td>
 		</tr>
 		<tr>
 			<th>상품 이름</th>
-			<td><%=prod.getProdName()%></td>
+			<td>${prod.prodName}</td>
 		</tr>
 		<tr>
 			<th>상품 분류명</th>
-			<td><%=prod.getLprodNm()%></td>
+			<td>${prod.lprodNm}</td>
 		</tr>
 		<tr>
 			<th>거래처 명</th>
-			<td><%=prod.getBuyer().getBuyerName()%></td>
+			<td>${prod.buyer.buyerName}</td>
 		</tr>
 		<tr>
 			<th>구입 가격</th>
-			<td><%=prod.getProdCost()%></td>
+			<td>${prod.prodCost}</td>
 		</tr>
 		<tr>
 			<th>판매 가격</th>
-			<td><%=prod.getProdPrice()%></td>
+			<td>${prod.prodPrice}</td>
 		</tr>
 		
 		<tr>
 			<th>간단 정보</th>
-			<td><%=prod.getProdOutline()%></td>
+			<td>${prod.prodOutline}</td>
 		</tr>
 		<tr>
 			<th>상세 정보</th>
-			<td><%=prod.getProdDetail()%></td>
+			<td>${prod.prodDetail}</td>
 		</tr>
 		
 	
 		<tr>
 			<th>입고일</th>
-			<td><%=prod.getProdInsdate()%></td>
+			<td>${prod.prodInsdate}</td>
 		</tr>
 		
 		<tr>
 			<th>상품 크기</th>
-			<td><%=prod.getProdSize()%></td>
+			<td>${prod.prodSize}</td>
 		</tr>
 		<tr>
 			<th>색상</th>
-			<td><%=prod.getProdColor()%></td>
+			<td>${prod.prodColor}</td>
 		</tr>
 		<tr>
 			<th>구매자 정보</th>
@@ -79,21 +75,30 @@
 						</tr>
 					</thead>
 					<tbody>
-						<%
-							for(MemberVO mem : member){
-						%>	
+					<c:set var="memberList" value="${prod.memberList}"></c:set>
+					
+					<c:choose>
+						<c:when test="${empty memberList}">
+							<tr>
+								<td colspan="5">해당 상품을 구입한 멤버가 없습니다</td>
+							</tr>
+						</c:when>
+						
+						
+						<c:otherwise>
+							<c:forEach var="mem" items="${memberList}" >
 								<tr>
-									<td><%=mem.getMemId() %></td>
-									<td><%=mem.getMemName() %></td>
-									<td><%=mem.getMemHp() %></td>
-									<td><%=mem.getMemMail() %></td>
-									<td><%=mem.getMemMileage() %></td>
+									<td>${mem.memId}</td>
+									<td>${mem.memName}</td>
+									<td>${mem.memHp}</td>
+									<td>${mem.memMail}</td>
+									<td>${mem.memMileage}</td>
 								</tr>
-						
-						<% 		
-							}
-						
-						%>
+							</c:forEach>
+						</c:otherwise>
+					
+					</c:choose>
+						981 290 519
 					</tbody>
 				
 				</table>

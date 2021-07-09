@@ -1,5 +1,7 @@
 package kr.or.ddit.prod.service;
 
+import org.apache.commons.lang3.StringUtils;
+
 import kr.or.ddit.enumtype.ServiceResult;
 import kr.or.ddit.prod.dao.ProdDAO;
 import kr.or.ddit.prod.dao.ProdDAOImpl;
@@ -12,8 +14,17 @@ public class ProdServiceImpl implements ProdService {
 	
 	@Override
 	public ServiceResult createProd(ProdVO prod) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		prodDAO.insertProd(prod);
+		ServiceResult result = null;
+		
+		if(StringUtils.isBlank(prod.getProdId())){
+			result = ServiceResult.FAIL;
+		}else {
+			result = ServiceResult.OK;
+		}
+		
+		return result;
 	}
 
 	@Override

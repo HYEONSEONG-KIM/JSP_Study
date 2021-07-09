@@ -4,11 +4,13 @@
 <%@page import="kr.or.ddit.vo.MemberVO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <jsp:include page="/includee/preScript.jsp"></jsp:include>
+
 <title>Insert title here</title>
 <style>
 	table, td, th{
@@ -21,105 +23,93 @@
 		height: 50px;
 	}
 </style>
+
 </head>
 <body>
-	<%
-		String deleteMessage = (String)session.getAttribute("deleteMessage");	
-		
-		if(StringUtils.isNoneBlank(deleteMessage)){
-			%>
-			<script type="text/javascript">
-				alert("<%=deleteMessage%>");
-			</script>
-			<% 
-			// flash Attribute 방식
-			session.removeAttribute("deleteMessage");
-		}
+<c:if test="${not empty deleteMessage }">
+	<script type="text/javascript">
+		alert("${deleteMessage}");
+	</script>
 	
-	
-		MemberVO member = (MemberVO)request.getAttribute("member");
-		if(member == null){
-			out.print(request.getAttribute("message"));
-		}else{
-		%>
+	<c:remove var="deleteMessage" scope="session"/>
+
+</c:if>
+
 			<table class="table table-striped">
 
 		<tr>
 			<th>회원ID</th>
-			<td><%=member.getMemId()%></td>
+			<td>${member.memId } </td>
 		</tr>
 		<tr>
 			<th>회원PASS</th>
-			<td><%=member.getMemPass()%></td>
+			<td>${member.memPass} ></td>
 		</tr>
 		<tr>
 			<th>이름</th>
-			<td><%=member.getMemName()%></td>
+			<td>${member.memName}</td>
 		</tr>
 		<tr>
 			<th>주민번호1</th>
-			<td><%=member.getMemRegno1()%></td>
+			<td>${member.memRegno1}</td>
 		</tr>
 		<tr>
 			<th>주민번호2</th>
-			<td><%=member.getMemRegno2()%></td>
+			<td>${member.memRegno2}</td>
 		</tr>
 		<tr>
 			<th>생년월일</th>
-			<td><%=member.getMemBir()%></td>
+			<td>${member.memBir}</td>
 		</tr>
 		<tr>
 			<th>우편번호</th>
-			<td><%=member.getMemZip()%></td>
+			<td>${member.memZip}</td>
 		</tr>
 		<tr>
 			<th>주소</th>
-			<td><%=member.getMemAdd1()%></td>
+			<td><${member.memAdd1}</td>
 		</tr>
 		<tr>
 			<th>상세주소</th>
-			<td><%=member.getMemAdd2()%></td>
+			<td>${member.memAdd2}</td>
 		</tr>
 		<tr>
 			<th>집전화</th>
-			<td><%=member.getMemHometel()%></td>
+			<td>${member.memHometel}</td>
 		</tr>
 		<tr>
 			<th>ㅠㅠ</th>
-			<td><%=member.getMemComtel()%></td>
+			<td>${member.memComtel}</td>
 		</tr>
 		<tr>
 			<th>휴대전화</th>
-			<td><%=member.getMemHp()%></td>
+			<td>${member.memHp}</td>
 		</tr>
 		<tr>
 			<th>이메일</th>
-			<td><%=member.getMemMail()%></td>
+			<td>${member.memMail}</td>
 		</tr>
 		<tr>
 			<th>직업</th>
-			<td><%=member.getMemJob()%></td>
+			<td>${member.memJob}</td>
 		</tr>
 		<tr>
 			<th>취미</th>
-			<td><%=member.getMemLike()%></td>
+			<td>${member.memLike}</td>
 		</tr>
 		<tr>
 			<th>비밀번호 질문</th>
-			<td><%=member.getMemMemorial()%></td>
+			<td>${member.memMemorial}</td>
 		</tr>
 		<tr>
 			<th>해답</th>
-			<td><%=member.getMemMemorialday()%></td>
+			<td>${member.memMemorialday}</td>
 		</tr>
 		<tr>
 			<th>마일리지</th>
-			<td><%=member.getMemMileage()%></td>
+			<td>${member.memMileage}</td>
 		</tr>
-		<tr>
-			<th>탈퇴여부</th>
-			<td><%=member.getMemDelete()%></td>
-		</tr>
+		
 
 		<tr>
 			<th>구매기록</th>
@@ -137,61 +127,59 @@
 						</tr>
 					</thead>
 					<tbody>
-						<%
-							Set<ProdVO> prodList = member.getProdList();
-							if(prodList.isEmpty()){
-								%>
+								<c:set var="prodList" value="${member.prodList }" ></c:set>
+						<c:choose>
+							<c:when test="${empty prodList }">
 								<tr>
 									<td colspan="7">구매 기록 없음</td>
 								</tr>
-								<%
-							}else{
-								for(ProdVO prod : prodList){
-									%>
+							</c:when>
+							
+							
+							<c:otherwise>
+								<%--자동으로 page 스코프에 담김 --%>
+								<c:forEach items="${prodList}" var="prod" >
 									<tr>
-										<td><%=prod.getLprodNm() %></td>
-										<td><%=prod.getBuyer().getBuyerName() %></td>
-										<td><%=prod.getBuyer().getBuyerAdd1() %></td>
-										<td><%=prod.getProdName() %></td>
-										<td><%=prod.getProdCost() %></td>
-										<td><%=prod.getProdPrice() %></td>
-										<td><%=prod.getProdMileage() %></td>
+										<td>${prod.lprodNm}</td>
+										<td>${prod.buyer.buyerName }</td>
+										<td>${prod.buyer.buyerAdd1 }</td>
+										<td>${prod.prodName }</td>
+										<td>${prod.prodCost}</td>
+										<td>${prod.prodPrice}</td>
+										<td>${prod.prodMileage}</td>
 									</tr>
-									<%
-								}
-							}
+								</c:forEach>
+							
+							</c:otherwise>
+						</c:choose>
 						
-						%>
 					</tbody>				
 				</table>
 			
 			
 			</td>
 		</tr>
-		<%
-			MemberVO authMember = (MemberVO)session.getAttribute("authMember");
-			boolean rendering = member.equals(authMember);
-			if(rendering){
-		%>
-		<tr>
-			<td colspan="2">
-				<input type = "button" value = "수정" id = "modify"/>
-				<input type = "button" value = "탈퇴" id = "delete"/>
-				
-				<form method="post" action="<%=request.getContextPath()%>/member/memberDelete.do">
-					<input type = "hidden" name = "memPass"/>
-				</form>
-			</td>
-		</tr>
 		
-		<%
-			}
-		%>	
+		
+		<c:if test="${sessionScope.authMember eq member}">
+			<tr>
+				<td colspan="2">
+					<input type = "button" value = "수정" id = "modify"/>
+					<input type = "button" value = "탈퇴" id = "delete"/>
+					
+					<form method="post" action="<%=request.getContextPath()%>/member/memberDelete.do">
+						<input type = "hidden" name = "memPass"/>
+					</form>
+				</td>
+			</tr>
+		</c:if>
+		
+	
+		
+		
 			</table>
 		
-		<% 	
-		}
-	%>
+	
 	
 </body>
 <script type="text/javascript">

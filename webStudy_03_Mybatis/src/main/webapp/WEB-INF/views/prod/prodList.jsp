@@ -5,6 +5,7 @@
 <%@page import="kr.or.ddit.vo.pagingVO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -16,40 +17,42 @@
 </head>
 <body>
 
-<%
-	/* pagingVO paging = (pagingVO)request.getAttribute("paging");
-	List<ProdVO> prodList = paging.getDataList(); */
-	List<Map<String,Object>> prodLguList = (List)request.getAttribute("prodLguList");
-	List<BuyerVO> buyerList = (List)request.getAttribute("buyerList");
-	
-%>
+
 <h3>SearchUI</h3>
 	<div id = "searchUI">
 		<label>분류 : </label>
 		 <select name = "prodLgu">
-			<option value>==선택하세요==</option>
+			<c:choose>
+				<c:when test="${empty prodLguList}">
+					<option value>항목이 없습니다</option>
+				</c:when>
 			
-			<%
-				for (Map<String, Object> lgu : prodLguList) {
-			%>
+				<c:otherwise>
+					<c:forEach items="${prodLguList}" var="lguMap">
+						<option value='${lguMap.get("PROD_LGU")}'>${lguMap.get("LPROD_NM")}</option>
+					</c:forEach>
+					
+				</c:otherwise>
+			</c:choose> 
 			
-				<option value="<%= lgu.get("PROD_LGU")%>"><%= lgu.get("LPROD_NM")%></option>
-
-			<%
-				}
-			%>
+			
 		</select>
 		 
 		<label>거레처 : </label> 
 		<select name = "prodBuyer">
-		<option value>==선택하세요==</option>
-		<% for(BuyerVO buyer : buyerList){
-		%>
-			<option value = "<%=buyer.getBuyerId()%>"><%=buyer.getBuyerName()%></option>
-				
-		<% 
-			}
-		%>
+		
+		<c:choose>
+			<c:when test="${empty buyerList}">
+				<option value>항목이 없습니다</option>
+			</c:when>
+			
+			<c:otherwise>
+				<c:forEach items="${buyerList}" var="buyer">
+					<option value = "${buyer.buyerId}">${buyer.buyerName}</option>
+				</c:forEach>
+			
+			</c:otherwise>
+		</c:choose>
 		
 		</select>
 		
@@ -105,39 +108,28 @@
 				</div>
 			</td>
 		</tr>
+		
 		</tfoot>
+		
 	</table>
+				<input type = "button" value = "등록" id = "prodInsert"/>
+	
 <h3>Hidden From</h3>
 <form id = "searchForm">
 	<input type = "text" name = "prodLgu" >
 	<input type = "text" name = "prodBuyer" >
 	<input type = "text" name = "prodName" >
-	<input type = "text" name = "page" value = ${paging.getCurrentPage()}>
+	<input type = "text" name = "page">
 </form>
 
 <script type="text/javascript">
-/* 	let tbody = $("tbody");
-	let pagingArea = $('#pagingArea'); */
-	
-	
-	/* 
-	function makeTdFromData(propVO){
-		let tds = [];
-		
-		tds.push($("<td>").html(propVO.prodName))
-		tds.push($("<td>").html(propVO.lprodNm))
-		tds.push($("<td>").html(propVO.buyer.buyerName))
-		tds.push($("<td>").html(propVO.prodCost))
-		tds.push($("<td>").html(propVO.prodSale))
-		tds.push($("<td>").html(propVO.prodMileage))
-		
-		return tds;
-	} */
+
 	
 	$(function(){
 		
 		$(document).ajaxComplete(function(event, xhr, options){
-			searchForm.get(0).reset();
+			console.log(searchForm.get(0))
+			searchForm.find('input[name="page"]').reset();
 		}).ajaxError(function(event, xhr, options, error){
 			console.log(event)
 			console.log(xhr)
@@ -145,8 +137,8 @@
 			console.log(error)
 		})
 		
-		
 	})
+	
 	
 	function makeTrTag(prod){
 		return $("<tr>").append(
@@ -166,7 +158,7 @@
 	 			return false;
 	 		}
 	 		let prodId = prod.prodId;
-	 		location.href = "<%=request.getContextPath()%>/prod/prodView.do?what=" + prodId;
+	 		location.href = "${pageContext.request.contextPath }/prod/prodView.do?what=" + prodId;
 	 	}).css('cursor', 'pointer');
 	 	
 	  	let pagingArea = $('#pagingArea');
@@ -189,6 +181,7 @@
 				  pagingArea.empty();
 				  let prodList = pagingVO.dataList;
 				  let trTags = [];
+				  
 				  if(prodList){
 					  
 					$(prodList).each(function(idx, prod){
@@ -204,50 +197,68 @@
 						)	  
 					  );
 				  }
+				  
 				  tbody.append(trTags);
 			  }
 		  }).submit();
 		  
+	
+		  
+		  $('#prodInsert').on('click', function(){
+			location.href = "${pageContext.request.contextPath }/prod/prodInsert.do";  
+		  })
 		  
 		  
 		  
 		  
 		  
-		  
-		  
-		  
-		  
-		  
-		  /* .on('submit',function(event){
-			  
-			  event.preventDefault();
-			 let data = $(this).serialize();  
-			 
-			   $.ajax({
-				data : data,
-				dataType : "json",
-				success : function(resp) {
-					
-					let dataList = resp.dataList;
-					
-					value = ""
-					tbody.empty();
-					pagingArea.empty();
-					let trs = [];
-					
-					$.each(dataList,function(i,v){
-						trs.push($("<tr>").append(makeTdFromData(v)));
-					})
-					console.log(trs)
-					tbody.append(trs);
-					pagingArea.html(resp.pagingHTML); 
-				}
 
-			});  
-					
-	  		return false;
-		  });*/
-		  
+	/* 	let tbody = $("tbody");
+	let pagingArea = $('#pagingArea'); */
+
+	/* 
+	function makeTdFromData(propVO){
+		let tds = [];
+		
+		tds.push($("<td>").html(propVO.prodName))
+		tds.push($("<td>").html(propVO.lprodNm))
+		tds.push($("<td>").html(propVO.buyer.buyerName))
+		tds.push($("<td>").html(propVO.prodCost))
+		tds.push($("<td>").html(propVO.prodSale))
+		tds.push($("<td>").html(propVO.prodMileage))
+		
+		return tds;
+	} */
+
+	/* .on('submit',function(event){
+	  
+	  event.preventDefault();
+	 let data = $(this).serialize();  
+	 
+	   $.ajax({
+		data : data,
+		dataType : "json",
+		success : function(resp) {
+			
+			let dataList = resp.dataList;
+			
+			value = ""
+			tbody.empty();
+			pagingArea.empty();
+			let trs = [];
+			
+			$.each(dataList,function(i,v){
+				trs.push($("<tr>").append(makeTdFromData(v)));
+			})
+			console.log(trs)
+			tbody.append(trs);
+			pagingArea.html(resp.pagingHTML); 
+		}
+
+	});  
+			
+		return false;
+	});*/
 
 	/* let searchForm = $('#searchForm');
 
@@ -267,9 +278,6 @@
 			searchForm.submit();
 		})
 	}) */
-	
-
-
 </script>
 
 

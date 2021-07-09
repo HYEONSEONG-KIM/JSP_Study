@@ -70,4 +70,7 @@ public class MemberVO implements Serializable{
 	
 	private Set<ProdVO> prodList; // has many 관계 - 1:n 관계
 	
+	public String getMemTest() {
+		return "테스트 데이터";
+	}
 }

@@ -59,12 +59,13 @@ public class MemberInsertControllerServlet extends HttpServlet{
 		
 		
 		
+		
 		ServiceResult result = service.creatMember(member);
 		String viewName = null;
 		String msg = null;
 		
 		boolean valid = validate(member, errors);
-		
+		System.out.println(errors);
 		if(valid) {
 		
 			switch (result) {

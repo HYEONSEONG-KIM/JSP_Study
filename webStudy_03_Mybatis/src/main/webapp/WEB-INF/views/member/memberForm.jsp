@@ -5,6 +5,7 @@
 <%@page import="kr.or.ddit.vo.MemberVO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -30,24 +31,13 @@ td {
 </style>
 </head>
 <body>
-	<jsp:useBean id="member" class="kr.or.ddit.vo.MemberVO" scope="request"></jsp:useBean>
-	<jsp:useBean id="errors" class="java.util.HashMap" scope="request"></jsp:useBean>
-	<%
-		// 		MemberVO member = (MemberVO) request.getAttribute("member");
-		/* 	Map<String,String> error = (Map)request.getAttribute("errors");
-			if(error == null){
-				error = new HashMap<>();
-			} */
-		String message = (String) request.getAttribute("message");
-		if (StringUtils.isNoneBlank(message)) {
-	%>
-	<script type="text/javascript">
-				alert("<%=message%>);
-		");
-	</script>
-	<%
-		}
-	%>
+	
+	<c:if test="${not empty message}">
+		<script type="text/javascript">
+			alert("${message}");
+		</script>
+	</c:if>
+	
 	<form id="memberForm" method="post">
 		<div class="col-sm-6">
 			<table class="table table-striped">
@@ -57,7 +47,7 @@ td {
 					<th>
 					<td><input type="text" name="memId" required
 						value="${member.getMemId()}" /><label id="memId-error"
-						class="error" for="memId">${errors.get("memId")}</label></td>
+						class="error" for="memId">${errors["memId"]}</label></td>
 				</tr>
 				<tr>
 					<th>회원PASS
@@ -98,7 +88,7 @@ td {
 					<th>우편번호
 					<th>
 					<td><input type="text" name="memZip" required
-						value="${member.getMemZip()}" readonly/>
+						value="${member.getMemZip()}" />
 					<input type = "button" value = "우편번호 검색"/>	
 						<label id="memZip-error"
 						class="error" for="memZip">${errors.get("memZip")}</label></td>
@@ -185,7 +175,7 @@ td {
 					<th>
 					<td><input type="text" name="memDelete"
 						value="${member.getMemDelete()}" /><label id="memDelete-error"
-						class="error" for="memDelete">${errors.get("memDelete")}</label></td>
+						class="error" for="memDelete">${errors["memDelete"]}</label></td>
 				</tr>
 				<tr>
 					<td colspan="2"><input type="submit" value="저장" required /></td>
@@ -196,7 +186,7 @@ td {
 	</form>
 </body>
 <script type="text/javascript">
-	$(function(){
+	<%-- $(function(){
 		$('#memberForm').validate({
 				rules:{
 						memId : {
@@ -207,7 +197,7 @@ td {
 		});
 		
 		
-	})
+	}) --%>
 </script>
 </html>
 <jsp:include page="/includee/footer.jsp"></jsp:include>
