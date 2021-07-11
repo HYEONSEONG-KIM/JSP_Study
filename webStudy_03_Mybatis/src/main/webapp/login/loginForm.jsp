@@ -27,8 +27,8 @@
 	session.removeAttribute("message");
 %>
 <div class = "error">
-	<%-- <%=request.getAttribute("errors") %> --%>
-	<%=message %>
+	
+	${errors }
 </div>
 <form name = "loginForm" id = "loginForm" action = "<%=request.getContextPath()%>/login/loginCheck.do" method = "post">
 	<ul>

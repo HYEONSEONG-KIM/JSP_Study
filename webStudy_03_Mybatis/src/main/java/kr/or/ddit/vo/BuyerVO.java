@@ -29,4 +29,6 @@ public class BuyerVO implements Serializable {
 	private String buyerCharger;
 	private String buyerTelext;
 	
+	private LprodVO lprod;
+	
 }

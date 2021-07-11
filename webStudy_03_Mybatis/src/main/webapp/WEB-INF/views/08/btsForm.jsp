@@ -2,6 +2,7 @@
 <%@page import="java.util.Map"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core"  prefix="c"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -16,16 +17,22 @@
 <form method = "post">
 	<select name = "btsMember" onchange = "this.form.submit();">
 		<option value>멤버선택</option>
-		<%
-			for(Entry<String,String[]> entry : btsMap.entrySet()){
-				String code = entry.getKey();
-				String[] info = entry.getValue();
-			%>
-			<option value = "<%=code%>"><%=info[0] %></option>
-			<%
-			}
 		
-		%>
+		<c:choose>
+			<c:when test="${empty btsMap}">
+				<option value>==비어있음==</option>
+			</c:when>
+			
+			<c:otherwise>
+				<c:forEach var = "btsMember" items="${btsMap}">
+					<option value = '${btsMember.key}'>${btsMember.value[0]}</option>
+				</c:forEach>
+			
+			
+			</c:otherwise>
+		
+		</c:choose>
+
 	</select>
 </form>
 

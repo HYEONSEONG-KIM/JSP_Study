@@ -10,6 +10,7 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <jsp:include page="/includee/preScript.jsp"/>
+
 <style>
 	table, td, th{
 		border : 1px solid lightgray;
