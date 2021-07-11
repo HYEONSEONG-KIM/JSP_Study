@@ -2,6 +2,8 @@ package kr.or.ddit.buyer.service;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+
 import kr.or.ddit.buyer.dao.BuyerDAO;
 import kr.or.ddit.buyer.dao.BuyerDAOImpl;
 import kr.or.ddit.commons.exception.DataNotFoundException;
@@ -13,9 +15,7 @@ public class buyerServiceImpl implements buyerService {
 
 	private BuyerDAO dao = BuyerDAOImpl.getInstance();
 	
-	private buyerServiceImpl() {
-		// TODO Auto-generated constructor stub
-	}
+	private buyerServiceImpl() {}
 	
 	private static buyerServiceImpl self = null;
 	
@@ -51,8 +51,17 @@ public class buyerServiceImpl implements buyerService {
 
 	@Override
 	public ServiceResult createBuyer(BuyerVO buyer) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		dao.insertBuyer(buyer);
+		ServiceResult result = null;
+		
+		if(StringUtils.isBlank(buyer.getBuyerId())) {
+			result =ServiceResult.FAIL;
+		}else {
+			result = ServiceResult.OK;
+		}
+		
+		return result;
 	}
 
 	@Override

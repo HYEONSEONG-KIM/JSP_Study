@@ -59,7 +59,12 @@ public class BuyerDAOImplTest {
 
 	@Test
 	public void testInsertBuyer() {
-		fail("Not yet implemented");
+		BuyerVO vo = new BuyerVO();
+		vo = dao.selectBuyer("P10101");
+		vo.setBuyerId(null);
+		
+		int result = dao.insertBuyer(vo);
+		assertEquals(1, result);
 	}
 
 	@Test

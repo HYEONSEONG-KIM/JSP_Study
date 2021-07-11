@@ -51,6 +51,8 @@
 	<input type = "button" id = "searchBtn" value = "검색">
 </div>
 
+<input type = "button" value = "거래처 등록"  id = "insertBuyer">
+
 <form id = "searchForm">
 	<input type = "hidden" name = "searchWord">
 	<input type = "hidden" name = "page">
@@ -165,7 +167,7 @@
 	});
 	
 	
-	let trTags = $('table').on('click','tr', function(){
+	let trTags = $('tbody').on('click','tr', function(){
 		let buyerId = $(this).data('id');
 		exampleModal.modal('show',this);
 		
@@ -174,6 +176,10 @@
 	
 	})
 	
+	
+	$('#insertBuyer').on('click',function(){
+		location.href = "${pageContext.request.contextPath}/buyer/buyerInsert.do";
+	})
 
 
 </script>

@@ -59,8 +59,15 @@ public class BuyerDAOImpl implements BuyerDAO {
 
 	@Override
 	public int insertBuyer(BuyerVO buyer) {
-		// TODO Auto-generated method stub
-		return 0;
+		try(
+			SqlSession sqlSession = sqlSessionFactory.openSession();
+				){
+			BuyerDAO mapper = sqlSession.getMapper(BuyerDAO.class);
+			int result = mapper.insertBuyer(buyer);
+			sqlSession.commit();
+			return result;
+		}
+	
 	}
 
 	@Override
