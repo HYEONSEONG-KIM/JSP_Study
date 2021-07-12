@@ -62,6 +62,16 @@
 			<td>${prod.prodColor}</td>
 		</tr>
 		<tr>
+			<td colspan="2">
+				<c:url value="/prod/prodUpdate.do" var="updateURL">
+					<c:param name="what" value="${prod.prodId}"></c:param>
+				</c:url>
+				<a href = "${updateURL}">상품 수정</a>
+			</td>
+		
+		</tr>
+		
+		<tr>
 			<th>구매자 정보</th>
 			<td>
 				<table class = 'table'>

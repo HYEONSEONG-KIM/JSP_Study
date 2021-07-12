@@ -22,6 +22,7 @@
 	<div id = "searchUI">
 		<label>분류 : </label>
 		 <select name = "prodLgu">
+		 <option value>--분류--</option>
 			<c:choose>
 				<c:when test="${empty prodLguList}">
 					<option value>항목이 없습니다</option>
@@ -29,7 +30,7 @@
 			
 				<c:otherwise>
 					<c:forEach items="${prodLguList}" var="lguMap">
-						<option value='${lguMap.get("PROD_LGU")}'>${lguMap.get("LPROD_NM")}</option>
+						<option value='${lguMap.get("LPROD_GU")}'>${lguMap.get("LPROD_NM")}</option>
 					</c:forEach>
 					
 				</c:otherwise>
@@ -40,19 +41,12 @@
 		 
 		<label>거레처 : </label> 
 		<select name = "prodBuyer">
-		
-		<c:choose>
-			<c:when test="${empty buyerList}">
-				<option value>항목이 없습니다</option>
-			</c:when>
+		<option value>--거래처--</option>
 			
-			<c:otherwise>
 				<c:forEach items="${buyerList}" var="buyer">
-					<option value = "${buyer.buyerId}">${buyer.buyerName}</option>
+					<option class = ${buyer.buyerLgu } value = "${buyer.buyerId}">${buyer.buyerName}</option>
 				</c:forEach>
 			
-			</c:otherwise>
-		</c:choose>
 		
 		</select>
 		
@@ -121,8 +115,16 @@
 	<input type = "text" name = "prodName" >
 	<input type = "text" name = "page">
 </form>
-
+<script type="text/javascript" src = "${pageContext.request.contextPath }/resources/js/prod/prodForm.js"></script>
 <script type="text/javascript">
+
+
+	let buyerTag = $("select[name='prodBuyer']").val("${paging.detailSearch.prodBuyer}")
+	$('select[name="prodLgu"]').othersSelect({
+		buyerTag : buyerTag
+	}).val("${paging.detailSearch.prodLgu}").change();
+	
+	
 
 	
 	$(function(){

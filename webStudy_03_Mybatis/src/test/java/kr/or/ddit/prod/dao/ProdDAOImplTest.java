@@ -67,11 +67,14 @@ public class ProdDAOImplTest {
 		*/
 		
 		
-		ProdVO insertVO = dao.selectProd("P101000001");
-		insertVO.setProdId(null);
+		ProdVO VO = dao.selectProd("P101000001");
+		VO.setProdName("모니터 삼성전자20인치칼라");
+		int result = dao.updateProd(VO);
+		/*insertVO.setProdId(null);
 		
-		int result = dao.insertProd(insertVO);
+		int result = dao.insertProd(insertVO);*/
 		assertEquals(1, result);
+		
 		
 	}
 

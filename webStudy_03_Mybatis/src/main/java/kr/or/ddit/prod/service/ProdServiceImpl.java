@@ -2,6 +2,7 @@ package kr.or.ddit.prod.service;
 
 import org.apache.commons.lang3.StringUtils;
 
+import kr.or.ddit.commons.exception.DataNotFoundException;
 import kr.or.ddit.enumtype.ServiceResult;
 import kr.or.ddit.prod.dao.ProdDAO;
 import kr.or.ddit.prod.dao.ProdDAOImpl;
@@ -40,13 +41,33 @@ public class ProdServiceImpl implements ProdService {
 	@Override
 	public ProdVO retrieveProd(String prodId) {
 		
-		return prodDAO.selectProd(prodId);
+		ProdVO prod = prodDAO.selectProd(prodId);
+		
+		if(prod == null) {
+			throw new DataNotFoundException();
+		}else {
+			
+			return prod;
+		}
+		
 	}
 
 	@Override
 	public ServiceResult modifyProd(ProdVO prod) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		prodDAO.selectProd(prod.getProdId());
+		ServiceResult result = null;
+	
+			int resultCnt = prodDAO.updateProd(prod);
+			if(resultCnt > 0) {
+				result = ServiceResult.OK;
+			}else {
+				result = ServiceResult.FAIL;
+			}
+			
+		
+		
+		return result;
 	}
 
 }

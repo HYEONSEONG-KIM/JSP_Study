@@ -5,6 +5,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletException;
@@ -20,6 +21,8 @@ import org.apache.commons.lang3.StringUtils;
 import kr.or.ddit.enumtype.ServiceResult;
 import kr.or.ddit.member.service.MemberService;
 import kr.or.ddit.member.service.MemberServiceImpl;
+import kr.or.ddit.utils.ValidatorUtils;
+import kr.or.ddit.validate.groups.UpdateGroup;
 import kr.or.ddit.vo.MemberVO;
 import oracle.jdbc.driver.Message;
 
@@ -64,10 +67,12 @@ public class MemberUpateControllerServlet extends HttpServlet{
 		}
 		
 		
-		Map<String, String> errors = new HashMap<String, String>();
+		Map<String, List<String>> errors = new HashMap<>();
 		req.setAttribute("errors", errors);
 		
-		boolean valid = validate(member, errors);
+		ValidatorUtils<MemberVO> validateUtils = new ValidatorUtils<>();
+		
+		boolean valid = validateUtils.validate(member, errors, UpdateGroup.class);
 		String viewName = null;
 		String message = null;
 		if(valid) {
@@ -117,7 +122,7 @@ public class MemberUpateControllerServlet extends HttpServlet{
 	 * @param member
 	 * @param errors
 	 * @return
-	 */
+	 *//*
 	private boolean validate(MemberVO member, Map<String, String> errors) {
 		boolean valid = true;
 		
@@ -161,7 +166,7 @@ public class MemberUpateControllerServlet extends HttpServlet{
 		}
 
 		return valid;
-	}
+	}*/
 }
 
 

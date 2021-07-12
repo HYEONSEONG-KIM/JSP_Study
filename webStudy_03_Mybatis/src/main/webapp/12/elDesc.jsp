@@ -46,7 +46,8 @@
 	2. 자바 객체의 메서드 호출 : ${applicationScope.sampleAttr.length()} / el Spec 2.2부터 사용가능-> 자바 빈 규약에 의해 출력
 	=> 속성의 형태로 지원되고 있는 객체, 자바 빈 규약에 생성된 객체
 	<%
-		MemberVO member = MemberVO.builder().memName("김은대") .build();
+	
+		MemberVO member = MemberVO.builder().memName("김은대").build();
 		pageContext.setAttribute("member", member);
 	%>
 	${ member.getMemName() },${member.getMemTest() } -> 2,2버전 / ${member.memName } , ${member.memTest } -> 2.1 버전 /

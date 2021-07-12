@@ -4,6 +4,16 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+import javax.validation.groups.Default;
+
+import kr.or.ddit.validate.contraints.TelNumber;
+import kr.or.ddit.validate.groups.DeleteGroup;
+import kr.or.ddit.validate.groups.InsertGroup;
+import kr.or.ddit.validate.groups.UpdateGroup;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -47,19 +57,32 @@ public class MemberVO implements Serializable{
 		this.memPass = memPass;
 	}
 
-
+	// javax.으로 시작하는것으로 사용 -> 다른걸로 바뀌면 vo자체를 바꿔야함
+	@NotBlank(groups = {Default.class, DeleteGroup.class})
 	private String memId;
+	@NotBlank(groups = {Default.class, DeleteGroup.class})
+	@Size(min = 4, max = 12,groups = {Default.class, DeleteGroup.class})
 	private String memPass;
+	@NotBlank()
 	private String memName;
+	@NotBlank(groups=InsertGroup.class)
 	private String memRegno1;
+	@NotBlank(groups=InsertGroup.class)
 	private String memRegno2;
+	@Pattern(regexp="\\d{4}-\\d{2}-\\d{2}")
 	private String memBir;
 	private String memZip;
 	private String memAdd1;
 	private String memAdd2;
+	@TelNumber
 	private String memHometel;
+	@TelNumber
 	private String memComtel;
+	@NotBlank
+	@TelNumber
 	private String memHp;
+	@NotBlank
+	@Email
 	private String memMail;
 	private String memJob;
 	private String memLike;

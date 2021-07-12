@@ -3,12 +3,10 @@
 <mapper namespace="kr.or.ddit.prod.dao.OthersDAO">
 
 	<select id="selectLprodList" resultType="map">
-		SELECT DISTINCT A.PROD_LGU , B.LPROD_NM
-		FROM PROD A INNER JOIN LPROD B ON (A.PROD_LGU = B.LPROD_GU)
-		ORDER BY PROD_LGU
+		SELECT * FROM LPROD
 	</select>
 
 	<select id="selectBuyerList" resultType="BuyerVO">
-		SELECT DISTINCT BUYER_ID, BUYER_NAME FROM buyer ORDER BY 1
+		SELECT DISTINCT BUYER_ID, BUYER_NAME, BUYER_LGU FROM buyer ORDER BY 1
 	</select>
 </mapper>

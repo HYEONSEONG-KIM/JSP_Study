@@ -5,6 +5,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletException;
@@ -15,10 +16,13 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.ibatis.annotations.Insert;
 
 import kr.or.ddit.enumtype.ServiceResult;
 import kr.or.ddit.member.service.MemberService;
 import kr.or.ddit.member.service.MemberServiceImpl;
+import kr.or.ddit.utils.ValidatorUtils;
+import kr.or.ddit.validate.groups.InsertGroup;
 import kr.or.ddit.vo.MemberVO;
 
 @WebServlet("/member/memberInsert.do")
@@ -54,17 +58,17 @@ public class MemberInsertControllerServlet extends HttpServlet{
 		System.out.println(member);
 		
 		
-		Map<String, String> errors = new HashMap<String, String>();
+		Map<String, List<String>> errors = new HashMap<>();
 		req.setAttribute("errors", errors);
-		
-		
 		
 		
 		ServiceResult result = service.creatMember(member);
 		String viewName = null;
 		String msg = null;
+
+		ValidatorUtils<MemberVO> utils = new ValidatorUtils<>();
 		
-		boolean valid = validate(member, errors);
+		boolean valid = utils.validate(member, errors, InsertGroup.class);
 		System.out.println(errors);
 		if(valid) {
 		
@@ -101,7 +105,7 @@ public class MemberInsertControllerServlet extends HttpServlet{
 	}
 	
 	
-	private boolean validate(MemberVO member, Map<String, String> errors) {
+	/*private boolean validate(MemberVO member, Map<String, String> errors) {
 		boolean valid = true;
 		
 		if (StringUtils.isBlank(member.getMemId())) {
@@ -145,7 +149,7 @@ public class MemberInsertControllerServlet extends HttpServlet{
 
 		return valid;
 	}
-	
+	*/
 }
 
 

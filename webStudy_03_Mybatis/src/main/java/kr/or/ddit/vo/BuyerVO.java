@@ -2,6 +2,8 @@ package kr.or.ddit.vo;
 
 import java.io.Serializable;
 
+import javax.validation.constraints.NotBlank;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -13,7 +15,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(of="buyerId")
 public class BuyerVO implements Serializable {
-
+	
 	private String buyerId;
 	private String buyerName;
 	private String buyerLgu;
