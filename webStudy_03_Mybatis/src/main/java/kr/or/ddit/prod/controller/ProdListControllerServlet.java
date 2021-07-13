@@ -34,7 +34,6 @@ public class ProdListControllerServlet extends HttpServlet{
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		// 검색 조건 : 상품명, 상품분류코드, 거래처코드(상세검색)
 		// 동일 페이지내에서 정렬 조건 : 상품 분류별 정렬 및 최근 등록된 상품부터 조회
-		req.setCharacterEncoding("UTF-8");
 		
 		String pageParam = req.getParameter("page");
 		String prodLgu = req.getParameter("prodLgu");

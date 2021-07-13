@@ -42,26 +42,10 @@
 
 	$(function(){
 		$('#table_id').DataTable( {
-			draw : "1",
-			processing: true,
-	    	serverSide: true,
-	    	
-	    	ajax :{
-				url : "${pageContext.request.contextPath}/member/memberZip.do",
-				 dataFilter : function(resp) {
-					console.log(resp)
-				}
-	    	},
+			serverSide : true,
 			
-			columns :[
-				{
-					"data" : "zipcode",
-					"data" : "sido",
-					"data" : "gugun",
-					"data" : "dong"
-				}
-			]
-
+			draw : 1,
+			
 		
 	    
 	} );

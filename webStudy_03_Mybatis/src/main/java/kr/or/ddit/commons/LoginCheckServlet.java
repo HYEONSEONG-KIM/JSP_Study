@@ -70,6 +70,9 @@ public class LoginCheckServlet extends HttpServlet {
 		String goPage = null;
 		boolean redirect = false;
 		
+		
+		
+		
 		if(!vaild) {
 			// 필수 파라미터 누락 여부 확인(400)
 			/*resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
@@ -85,7 +88,11 @@ public class LoginCheckServlet extends HttpServlet {
 				
 				if(resultValue instanceof MemberVO) {
 					//	1) 성공 : welcome page로 이동
-						goPage = "/";
+						goPage = (String) session.getAttribute("savedRequestURL");
+						session.removeAttribute("currentURI");
+						if(goPage == null || goPage.isEmpty()) {
+							goPage = "/";
+						}
 						redirect = true;
 						// 로그인 성공하면, 웰컴페이지로 이동해서 성공한 이름을 보여줄것
 						session.setAttribute("authMember", resultValue);

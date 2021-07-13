@@ -4,6 +4,8 @@ import java.io.File;
 
 public class FancyTreeNodeAdapter extends File implements FancyTreeNode{
 
+	
+	
 	public FancyTreeNodeAdapter(File adaptee, String relativePath) {
 		super(adaptee.getAbsolutePath());
 		this.key = relativePath;

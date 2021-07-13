@@ -25,7 +25,6 @@ public class MemberListControllerServlet extends HttpServlet{
 	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		req.setCharacterEncoding("UTF-8");
 		// current Page : page parameter
 		String pageParam = req.getParameter("page");
 		String searchType = req.getParameter("searchType");

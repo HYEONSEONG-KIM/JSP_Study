@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+ <properties>
+ 	<!-- 보호 자원과 보호자원의 신분 -->
+ 	<entry key = "/mypage.do">ROLE_USER,ROLE_ADMIN</entry>
+ 	<entry key = "/member/memberUpdate.do">ROLE_USER,ROLE_ADMIN</entry>
+ 	<entry key = "/member/memberDelete.do">ROLE_USER,ROLE_ADMIN</entry>
+ 	<entry key = "/prod/prodInsert.do">ROLE_ADMIN</entry>
+ 	<entry key = "/prod/prodUpdate.do">ROLE_ADMIN</entry>
+ </properties>

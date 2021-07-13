@@ -18,6 +18,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import kr.or.ddit.enumtype.ServiceResult;
+import kr.or.ddit.multipart.MultipartFile;
+import kr.or.ddit.multipart.StandardMultipartHttpServletRequest;
 import kr.or.ddit.prod.dao.OthersDAO;
 import kr.or.ddit.prod.dao.OthersDAOImpl;
 import kr.or.ddit.prod.service.ProdService;
@@ -61,7 +63,15 @@ public class ProdInsertControllerServlet extends HttpServlet{
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		
 		ProdVO prod = new ProdVO();
-		req.setCharacterEncoding("UTF-8");
+		if(req instanceof StandardMultipartHttpServletRequest) {
+			MultipartFile prodImage = ((StandardMultipartHttpServletRequest) req).getFile("prodImage");
+			prod.setProdImage(prodImage);
+		}
+		// 저장 위치
+		
+		// 파일 이름
+		
+		// 트랜잭션
 		
 		try {
 			BeanUtils.populate(prod, req.getParameterMap());

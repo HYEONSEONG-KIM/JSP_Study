@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
 
+import kr.or.ddit.filter.wrapper.SampleHttpServletRequestWrapper;
 import kr.or.ddit.prod.service.ProdService;
 import kr.or.ddit.prod.service.ProdServiceImpl;
 import kr.or.ddit.vo.ProdVO;
@@ -25,6 +26,9 @@ public class ProdSelectControllerServlet extends HttpServlet {
 		req.setCharacterEncoding("UTF-8");
 		String prodId = req.getParameter("what");
 		
+		if(req instanceof SampleHttpServletRequestWrapper) {
+			String customData = ((SampleHttpServletRequestWrapper) req).getCustomData();
+		}
 
 		
 		if(StringUtils.isBlank(prodId)) {

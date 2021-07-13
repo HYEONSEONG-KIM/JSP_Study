@@ -17,6 +17,8 @@ import org.apache.commons.lang3.StringUtils;
 
 import kr.or.ddit.commons.exception.DataNotFoundException;
 import kr.or.ddit.enumtype.ServiceResult;
+import kr.or.ddit.multipart.MultipartFile;
+import kr.or.ddit.multipart.StandardMultipartHttpServletRequest;
 import kr.or.ddit.prod.dao.OthersDAO;
 import kr.or.ddit.prod.dao.OthersDAOImpl;
 import kr.or.ddit.prod.service.ProdService;
@@ -40,12 +42,18 @@ public class ProdUpdateControllerServlet extends HttpServlet {
 		String viewName = "prod/prodInsert";
 		String prodId = req.getParameter("what");
 		
+		ProdVO prod = new ProdVO();
+		
+		if(req instanceof StandardMultipartHttpServletRequest) {
+			MultipartFile prodImage = ((StandardMultipartHttpServletRequest) req).getFile("prodImage");
+			prod.setProdImage(prodImage);
+		}
+		
 		if(StringUtils.isBlank(prodId)) {
 			resp.sendError(400,"필수 파라미터 누락");
 			return;
 		}
 		
-		ProdVO prod = null;
 		
 		try {
 			prod = service.retrieveProd(prodId);
@@ -78,8 +86,6 @@ public class ProdUpdateControllerServlet extends HttpServlet {
 	
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		
-		req.setCharacterEncoding("UTF-8");
 		
 		ProdVO prod = new ProdVO();
 		

@@ -8,6 +8,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
+import kr.or.ddit.multipart.MultipartFile;
 import kr.or.ddit.validate.groups.DeleteGroup;
 import kr.or.ddit.validate.groups.UpdateGroup;
 import lombok.Data;
@@ -19,7 +20,6 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(of = "prodId")
-
 public class ProdVO {
 	
 	@NotBlank(groups = {UpdateGroup.class, DeleteGroup.class})
@@ -48,7 +48,14 @@ public class ProdVO {
 	private String prodOutline;
 	private String prodDetail;
 	@NotBlank
-	private String prodImg;
+	private String prodImg; // DB communication
+	
+	private MultipartFile prodImage; // client communication
+	
+	public void setProdImage(MultipartFile prodImage) {
+		this.prodImage = prodImage;
+	}
+	
 	@NotNull
 	private Integer prodTotalstock;
 	private String prodInsdate;

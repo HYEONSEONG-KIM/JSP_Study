@@ -21,7 +21,7 @@
 
 </c:if>
 
-<form id = "insertForm" method="post">
+<form id = "insertForm" method="post" enctype="multipart/form-data">
 	<input type = "hidden" name = "prodId" value= "${prod.prodId}">
 	<div class="col-sm-6">
 	<table class = "table">
@@ -116,7 +116,10 @@
 				<tr>
 					<th>이미지
 					</th>
-					<td><input type="file" name="prodImg" required value="${prod.prodImg}" /><label
+					<td>
+					<input type ="file" name ="prodImage"/>
+					<input type="text" name="prodImg" required value="${prod.prodImg}" />
+					<label
 						id="prodImg-error" class="error" for="prodImg">${errors.prodImg}</label></td>
 				</tr>
 				<tr>

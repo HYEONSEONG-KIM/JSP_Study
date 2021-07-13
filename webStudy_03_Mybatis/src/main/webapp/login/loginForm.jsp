@@ -1,6 +1,7 @@
 <%@page import="java.util.Objects"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -21,14 +22,16 @@
 <%--
 	String failId = (String)session.getAttribute("failId");
 --%>
-<%
+<%-- <%
 	// flash attribute
 	String message = (String)session.getAttribute("message");
 	session.removeAttribute("message");
-%>
+%> --%>
 <div class = "error">
-	
+	${message }
+	<c:remove var="message" scope="session"/>
 	${errors }
+	
 </div>
 <form name = "loginForm" id = "loginForm" action = "<%=request.getContextPath()%>/login/loginCheck.do" method = "post">
 	<ul>

@@ -55,7 +55,6 @@ public class MemberUpateControllerServlet extends HttpServlet{
 		// parsing : 문자열 -> 특정 타입(TO_DATE, TO_NUMBER)
 		// formatting : 특정타입 -> 문자열(TO_CHAR)
 		
-		req.setCharacterEncoding("UTF-8");
 		
 		MemberVO member = new MemberVO();
 		req.setAttribute("member", member);

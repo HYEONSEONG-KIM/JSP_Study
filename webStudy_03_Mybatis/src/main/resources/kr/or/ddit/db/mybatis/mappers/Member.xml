@@ -10,7 +10,7 @@
 		    MEM_REGNO2,    MEM_BIR,    MEM_ZIP,    MEM_ADD1,
 		    MEM_ADD2,    MEM_HOMETEL,    MEM_COMTEL,    MEM_HP,
 		    MEM_MAIL,    MEM_JOB,    MEM_LIKE,    MEM_MEMORIAL,
-		    MEM_MEMORIALDAY,    MEM_MILEAGE,    MEM_DELETE
+		    MEM_MEMORIALDAY,    MEM_MILEAGE,    MEM_DELETE	, MEM_ROLE
 			) 
 		VALUES ( 
 			#{memId,jdbcType=VARCHAR},
@@ -31,7 +31,8 @@
 			#{memMemorial,jdbcType=VARCHAR},
 			TO_DATE(#{memMemorialday,jdbcType=DATE}, 'YYYY-MM-DD HH24:MI:SS'),
 			#{memMileage},
-			#{memDelete,jdbcType=VARCHAR }
+			#{memDelete,jdbcType=VARCHAR },
+			'ROLE_USER'
 		)
 		
 		<selectKey resultType="string" keyProperty="memId" >
@@ -45,7 +46,7 @@
 		=> 반환값 타입 -->
 	<select id="selectMemberById" parameterType="string"
 		resultType="MemberVO">
-		SELECT MEM_ID, MEM_PASS, MEM_NAME FROM MEMBER WHERE MEM_ID
+		SELECT MEM_ID, MEM_PASS, MEM_NAME, MEM_ROLE FROM MEMBER WHERE MEM_ID
 		= #{mem_id} AND MEM_DELETE IS NULL
 	</select>
 
