@@ -11,6 +11,9 @@
 		    MEM_ADD2,    MEM_HOMETEL,    MEM_COMTEL,    MEM_HP,
 		    MEM_MAIL,    MEM_JOB,    MEM_LIKE,    MEM_MEMORIAL,
 		    MEM_MEMORIALDAY,    MEM_MILEAGE,    MEM_DELETE	, MEM_ROLE
+		    <if test="memImg != null and memImg.length gt 0">
+		    ,	MEM_IMG
+		    </if>
 			) 
 		VALUES ( 
 			#{memId,jdbcType=VARCHAR},
@@ -33,6 +36,10 @@
 			#{memMileage},
 			#{memDelete,jdbcType=VARCHAR },
 			'ROLE_USER'
+			<if test="memImg != null and memImg.length gt 0">
+			,#{memImg, jdbcType=BLOB}
+			</if>
+			
 		)
 		
 		<selectKey resultType="string" keyProperty="memId" >
@@ -46,7 +53,8 @@
 		=> 반환값 타입 -->
 	<select id="selectMemberById" parameterType="string"
 		resultType="MemberVO">
-		SELECT MEM_ID, MEM_PASS, MEM_NAME, MEM_ROLE FROM MEMBER WHERE MEM_ID
+		SELECT MEM_ID, MEM_PASS, MEM_NAME, MEM_ROLE , MEM_IMG
+		FROM MEMBER WHERE MEM_ID
 		= #{mem_id} AND MEM_DELETE IS NULL
 	</select>
 
@@ -151,6 +159,10 @@
 		jdbcType=VARCHAR},
 		MEM_MEMORIALDAY=TO_DATE(#{memMemorialday,
 		jdbcType=DATE}, 'YYYY-MM-DD HH24:mi:ss')
+		<if test="memImg != null and memImg.length gt 0">
+		, MEM_IMG = #{memImg, jdbcType=BLOB}
+		</if>
+		
 		WHERE MEM_ID=#{memId}
 	</update>
 

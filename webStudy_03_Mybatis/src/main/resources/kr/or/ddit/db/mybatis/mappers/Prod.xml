@@ -152,7 +152,6 @@
 				PROD_SALE = #{prodSale,jdbcType=NUMERIC},
 				PROD_OUTLINE = #{prodOutline,jdbcType=VARCHAR},
 				PROD_DETAIL = #{prodDetail,jdbcType=CLOB},
-				PROD_IMG = #{prodImg,jdbcType=VARCHAR},
 				PROD_TOTALSTOCK = #{prodTotalstock,jdbcType=NUMERIC},
 				PROD_PROPERSTOCK = #{prodProperstock,jdbcType=NUMERIC},
 				PROD_SIZE = #{prodSize,jdbcType=VARCHAR},
@@ -162,6 +161,9 @@
 				PROD_QTYIN = #{prodQtyin,jdbcType=NUMERIC},
 				PROD_QTYSALE = #{prodQtysale,jdbcType=NUMERIC},
 				PROD_MILEAGE = #{prodMileage,jdbcType=NUMERIC}
+				<if test="@org.apache.commons.lang3.StringUtils@isNotBlank(prodImg)">
+					,PROD_IMG = #{prodImg,jdbcType=VARCHAR}
+				</if>
 			WHERE PROD_ID = #{prodId,jdbcType=VARCHAR}
 	
 	

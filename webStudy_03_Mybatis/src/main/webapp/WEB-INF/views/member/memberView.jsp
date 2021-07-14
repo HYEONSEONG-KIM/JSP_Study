@@ -49,6 +49,16 @@
 			<th>이름</th>
 			<td>${member.memName}</td>
 		</tr>
+		
+		<tr>
+			<th>프로필 사진</th>
+			<td>
+				<c:if test="${not empty member.base64Img }">
+					<img src = "data:image/*;base64, ${member.base64Img }"/>
+				</c:if>
+			</td>
+		</tr>
+		
 		<tr>
 			<th>주민번호1</th>
 			<td>${member.memRegno1}</td>

@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.Part;
 
 // 필터를 통해 들어온 request객체가 mutipart형식의 요청이면 wrapper로 바꿔주기 위한 클래스
+// 톰캣은 part api로 캡슐화 -> 사용하기 불편 ->  어댑터 패턴 사용
 public class StandardMultipartHttpServletRequest extends HttpServletRequestWrapper{
 	
 	// key=>partName, value => part
@@ -22,6 +23,7 @@ public class StandardMultipartHttpServletRequest extends HttpServletRequestWrapp
 	
 	public StandardMultipartHttpServletRequest(HttpServletRequest request) throws IOException, ServletException {
 		super(request);
+		// part가 넘어올때 input의 순서로 넘어옴,그래서 map의 순서도 유지하기위해 LinkedHashMap으로 초기화
 		multipartFiles = new LinkedHashMap<>();
 		parseRequest(request);
 	}
@@ -29,6 +31,7 @@ public class StandardMultipartHttpServletRequest extends HttpServletRequestWrapp
 	private void parseRequest(HttpServletRequest request) throws IOException, ServletException {
 		Collection<Part> parts = request.getParts();
 		for(Part single : parts) {
+			// part객체가 text인지 file인지 검증
 			if(single.getContentType() == null) continue;
 			MultipartFile file = new StandardMultipartFile(single);
 			String partName = file.getName();

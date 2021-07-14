@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -21,6 +22,8 @@ import org.apache.commons.lang3.StringUtils;
 import kr.or.ddit.enumtype.ServiceResult;
 import kr.or.ddit.member.service.MemberService;
 import kr.or.ddit.member.service.MemberServiceImpl;
+import kr.or.ddit.multipart.MultipartFile;
+import kr.or.ddit.multipart.StandardMultipartHttpServletRequest;
 import kr.or.ddit.utils.ValidatorUtils;
 import kr.or.ddit.validate.groups.UpdateGroup;
 import kr.or.ddit.vo.MemberVO;
@@ -32,6 +35,7 @@ import oracle.jdbc.driver.Message;
  *
  */
 @WebServlet("/member/memberUpdate.do")
+@MultipartConfig
 public class MemberUpateControllerServlet extends HttpServlet{
 	
 	private MemberService service = MemberServiceImpl.getInstance();
@@ -58,6 +62,11 @@ public class MemberUpateControllerServlet extends HttpServlet{
 		
 		MemberVO member = new MemberVO();
 		req.setAttribute("member", member);
+		
+		if(req instanceof StandardMultipartHttpServletRequest) {
+			MultipartFile memImage = ((StandardMultipartHttpServletRequest) req).getFile("memImage");
+			member.setMemImage(memImage);
+		}
 
 		try {
 			BeanUtils.populate(member, req.getParameterMap());

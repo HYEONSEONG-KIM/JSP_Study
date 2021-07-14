@@ -117,10 +117,9 @@
 					<th>이미지
 					</th>
 					<td>
-					<input type ="file" name ="prodImage"/>
-					<input type="text" name="prodImg" required value="${prod.prodImg}" />
+					<input type ="file" name ="prodImage" accept="image/*"/>
 					<label
-						id="prodImg-error" class="error" for="prodImg">${errors.prodImg}</label></td>
+						id="prodImage" class="error" for="prodImage">${errors.prodImage}</label></td>
 				</tr>
 				<tr>
 					<th>총재고

@@ -23,6 +23,7 @@ public class FileUploadServletUsingMultipartFilter extends HttpServlet{
 		
 		String textParam = req.getParameter("textParam");
 		req.getSession().setAttribute("textParam", textParam);
+		// req가 원본인지 wrapper인지 검증
 		if(req instanceof StandardMultipartHttpServletRequest) {
 			StandardMultipartHttpServletRequest wrapper = (StandardMultipartHttpServletRequest)req;
 			// filePart => name으로 설정한 값(input태그에서)

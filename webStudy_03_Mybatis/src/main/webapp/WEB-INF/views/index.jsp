@@ -4,7 +4,12 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <h4>웰컴 페이지</h4>
+누적 방문자수 :${userCount}  , 현재 방문자 수 : ${currentUserCount }
 
+로그인 되었다면,
+<c:if test="${not empty authMember}">
+접속자 리스트 : ${currentUserList}
+</c:if>
 <c:if test="${not empty message}">
 	<h6>${message}</h6>
 </c:if>
@@ -28,6 +33,9 @@
 	<c:otherwise>
 		<h4>${authMember.memId},
 			<a href="${pageContext.request.contextPath }/mypage.do">${authMember.memName}님 </a><br>
+			<c:if test="${not empty authMember.memImg}">
+			<img src = "data:image/*;base64,${ authMember.base64Img}"/>
+			</c:if>
 			<a href="${pageContext.request.contextPath }/login/logout.do">로그아웃</a>
 		</h4>
 	</c:otherwise>

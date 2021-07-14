@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -29,6 +30,7 @@ import kr.or.ddit.vo.BuyerVO;
 import kr.or.ddit.vo.ProdVO;
 
 @WebServlet("/prod/prodUpdate.do")
+@MultipartConfig()
 public class ProdUpdateControllerServlet extends HttpServlet {
 	
 	private ProdService service = new ProdServiceImpl();
@@ -42,12 +44,9 @@ public class ProdUpdateControllerServlet extends HttpServlet {
 		String viewName = "prod/prodInsert";
 		String prodId = req.getParameter("what");
 		
-		ProdVO prod = new ProdVO();
+		ProdVO prod = null;
 		
-		if(req instanceof StandardMultipartHttpServletRequest) {
-			MultipartFile prodImage = ((StandardMultipartHttpServletRequest) req).getFile("prodImage");
-			prod.setProdImage(prodImage);
-		}
+	
 		
 		if(StringUtils.isBlank(prodId)) {
 			resp.sendError(400,"필수 파라미터 누락");
@@ -88,6 +87,11 @@ public class ProdUpdateControllerServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		
 		ProdVO prod = new ProdVO();
+		
+		if(req instanceof StandardMultipartHttpServletRequest) {
+			MultipartFile prodImage = ((StandardMultipartHttpServletRequest) req).getFile("prodImage");
+			prod.setProdImage(prodImage);
+		}
 		
 		try {
 			BeanUtils.populate(prod, req.getParameterMap());

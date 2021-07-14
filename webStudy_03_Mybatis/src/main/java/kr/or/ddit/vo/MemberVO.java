@@ -1,15 +1,27 @@
 package kr.or.ddit.vo;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpSessionBindingEvent;
+import javax.servlet.http.HttpSessionBindingListener;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import javax.validation.groups.Default;
 
+import org.apache.commons.codec.binary.Base64;
+
+import kr.or.ddit.multipart.MultipartFile;
+import kr.or.ddit.validate.contraints.FileMime;
 import kr.or.ddit.validate.contraints.TelNumber;
 import kr.or.ddit.validate.groups.DeleteGroup;
 import kr.or.ddit.validate.groups.InsertGroup;
@@ -21,6 +33,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import net.coobird.thumbnailator.Thumbnails;
 
 /**
  *	회원관리를 위한 Domain Layer 
@@ -41,10 +54,10 @@ import lombok.ToString;
  */
 @Data
 @EqualsAndHashCode(of = "memId")
-@ToString(exclude= {"memPass", "memRegon1","memRegon2"})
+@ToString(exclude= {"memPass", "memRegon1","memRegon2", "memImg", "memImage"})
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
-public class MemberVO implements Serializable{
+public class MemberVO implements Serializable,HttpSessionBindingListener{
 
 	public MemberVO() {
 	}
@@ -74,12 +87,12 @@ public class MemberVO implements Serializable{
 	private String memZip;
 	private String memAdd1;
 	private String memAdd2;
-	@TelNumber
+	//@TelNumber
 	private String memHometel;
-	@TelNumber
+	//@TelNumber
 	private String memComtel;
 	@NotBlank
-	@TelNumber
+	//@TelNumber
 	private String memHp;
 	@NotBlank
 	@Email
@@ -98,4 +111,58 @@ public class MemberVO implements Serializable{
 	}
 	
 	private String memRole;
+	private byte[] memImg;
+	private String memPath;
+	
+	@FileMime(mime = "image/")
+	private transient MultipartFile memImage;
+	
+	public String getBase64Img() {
+		if(memImg == null) return null;
+		
+		return Base64.encodeBase64String(memImg);
+	}
+	
+	public void setMemImage(MultipartFile memImage) throws IOException {
+		if(memImage == null || memImage.isEmpty()) {
+			return;
+		}
+		this.memImage = memImage;
+
+		
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		Thumbnails.of(this.memImage.getInputStream())
+		.size(100, 200).toOutputStream(os);
+		
+		this.memImg = os.toByteArray();
+		this.memPath = UUID.randomUUID().toString();
+	}
+
+	
+
+	@Override
+	public void valueBound(HttpSessionBindingEvent event) {
+
+		String attrName = event.getName();
+		if("authMember".equals(attrName)) {
+			ServletContext application = event.getSession().getServletContext();
+			Map<String, MemberVO> userList = (Map<String, MemberVO>) application.getAttribute("currentUserList");
+			
+			userList.put(memId, this);
+		}
+	}
+
+
+
+	@Override
+	public void valueUnbound(HttpSessionBindingEvent event) {
+
+		String attrName = event.getName();
+		if("authMember".equals(attrName)) {
+			ServletContext application = event.getSession().getServletContext();
+			Map<String, MemberVO> userList = (Map<String, MemberVO>) application.getAttribute("currentUserList");
+			
+			userList.remove(memId, this);
+		}
+	}
 }

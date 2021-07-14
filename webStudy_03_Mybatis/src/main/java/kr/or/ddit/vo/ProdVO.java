@@ -1,7 +1,9 @@
 package kr.or.ddit.vo;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
@@ -9,10 +11,13 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 import kr.or.ddit.multipart.MultipartFile;
+import kr.or.ddit.validate.contraints.FileMime;
 import kr.or.ddit.validate.groups.DeleteGroup;
+import kr.or.ddit.validate.groups.InsertGroup;
 import kr.or.ddit.validate.groups.UpdateGroup;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 /**
  *	상품관리 Domain Layer 
@@ -20,7 +25,8 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(of = "prodId")
-public class ProdVO {
+@ToString(exclude = "prodImage")
+public class ProdVO implements Serializable{
 	
 	@NotBlank(groups = {UpdateGroup.class, DeleteGroup.class})
 	private String prodId;
@@ -47,13 +53,18 @@ public class ProdVO {
 	@NotBlank
 	private String prodOutline;
 	private String prodDetail;
-	@NotBlank
+	@NotBlank(groups= InsertGroup.class)
 	private String prodImg; // DB communication
 	
-	private MultipartFile prodImage; // client communication
+	@NotNull(groups= InsertGroup.class)
+	@FileMime(mime = "image/")
+	private transient MultipartFile prodImage; // client communication
 	
 	public void setProdImage(MultipartFile prodImage) {
-		this.prodImage = prodImage;
+		if(prodImage != null && !prodImage.isEmpty()) {
+			this.prodImage = prodImage;
+			this.prodImg = UUID.randomUUID().toString();
+		}
 	}
 	
 	@NotNull

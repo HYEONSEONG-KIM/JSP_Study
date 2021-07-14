@@ -1,7 +1,10 @@
 package kr.or.ddit.member.controller;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.UUID;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -10,17 +13,21 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import kr.or.ddit.commons.UserNotFoundExcpetion;
 import kr.or.ddit.enumtype.MimeType;
 import kr.or.ddit.member.service.MemberService;
 import kr.or.ddit.member.service.MemberServiceImpl;
 import kr.or.ddit.vo.MemberVO;
+import oracle.sql.BLOB;
 
 @WebServlet("/member/memberView.do")
 public class MemberViewControllerServlet extends HttpServlet{
 
 	private MemberService service = MemberServiceImpl.getInstance();
+	private static final Logger logger = LoggerFactory.getLogger(MemberViewControllerServlet.class);
 	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -56,6 +63,11 @@ public class MemberViewControllerServlet extends HttpServlet{
 			}
 			
 		}
+		
+		
+		
+		
+		
 		
 		
 		if(status == 200) {

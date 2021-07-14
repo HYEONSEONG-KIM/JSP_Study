@@ -4,72 +4,45 @@
   <welcome-file-list>
     <welcome-file>index.do</welcome-file>
   </welcome-file-list>
-  
   <context-param>
-  	<param-name>cParam1</param-name>
-	<param-value>컨텍스트파라미터</param-value>
+    <param-name>cParam1</param-name>
+    <param-value>컨텍스트파라미터</param-value>
   </context-param>
+  <listener>
+    <listener-class>kr.or.ddit.listener.ContextLoaderListener</listener-class>
+  </listener>
+  
+  <listener>
+    <listener-class>kr.or.ddit.listener.CustomSessionListener</listener-class>
+  </listener>
   
   <filter>
-  	<filter-name>CharacterEncodingFilter</filter-name>
- 	<filter-class>kr.or.ddit.filter.CharacterEncodingFilter</filter-class>
- 	<init-param>
- 		<param-name>encoding</param-name>
- 		<param-value>UTF-8</param-value>
- 	</init-param>
+    <filter-name>CharacterEncodingFilter</filter-name>
+    <filter-class>kr.or.ddit.filter.CharacterEncodingFilter</filter-class>
+    <init-param>
+      <param-name>encoding</param-name>
+      <param-value>UTF-8</param-value>
+    </init-param>
   </filter>
-  
   <filter-mapping>
-  	<filter-name>CharacterEncodingFilter</filter-name>
-  	<url-pattern>/*</url-pattern>
+    <filter-name>CharacterEncodingFilter</filter-name>
+    <url-pattern>/*</url-pattern>
   </filter-mapping>
- 
- <filter>
- 	<filter-name>MultipartFilter</filter-name>
- 	<filter-class>kr.or.ddit.multipart.MultipartFilter</filter-class>
- </filter>
- 
- <filter-mapping>
- 	<filter-name>MultipartFilter</filter-name>
-	<url-pattern>*.do</url-pattern>
- </filter-mapping>
-  
+  <filter>
+    <filter-name>MultipartFilter</filter-name>
+    <filter-class>kr.or.ddit.multipart.MultipartFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>MultipartFilter</filter-name>
+    <url-pattern>*.do</url-pattern>
+  </filter-mapping>
   <servlet>
-  	<servlet-name>FileUploadServlet</servlet-name>
-  	<servlet-class>kr.or.ddit.fileupload.FileUploadServlet</servlet-class>
-  	<multipart-config/>
+    <servlet-name>FileUploadServlet</servlet-name>
+    <servlet-class>kr.or.ddit.fileupload.FileUploadServlet</servlet-class>
+    <multipart-config/>
   </servlet>
-  
   <servlet-mapping>
-  	<servlet-name>FileUploadServlet</servlet-name>
-  	<url-pattern>/fileUpload.do</url-pattern>
+    <servlet-name>FileUploadServlet</servlet-name>
+    <url-pattern>/fileUpload.do</url-pattern>
   </servlet-mapping>
-  
-<!-- 	<filter>
-		<filter-name>AuthenticationFilter</filter-name>
-		<filter-class>kr.or.ddit.auth.AuthenticationFilter</filter-class>
-		<init-param>
-			<param-name>secured_path</param-name>
-			<param-value>/kr/or/ddit/auth/securedResources.xml</param-value>
-		</init-param>
-	</filter>
-	
-	<filter-mapping>
-		<filter-name>AuthenticationFilter</filter-name>
-		<url-pattern>/*</url-pattern>
-	</filter-mapping>
-	
-	
-	<filter>
-		<filter-name>AuthorizationFilter</filter-name>
-		<filter-class>kr.or.ddit.auth.AuthorizationFilter</filter-class>
-		
-	</filter>
-	
-	<filter-mapping>
-		<filter-name>AuthorizationFilter</filter-name>
-		<url-pattern>/*</url-pattern>
-	</filter-mapping> -->
-  
-  
 </web-app>

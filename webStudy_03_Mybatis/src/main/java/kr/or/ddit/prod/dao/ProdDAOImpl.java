@@ -37,15 +37,10 @@ public class ProdDAOImpl implements ProdDAO {
 	}
 	
 	@Override
-	public int insertProd(ProdVO prod) {
-		try(
-			SqlSession sqlSession = sqlSessionFactory.openSession();
-		){
-			ProdDAO mapper = sqlSession.getMapper(ProdDAO.class);
-			int result = mapper.insertProd(prod);
-			sqlSession.commit();
-			return result;
-		}
+	public int insertProd(ProdVO prod, SqlSession sqlSession) {
+		
+			return sqlSession.insert("kr.or.ddit.prod.dao.ProdDAO.insertProd",prod);
+		
 	}
 	
 	@Override
@@ -69,15 +64,8 @@ public class ProdDAOImpl implements ProdDAO {
 	}
 	
 	@Override
-	public int updateProd(ProdVO prod) {
-		try(
-				SqlSession sqlSession = sqlSessionFactory.openSession();
-			){
-				ProdDAO mapper = sqlSession.getMapper(ProdDAO.class);
-				int result = mapper.updateProd(prod);
-				sqlSession.commit();
-				return result;
-			}
+	public int updateProd(ProdVO prod, SqlSession sqlSession) {
+		return sqlSession.update("kr.or.ddit.prod.dao.ProdDAO.updateProd",prod);
 	}
 
 }

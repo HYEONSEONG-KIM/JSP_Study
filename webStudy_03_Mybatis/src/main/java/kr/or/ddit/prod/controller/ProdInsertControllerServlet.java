@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -28,6 +29,7 @@ import kr.or.ddit.vo.BuyerVO;
 import kr.or.ddit.vo.ProdVO;
 
 @WebServlet("/prod/prodInsert.do")
+@MultipartConfig()
 public class ProdInsertControllerServlet extends HttpServlet{
 	
 	private ProdService service = new ProdServiceImpl();

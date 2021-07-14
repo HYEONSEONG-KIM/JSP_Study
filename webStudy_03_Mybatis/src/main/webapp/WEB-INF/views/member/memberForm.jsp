@@ -38,7 +38,7 @@ td {
 		</script>
 	</c:if>
 	
-	<form id="memberForm" method="post">
+	<form id="memberForm" method="post" enctype="multipart/form-data" >
 		<div class="col-sm-6">
 			<table class="table table-striped">
 				<tr>
@@ -63,6 +63,16 @@ td {
 						value="${member.getMemName()}" /><label id="memName-error"
 						class="error" for="memName">${errors.get("memName")}</label></td>
 				</tr>
+				
+				<tr>
+					<th>회원이미지</th>
+					<td>
+						<input type = "file" name = "memImage"/>
+						<label id="memImage-error"
+						class="error" for="memImage">${errors.get("memImage")}</label></td>
+					</td>
+				</tr>
+				
 				<tr>
 					<th>주민번호1
 					<th>

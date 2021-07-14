@@ -2,6 +2,8 @@ package kr.or.ddit.prod.dao;
 
 import java.util.List;
 
+import org.apache.ibatis.session.SqlSession;
+
 import kr.or.ddit.vo.ProdVO;
 import kr.or.ddit.vo.pagingVO;
 
@@ -14,9 +16,10 @@ public interface ProdDAO {
 	/**
 	 * 신규 상품 등록
 	 * @param prod pk를 제외한 나머지 상품 데이터를 가진 VO
+	 * @param SqlSession TODO
 	 * @return rowcnt > 0 성공, PK는 call by reference로 확인
 	 */
-	public int insertProd(ProdVO prod);
+	public int insertProd(ProdVO prod, SqlSession SqlSession);
 	
 	/**
 	 * 토탈 레코드 조회
@@ -43,9 +46,10 @@ public interface ProdDAO {
 	/**
 	 * 상품 정보 수정
 	 * @param prod
+	 * @param sqlSession TODO
 	 * @return
 	 */
-	public int updateProd(ProdVO prod);
+	public int updateProd(ProdVO prod, SqlSession sqlSession);
 	
 	
 }

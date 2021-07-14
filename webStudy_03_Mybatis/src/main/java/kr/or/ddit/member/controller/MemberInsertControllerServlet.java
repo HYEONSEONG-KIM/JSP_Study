@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -21,11 +22,14 @@ import org.apache.ibatis.annotations.Insert;
 import kr.or.ddit.enumtype.ServiceResult;
 import kr.or.ddit.member.service.MemberService;
 import kr.or.ddit.member.service.MemberServiceImpl;
+import kr.or.ddit.multipart.MultipartFile;
+import kr.or.ddit.multipart.StandardMultipartHttpServletRequest;
 import kr.or.ddit.utils.ValidatorUtils;
 import kr.or.ddit.validate.groups.InsertGroup;
 import kr.or.ddit.vo.MemberVO;
 
 @WebServlet("/member/memberInsert.do")
+@MultipartConfig
 public class MemberInsertControllerServlet extends HttpServlet{
 	
 	private MemberService service = MemberServiceImpl.getInstance();
@@ -47,6 +51,16 @@ public class MemberInsertControllerServlet extends HttpServlet{
 		
 		MemberVO member = new MemberVO();
 		
+		if(req instanceof StandardMultipartHttpServletRequest) {
+			
+			StandardMultipartHttpServletRequest wrapper = (StandardMultipartHttpServletRequest) req;
+			
+			MultipartFile file = wrapper.getFile("memImage");
+			if(file != null && !file.isEmpty()) {
+				member.setMemImage(file);
+			}
+		}
+		
 		try {
 			BeanUtils.populate(member, req.getParameterMap());
 		} catch (IllegalAccessException | InvocationTargetException e) {
@@ -60,15 +74,15 @@ public class MemberInsertControllerServlet extends HttpServlet{
 		Map<String, List<String>> errors = new HashMap<>();
 		req.setAttribute("errors", errors);
 		
+		ValidatorUtils<MemberVO> utils = new ValidatorUtils<>();
+		
+		boolean valid = utils.validate(member, errors, InsertGroup.class);
+		System.out.println(errors);
 		
 		ServiceResult result = service.creatMember(member);
 		String viewName = null;
 		String msg = null;
 
-		ValidatorUtils<MemberVO> utils = new ValidatorUtils<>();
-		
-		boolean valid = utils.validate(member, errors, InsertGroup.class);
-		System.out.println(errors);
 		if(valid) {
 		
 			switch (result) {

@@ -47,6 +47,13 @@
 			<td>${prod.prodDetail}</td>
 		</tr>
 		
+		<tr>
+			<th>이미지</th>
+			<td>
+				<img src = "${cPath}${prodImagesUrl}/${prod.prodImg}"/>
+			</td>
+		</tr>
+		
 	
 		<tr>
 			<th>입고일</th>

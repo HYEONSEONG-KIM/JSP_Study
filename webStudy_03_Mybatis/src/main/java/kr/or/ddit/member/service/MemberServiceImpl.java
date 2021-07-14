@@ -1,15 +1,28 @@
 package kr.or.ddit.member.service;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
+import java.util.UUID;
+
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.ThreadUtils;
 
 import kr.or.ddit.commons.UserNotFoundExcpetion;
 import kr.or.ddit.enumtype.ServiceResult;
+import kr.or.ddit.listener.ContextLoaderListener;
 import kr.or.ddit.member.dao.MemberDAO;
 import kr.or.ddit.member.dao.MemberDAOImpl;
+import kr.or.ddit.multipart.MultipartFile;
 import kr.or.ddit.utils.EncryptUtils;
 import kr.or.ddit.vo.MemberVO;
 import kr.or.ddit.vo.ZipVO;
 import kr.or.ddit.vo.pagingVO;
+import net.coobird.thumbnailator.Thumbnails;
+import net.coobird.thumbnailator.Thumbnails.Builder;
+import net.coobird.thumbnailator.builders.BufferedImageBuilder;
 
 public class MemberServiceImpl implements MemberService {
 
@@ -26,6 +39,34 @@ public class MemberServiceImpl implements MemberService {
 		return self;
 	}
 	
+	private void proccessProdImage(MemberVO member) {
+		
+		MultipartFile memImage = member.getMemImage();
+		
+		if(memImage == null || memImage.isEmpty()) return;
+		
+		try/*(
+			//InputStream is = memImage.getInputStream();
+		)*/{
+			File saveFolder = ContextLoaderListener.memberImages;
+			String saveName = member.getMemPath();
+			File saveFile = new File(saveFolder, saveName);
+			
+			//FileUtils.copyInputStreamToFile(is, saveFile);
+			memImage.transferTo(saveFile);
+			
+		}catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+		
+	}
+	
+	
+
+	
+	
+	
+	
 	@Override
 	public ServiceResult creatMember(MemberVO member) {
 		
@@ -39,6 +80,9 @@ public class MemberServiceImpl implements MemberService {
 		member.setMemPass(encoded);
 		
 		int result = memberDao.insertMember(member);
+		
+		proccessProdImage(member);
+		
 		if(result > 0) {
 			return ServiceResult.OK;
 		}else {
@@ -47,6 +91,8 @@ public class MemberServiceImpl implements MemberService {
 	}
 	
 	
+	
+
 	@Override
 	public int retrieveMemberCount(pagingVO pagingvo) {
 
