@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd" version="3.1">
+  <display-name>webStudy04_MVC</display-name>
+  <welcome-file-list>
+    <welcome-file>index.do</welcome-file>
+  </welcome-file-list>
+  <context-param>
+    <param-name>cParam1</param-name>
+    <param-value>컨텍스트파라미터</param-value>
+  </context-param>
+  <listener>
+    <listener-class>kr.or.ddit.listener.ContextLoaderListener</listener-class>
+  </listener>
+  
+  <listener>
+    <listener-class>kr.or.ddit.listener.CustomSessionListener</listener-class>
+  </listener>
+  
+  <filter>
+    <filter-name>CharacterEncodingFilter</filter-name>
+    <filter-class>kr.or.ddit.filter.CharacterEncodingFilter</filter-class>
+    <init-param>
+      <param-name>encoding</param-name>
+      <param-value>UTF-8</param-value>
+    </init-param>
+  </filter>
+  <filter-mapping>
+    <filter-name>CharacterEncodingFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+  <filter>
+    <filter-name>MultipartFilter</filter-name>
+    <filter-class>kr.or.ddit.multipart.MultipartFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>MultipartFilter</filter-name>
+    <url-pattern>*.do</url-pattern>
+  </filter-mapping>
+  <servlet>
+    <servlet-name>FileUploadServlet</servlet-name>
+    <servlet-class>kr.or.ddit.fileupload.FileUploadServlet</servlet-class>
+    <multipart-config/>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>FileUploadServlet</servlet-name>
+    <url-pattern>/fileUpload.do</url-pattern>
+  </servlet-mapping>
+  
+  
+  <servlet>
+  	<servlet-name>FrontController</servlet-name>
+  	<servlet-class>kr.or.ddit.mvc.FrontController</servlet-class>
+  	<init-param>
+  		<param-name>basePackage</param-name>
+  		<param-value>kr.or.ddit</param-value>
+  	</init-param>
+  	
+  		<init-param>
+  		<param-name>prefix</param-name>
+  		<param-value>/WEB-INF/views/</param-value>
+  	</init-param>
+  	
+  		<init-param>
+  		<param-name>suffix</param-name>
+  		<param-value>.jsp</param-value>
+  	</init-param>
+  	<!-- 서버 구동시 제일 먼저 객체 생성 -->
+  	<load-on-startup>1</load-on-startup>
+  	<multipart-config></multipart-config>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>FrontController</servlet-name>
+  	<url-pattern>*.do</url-pattern>
+  </servlet-mapping>
+  
+</web-app>

@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 여기서 사용할 DAO interface 경로 설정(Mybatis의 경로는 모두 classpath이므로 kr부터의 상대경로(/ 
+	없이) 표시 ) -->
+<mapper namespace="kr.or.ddit.member.dao.MemberDAO">
+
+	<insert id="insertMember" parameterType="MemberVO">
+		INSERT INTO member (
+		    MEM_ID,    MEM_PASS,    MEM_NAME,    MEM_REGNO1,
+		    MEM_REGNO2,    MEM_BIR,    MEM_ZIP,    MEM_ADD1,
+		    MEM_ADD2,    MEM_HOMETEL,    MEM_COMTEL,    MEM_HP,
+		    MEM_MAIL,    MEM_JOB,    MEM_LIKE,    MEM_MEMORIAL,
+		    MEM_MEMORIALDAY,    MEM_MILEAGE,    MEM_DELETE	, MEM_ROLE
+		    <if test="memImg != null and memImg.length gt 0">
+		    ,	MEM_IMG
+		    </if>
+			) 
+		VALUES ( 
+			#{memId,jdbcType=VARCHAR},
+			#{memPass,jdbcType=VARCHAR},
+			#{memName,jdbcType=VARCHAR},
+			#{memRegno1,jdbcType=CHAR},
+			#{memRegno2,jdbcType=CHAR},
+			TO_DATE(#{memBir,jdbcType=DATE}, 'YYYY-MM-DD HH24:MI:SS'),
+			#{memZip,jdbcType=CHAR},
+			#{memAdd1,jdbcType=VARCHAR},
+			#{memAdd2,jdbcType=VARCHAR},
+			#{memHometel,jdbcType=VARCHAR},
+			#{memComtel,jdbcType=VARCHAR},
+			#{memHp,jdbcType=VARCHAR},
+			#{memMail,jdbcType=VARCHAR},
+			#{memJob,jdbcType=VARCHAR},
+			#{memLike,jdbcType=VARCHAR},
+			#{memMemorial,jdbcType=VARCHAR},
+			TO_DATE(#{memMemorialday,jdbcType=DATE}, 'YYYY-MM-DD HH24:MI:SS'),
+			#{memMileage},
+			#{memDelete,jdbcType=VARCHAR },
+			'ROLE_USER'
+			<if test="memImg != null and memImg.length gt 0">
+			,#{memImg, jdbcType=BLOB}
+			</if>
+			
+		)
+		
+		<selectKey resultType="string" keyProperty="memId" >
+			SELECT MEM_ID FROM MEMBER WHERE MEM_ID = #{memId}
+		</selectKey>
+	</insert>
+
+
+
+	<!-- id => 해당 sql을 사용할 메서드 명 (코드 어시스트 치면 나옴) parameterType => 파라미터 resultType 
+		=> 반환값 타입 -->
+	<select id="selectMemberById" parameterType="string"
+		resultType="MemberVO">
+		SELECT MEM_ID, MEM_PASS, MEM_NAME, MEM_ROLE , MEM_IMG
+		FROM MEMBER WHERE MEM_ID
+		= #{mem_id} AND MEM_DELETE IS NULL
+	</select>
+
+	<sql id="searchFrag">
+		<where>
+			<if
+				test="simpleSearch!=null and @org.apache.commons.lang3.StringUtils@isNotBlank(simpleSearch.searchWrod)">
+
+				<!-- switch case문과 같은 문법 -->
+				<choose>
+					<when test="simpleSearch.searchType eq 'name'">
+						INSTR(MEM_NAME, #{simpleSearch.searchWrod}) > 0
+					</when>
+
+					<when test="simpleSearch.searchType eq 'address'">
+						INSTR(MEM_ADD1, #{simpleSearch.searchWrod}) > 0
+					</when>
+
+					<when test="simpleSearch.searchType eq 'hp'">
+						INSTR(MEM_HP, #{simpleSearch.searchWrod}) > 0
+					</when>
+
+					<otherwise>
+						INSTR(MEM_NAME, #{simpleSearch.searchWrod}) > 0
+						OR INSTR(MEM_ADD1, #{simpleSearch.searchWrod}) > 0
+						OR INSTR(MEM_HP, #{simpleSearch.searchWrod}) > 0
+					</otherwise>
+				</choose>
+			</if>
+		</where>
+	</sql>
+
+
+	<select id="selectTotalRecord" parameterType="pagingVO"
+		resultType="int">
+		SELECT COUNT(*)
+		FROM MEMBER
+		<include refid="searchFrag"></include>
+	</select>
+
+	<select id="selectMemberList" resultType="MemberVO"
+		parameterType="pagingVO">
+		SELECT B.*
+		FROM(
+		SELECT A.*, ROWNUM RNUM
+		FROM(
+		SELECT * FROM member
+		<include refid="searchFrag"></include>
+		ORDER BY ROWID DESC
+		) A
+		) B
+	<![CDATA[
+	WHERE RNUM >= #{startRow} AND RNUM <= #{endRow}
+	]]>
+	</select>
+
+
+	<!-- autoMapping 기능 사용하면 일일히 설정 하지 않아도 자동 매핑 -->
+	<resultMap type="MemberVO" id="memberMap" autoMapping="true">
+	<!-- id는 vo에 equals 메서드로 오버라이딩된 컬럼을 설정해줌으로 해당 컬럼값이 같으면 같은 객체로 인식하여 중복하지 않음  -->
+		<id property="memId" column="MEM_ID"/>
+		<!-- has many관계 해소  -->
+		<collection property="prodList" javaType="java.util.Set" ofType="ProdVO" autoMapping="true">
+			<id property="prodId" column="PROD_ID"/>
+			<!-- has a관계 해소 -->
+			<association property="buyer" autoMapping="true"></association>
+		</collection>
+	</resultMap>
+	
+	<!-- resultMap으로 수동 바인딩 설정 -->
+	<select id="selectMemberDatail" parameterType="string" resultMap="memberMap">
+		WITH PRODALL AS(
+			SELECT PROD_ID, PROD_COST, PROD_PRICE, LPROD_NM,
+				BUYER_NAME, BUYER_ADD1, BUYER_CHARGER
+			FROM PROD INNER JOIN LPROD ON (PROD_LGU = LPROD_GU)
+			INNER JOIN BUYER ON (PROD_BUYER = BUYER_ID)
+		), CARTPROD AS(
+			SELECT CART_MEMBER, PRODALL.*
+			FROM CART INNER JOIN PRODALL ON (CART_PROD = PROD_ID)
+		)
+		
+		SELECT MEMBER.*, CARTPROD.* FROM MEMBER LEFT OUTER JOIN CARTPROD ON (MEM_ID = CART_MEMBER)
+		WHERE MEM_ID = #{mem_id}
+	</select>
+
+	<update id="updateMember" parameterType="MemberVO">
+		UPDATE MEMBER SET
+		MEM_NAME=#{memName ,jdbcType=VARCHAR},
+		MEM_ZIP=#{memZip,
+		jdbcType=VARCHAR},
+		MEM_ADD1=#{memAdd1, jdbcType=VARCHAR},
+		MEM_ADD2=#{memAdd2, jdbcType=VARCHAR},
+		MEM_HOMETEL=#{memHometel,
+		jdbcType=VARCHAR},
+		MEM_COMTEL=#{memComtel, jdbcType=VARCHAR},
+		MEM_HP=#{memHp, jdbcType=VARCHAR},
+		MEM_MAIL=#{memMail,
+		jdbcType=VARCHAR},
+		MEM_JOB=#{memJob, jdbcType=VARCHAR},
+		MEM_LIKE=#{memLike, jdbcType=VARCHAR},
+		MEM_MEMORIAL=#{memMemorial,
+		jdbcType=VARCHAR},
+		MEM_MEMORIALDAY=TO_DATE(#{memMemorialday,
+		jdbcType=DATE}, 'YYYY-MM-DD HH24:mi:ss')
+		<if test="memImg != null and memImg.length gt 0">
+		, MEM_IMG = #{memImg, jdbcType=BLOB}
+		</if>
+		
+		WHERE MEM_ID=#{memId}
+	</update>
+
+	<update id="deleteMember" parameterType="string">
+		UPDATE MEMBER
+		SET
+		MEM_DELETE = '1'
+		WHERE MEM_ID = #{mem_id}
+	</update>
+	
+	<select id="selectZip" resultType="ZipVO">
+		SELECT
+   		 	ZIPCODE,    SIDO,    GUGUN,
+    		DONG,    RI,    BLDG,    BUNJI,   SEQ
+		FROM ZIPTB
+	</select>
+</mapper>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd" >
+<configuration>
+	
+	<!-- properties 파일 매핑 -->
+	<properties resource="kr/or/ddit/db/dbInfo.properties"/>
+	
+	<!-- VO클래스 필드명 카멜 표기법이어야 한다는 조건 설정 -->
+	<settings>
+		<setting name="mapUnderscoreToCamelCase" value="true"/>	
+	</settings>
+	
+	<!-- 해당 Alias설정시 mapper xml에서 간편히 사용 가능 -->
+	<typeAliases>
+		<package name="kr.or.ddit.vo"/>
+	</typeAliases>
+
+	<!-- 드라이버 로드 및 커넥션 풀 설정 -->
+	<environments default="dev">
+		<environment id="dev">
+			<transactionManager type="JDBC"/>
+			<dataSource type="POOLED">
+				<property name="driver" value="${driverClassName}"/>
+				<property name="url" value="${url}"/>
+				<property name="username" value="${user}"/>
+				<property name="password" value="${password}"/>
+				<property name="poolMaximumActiveConnections" value="${maxTotal}"/>
+				<property name="poolMaximumIdleConnections" value="${maxIdle}"/>
+				<property name="poolTimeToWait" value="${maxWait}"/>
+			</dataSource>
+		</environment>
+	</environments>
+	
+	<mappers>
+		<mapper resource="kr/or/ddit/db/mybatis/mappers/Member.xml"/>
+		<mapper resource="kr/or/ddit/db/mybatis/mappers/Employee.xml"/>
+		<mapper resource="kr/or/ddit/db/mybatis/mappers/DBProp.xml"/>
+		<mapper resource="kr/or/ddit/db/mybatis/mappers/Prod.xml"/>
+		<mapper resource="kr/or/ddit/db/mybatis/mappers/Others.xml"/>
+		<mapper resource="kr/or/ddit/db/mybatis/mappers/buyer.xml"/>
+	</mappers>
+
+</configuration>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
