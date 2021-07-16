@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.ddit.board.dao.FreeBoardDAO">
+
+	<sql id="searchBoard">
+		
+			<trim prefix="WHERE" prefixOverrides="AND">
+				<if test = "@org.apache.commons.lang3.StringUtils@isNotBlank(simpleSearch.startDate)">
+					BO_DATE >= TO_DATE(#{simpleSearch.startDate},'YYYY-MM-DD')
+				</if>
+				<if test = "@org.apache.commons.lang3.StringUtils@isNotBlank(simpleSearch.endDate)">
+					<![CDATA[
+					AND BO_DATE <= TO_DATE(#{simpleSearch.endDate}, 'YYYY-MM-DD')
+					]]>
+				</if>
+				<if test = "simpleSearch != null and @org.apache.commons.lang3.StringUtils@isNotBlank(simpleSearch.searchWrod)">
+					AND
+					<choose>
+						<when test="simpleSearch.searchType eq 'title'">
+							INSTR(BO_TITLE, #{simpleSearch.searchWrod}) > 0
+						</when>
+						
+						<when test="simpleSearch.searchType eq 'writer'">
+							INSTR(BO_WRITER, #{simpleSearch.searchWrod}) > 0
+						</when>
+						
+						<when test="simpleSearch.searchType eq 'content'">
+							INSTR(BO_CONTENT, #{simpleSearch.searchWrod}) > 0
+						</when>
+					
+						<otherwise>
+						(
+							INSTR(BO_TITLE, #{simpleSearch.searchWrod}) > 0
+							OR INSTR(BO_WRITER, #{simpleSearch.searchWrod}) > 0
+							OR INSTR(BO_CONTENT, #{simpleSearch.searchWrod}) > 0
+						)
+						</otherwise>
+					</choose>
+				</if>
+			</trim>
+	</sql>
+
+	<select id="selectTotalRecord" parameterType="pagingVO" resultType="int">
+		SELECT COUNT(*) FROM FREEBOARD
+		<include refid="searchBoard"></include>
+	</select>
+	
+	<select id="selectBoardList" parameterType="pagingVO" resultType="FreeBoardVO">
+			SELECT * 
+		FROM
+		(
+		    SELECT
+		        ROWNUM rnum, A.*
+		        FROM(
+		            SELECT
+		                BO_NO,    BO_TITLE,    BO_WRITER,
+		                BO_IP,    BO_MAIL,    BO_PASS,
+		                BO_CONTENT,    BO_DATE,    BO_REP,
+		                BO_HIT,    BO_REC,    BO_PARENT
+		            FROM
+		                FREEBOARD
+		            <include refid="searchBoard"></include>
+		            ORDER BY BO_DATE DESC    
+		         ) A
+		)
+		WHERE rnum BETWEEN #{startRow} AND #{endRow}
+	
+	</select>
+
+	
+	
+	<resultMap type="FreeBoardVO" id="boardMap" autoMapping="true">
+		<id property="boNo" column="ORI_BONO"/>
+	
+		<collection property="attatchList"  javaType="java.util.List" ofType="AttatchVO" autoMapping="true">
+			<id property="attNo" column="ATT_NO"/>
+		</collection>
+	</resultMap>
+
+	<select id="selectBoard" parameterType="int" resultMap="boardMap">
+			
+		SELECT
+		         A.BO_NO ORI_BONO,    A.BO_TITLE,    A.BO_WRITER,
+		         A.BO_IP,    A.BO_MAIL,    A.BO_PASS,
+		         A.BO_CONTENT,    A.BO_DATE,    A.BO_REP,
+		         A.BO_HIT,    A.BO_REC,    A.BO_PARENT, 
+		         B.ATT_NO, B.ATT_FILENAME, B.ATT_SAVENAME, B.ATT_MIME,
+		         B.ATT_FILESIZE, B.ATT_FANCYSIZE, B.ATT_DOWNLOAD
+		FROM
+		         FREEBOARD A LEFT OUTER JOIN ATTATCH B ON (A.BO_NO = B.BO_NO)
+		WHERE    A.BO_NO = #{boNo}
+	</select>
+	
+	<update id="incrementHit" parameterType="int">
+		UPDATE FREEBOARD
+		SET BO_HIT = BO_HIT + 1
+		WHERE BO_NO = #{boNo}
+	</update>
+	
+	<update id="incrementRec" parameterType="int">
+		UPDATE FREEBOARD
+		SET BO_REC = BO_REC + 1
+		WHERE BO_NO = #{boNo}
+	</update>
+	
+	<update id="incrementRep" parameterType="int">
+		UPDATE FREEBOARD
+		SET BO_REP = BO_REP + 1
+		WHERE BO_NO = #{boNo}
+	</update>
+	
+</mapper>
+
+
+
+
+
+
+
+

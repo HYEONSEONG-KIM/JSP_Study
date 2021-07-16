@@ -15,28 +15,24 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import kr.or.ddit.buyer.service.buyerService;
 import kr.or.ddit.buyer.service.buyerServiceImpl;
+import kr.or.ddit.commons.exception.DataNotFoundException;
+import kr.or.ddit.mvc.annotation.stereotype.Controller;
+import kr.or.ddit.mvc.annotation.stereotype.RequestMapping;
+import kr.or.ddit.mvc.resolvers.RequestParam;
 import kr.or.ddit.vo.BuyerVO;
 import kr.or.ddit.vo.pagingVO;
 
-@WebServlet("/buyer/buyerList.do")
-public class BuyerListControllerServlet extends HttpServlet {
+@Controller
+public class Buyer {
 
 	private buyerService service = buyerServiceImpl.getInstance();
 	
-	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	@RequestMapping("/buyer/buyerList.do")
+	public String buyerList(
+			@RequestParam(value = "page", required = false, defaultValue = "1") int currentPage
+			,@RequestParam(value = "searchWord", required =false) String searchWord
+			,HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		
-		req.setCharacterEncoding("UTF-8");
-		
-		String searchWord = req.getParameter("searchWord");
-		String pageStr = req.getParameter("page");
-		int currentPage = 1;
-		if(StringUtils.isNumeric(pageStr)) {
-			currentPage = Integer.parseInt(pageStr);
-		}
-		
-		
-	
 		
 		String accept = req.getHeader("accept");
 		String viewName = null;
@@ -64,28 +60,35 @@ public class BuyerListControllerServlet extends HttpServlet {
 			){
 				mapper.writeValue(out, paging);
 			}
-			
-			
-			
+			return null;
 		}else {
+			return "buyer/buyerList";
+		}
+	}
+		@RequestMapping("/buyer/buyerDetail.do")
+		public String buyerView(
+				@RequestParam("buyerId") String buyerId,
+				HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 			
-			viewName = "buyer/buyerList";
+			int status = 200;
+			String msg = null;
 			
-			if(viewName.startsWith("redirect:")) {
-				viewName  = viewName.substring("redirect:".length());
-				resp.sendRedirect(req.getContextPath() + viewName);
-				
-			}else {
-				String prefix = "/WEB-INF/views/";
-				String suffix = ".jsp";
-				req.getRequestDispatcher(prefix + viewName + suffix).forward(req, resp);
+			BuyerVO buyer = null;
+			
+			try {
+				buyer = service.retrieceBuyer(buyerId);
+			}catch(DataNotFoundException e) {
+				status = 500;
+				msg = "데이터 없음";
 			}
 			
-		}
-		
-		
-		
-		
+			if(status == 200) {
+				req.setAttribute("buyer", buyer);
+				return "/buyer/buyerDetail";
+			}else {
+				resp.sendError(status,msg);
+				return null;
+			}
 
 		
 		

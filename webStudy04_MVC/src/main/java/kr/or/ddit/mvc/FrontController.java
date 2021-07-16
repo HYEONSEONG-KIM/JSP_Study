@@ -29,9 +29,11 @@ public class FrontController extends HttpServlet{
 	@Override
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
+		// 하드코딩하지 않게 web.xml에 파라미터로 설정
 		String basePackage = config.getInitParameter("basePackage");
 		String prefix =  config.getInitParameter("prefix");
 		String suffix =  config.getInitParameter("suffix");
+		// basePackage에 안에 mapping정보를 map의 형태로 저장
 		handlerMapping = new RequestMappingHandlerMapping(basePackage);
 		handlerAdapter = new RequestMappingHandlerAdapter();
 		((RequestMappingHandlerAdapter)handlerAdapter).addArgumentResolvers(new RequestPartArgumentResolver());
@@ -42,7 +44,9 @@ public class FrontController extends HttpServlet{
 	
 	@Override
 	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		// 매핑할 정보
 		RequestMappingInfo mappingInfo = handlerMapping.findCommandHandler(req);
+		// 요청에 들어온 mapping주소가 없으면 null 
 		if(mappingInfo == null) {
 			resp.sendError(404, req.getRequestURI() + "에 대한 핸들러가 없음, 제공하지 않는 서비스");
 			return;

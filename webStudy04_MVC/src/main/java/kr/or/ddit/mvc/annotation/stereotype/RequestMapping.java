@@ -7,9 +7,18 @@ import java.lang.annotation.Target;
 
 import kr.or.ddit.mvc.annotation.RequestMethod;
 
+
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface RequestMapping {
+	/**
+	 * uri주소
+	 * @return
+	 */
 	String value();
+	/**
+	 * method 타입
+	 * @return
+	 */
 	RequestMethod method() default RequestMethod.GET;
 }

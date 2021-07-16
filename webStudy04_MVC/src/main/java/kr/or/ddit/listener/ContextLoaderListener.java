@@ -29,8 +29,10 @@ public class ContextLoaderListener implements ServletContextListener {
 	
 	public static File prodImages;
 	public static File memberImages;
+	public static File buyerImages;
 	public static String prodImagesUrl;
 	public static String memberImageUrl;
+	public static String buyerImageUrl;
 
 	
 	@Override
@@ -40,10 +42,13 @@ public class ContextLoaderListener implements ServletContextListener {
 		
 		prodImagesUrl = "/resources/prodImages";
 		memberImageUrl = "/resources/memImages";
+		buyerImageUrl = "/resources/buyerImages";
 		application.setAttribute("prodImagesUrl", prodImagesUrl);
 		application.setAttribute("memberImageUrl", memberImageUrl);
+		application.setAttribute("buyerImageUrl", buyerImageUrl);
 		String prodSaveFolderPath = application.getRealPath(prodImagesUrl);
 		String memberSaveFolderPath = application.getRealPath(memberImageUrl);
+		String buyerSaveFolderPath = application.getRealPath(buyerImageUrl);
 		prodImages = new File(prodSaveFolderPath);
 		if(!prodImages.exists()) {
 			prodImages.mkdirs();
@@ -51,6 +56,11 @@ public class ContextLoaderListener implements ServletContextListener {
 		memberImages = new File(memberSaveFolderPath);
 		if(!memberImages.exists()) {
 			memberImages.mkdirs();
+		}
+		
+		buyerImages = new File(buyerSaveFolderPath);
+		if(!buyerImages.exists()) {
+			buyerImages.mkdirs();
 		}
 		
 		application.setAttribute("userCount", new Integer(0));

@@ -16,6 +16,14 @@
 			<th>거래처명</th>
 			<td>${buyer.buyerName}</td>
 		</tr>
+		
+		<tr>
+			<th>사업자 등록증</th>
+			<td>
+				<img alt="" src="${cPath}${buyerImageUrl}/${buyer.buyerImg}">
+			</td>
+		</tr>
+		
 		<tr>
 			<th>상품분류명</th>
 			<td>${buyer.lprod.lprodNm}</td>

@@ -21,7 +21,7 @@
 </c:if>
 
 
-<form id = "buyerForm" method = "post">
+<form id = "buyerForm" method = "post" enctype="multipart/form-data">
 <div class="col-sm-6">
 	<table class="table">
 		
@@ -53,7 +53,7 @@
 								
 								<c:otherwise>
 									<c:forEach items="${lprodList}" var="lguMap">
-										<option value='${lguMap.get("PROD_LGU")}'>${lguMap.get("LPROD_NM")}</option>
+										<option value='${lguMap.get("LPROD_GU")}'>${lguMap.get("LPROD_NM")}</option>
 									</c:forEach>
 								</c:otherwise>
 					
@@ -64,6 +64,16 @@
 				<label id="buyerLgu-error"
 				class="error" for="buyerLgu">${errors}</label></td>
 		</tr>
+		
+		<tr>
+			<th>사업자 등록증</th>
+			<td>
+				<input type = "file" name = "buyerImage">
+				<label id="buyerImage-error"
+				class="error" for="buyerImage">${errors.buyerImage}</label>
+			</td>
+		</tr>
+		
 		<tr>
 			<th>거래은행
 			<th>

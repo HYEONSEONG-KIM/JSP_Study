@@ -1,5 +1,6 @@
 package kr.or.ddit.mvc.annotation;
 
+// mapping정보를 담기위해 키로 사용할 메서드(uri와 요청 정보)
 public class RequestMappingCondition {
 	private String uri;
 	private RequestMethod method;

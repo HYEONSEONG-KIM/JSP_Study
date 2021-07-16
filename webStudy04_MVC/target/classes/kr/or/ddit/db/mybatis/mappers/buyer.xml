@@ -49,7 +49,7 @@
 			BUYER_BANK, BUYER_BANKNO, BUYER_BANKNAME,
 			BUYER_ZIP, BUYER_ADD1, BUYER_ADD2,
 			BUYER_COMTEL, BUYER_FAX, BUYER_MAIL,
-			BUYER_CHARGER, BUYER_TELEXT, LPROD_NM "lprod.lprodNm"
+			BUYER_CHARGER, BUYER_TELEXT, LPROD_NM "lprod.lprodNm", BUYER_IMG
 			FROM BUYER INNER JOIN LPROD
 			ON BUYER_LGU = LPROD_GU
 			WHERE BUYER_ID = #{buyerName}
@@ -67,7 +67,7 @@
 			BUYER_ID, BUYER_NAME, BUYER_LGU, BUYER_BANK,
 			BUYER_BANKNO, BUYER_BANKNAME, BUYER_ZIP, BUYER_ADD1,
 			BUYER_ADD2, BUYER_COMTEL, BUYER_FAX, BUYER_MAIL,
-			BUYER_CHARGER, BUYER_TELEXT
+			BUYER_CHARGER, BUYER_TELEXT, BUYER_IMG
 			) VALUES (
 				#{buyerId,jdbcType=CHAR},
 				#{buyerName,jdbcType=VARCHAR},
@@ -82,7 +82,8 @@
 				#{buyerFax,jdbcType=VARCHAR},
 				#{buyerMail,jdbcType=VARCHAR},
 				#{buyerCharger,jdbcType=VARCHAR},
-				#{buyerTelext,jdbcType=VARCHAR}
+				#{buyerTelext,jdbcType=VARCHAR},
+				#{buyerImg,jdbcType=VARCHAR}
 			)
 	
 	</insert>

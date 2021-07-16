@@ -62,8 +62,7 @@ public class pagingVO<T>{
 		startPage = blockSize * ((currentPage - 1) / blockSize) + 1;
 		endPage = startPage + (blockSize - 1);
 	}
-	
-	private static final String LINKPTRN = "<a class = 'pageLink' href = '#' data-page= '%d'>%s</a>\n";
+	private static final String LINKPTRN = "<a class = 'pageLink btn btn-secondary' href = '#' data-page= '%d'>%s</a>\n";
 	public String getPagingHTML() {
 //		<a href = "?page=1"></a>
 		StringBuffer html = new StringBuffer();
@@ -75,7 +74,7 @@ public class pagingVO<T>{
 		endPage = endPage > totalPage? totalPage : endPage;
 		for(int page = startPage; page <= endPage; page++) {
 			if(currentPage == page) {
-				html.append("[" + page+"]");
+				html.append("<span class = 'btn btn-dark'>" + page+"</span>");
 			}else {
 				html.append(String.format(LINKPTRN, page, page));
 			}
