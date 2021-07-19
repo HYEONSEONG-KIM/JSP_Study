@@ -1,5 +1,7 @@
 package kr.or.ddit.board.dao;
 
+import org.apache.ibatis.session.SqlSession;
+
 import kr.or.ddit.vo.AttatchVO;
 import kr.or.ddit.vo.FreeBoardVO;
 
@@ -8,18 +10,18 @@ import kr.or.ddit.vo.FreeBoardVO;
  *
  */
 public interface AttatchDAO {
-	public int insertAttatchs(FreeBoardVO board);
+	public int insertAttatchs(FreeBoardVO board,SqlSession sqlSession);
 	/**
 	 * 파일을 다운로드 하는경우 select
 	 * @param attNo
 	 * @return
 	 */
-	public AttatchVO selectAttatch(int attNo);
+	public AttatchVO selectAttatch(int attNo, SqlSession sqlSession );
 	/**
 	 * 글을 수정시 파일을 변경시 기존 파일 삭제하고 다시 업로드 하기위한 메서드
 	 * @param board
 	 */
-	public int deleteAttatchs(FreeBoardVO board);
+	public int deleteAttatchs(FreeBoardVO board, SqlSession sqlSession);
 	/**
 	 * 게시판 삭제시 해당 게시판의 파일들을 먼저 삭제하기 위한 메서드
 	 * @param boNo

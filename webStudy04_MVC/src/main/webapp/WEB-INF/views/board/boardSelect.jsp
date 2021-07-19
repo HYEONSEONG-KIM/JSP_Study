@@ -43,15 +43,17 @@
 			<c:set var="attatchList" value="${freeboard.attatchList}"></c:set>
 				<c:choose>
 					<c:when test="${empty attatchList }">
-						이미지가 존재하지 않습니다
+						파일이 존재하지 않습니다
 					</c:when>
 					
 					<c:otherwise>
 						<c:forEach var="attatch" items="${attatchList}">
-							<c:set var = "size" value="${size + attatch.attFilesize}"></c:set>
-							<c:set var = "cnt" value = "${cnt + 1 }"></c:set>
+							<c:set var="i" value="${i + 1}"></c:set>
+							<c:if test="${i ne 1}">
+								,
+							</c:if>
+							<span>${attatch.attFilename}</span>
 						</c:forEach>
-						${cnt}/${size}
 					</c:otherwise>
 				</c:choose>
 			</td>
@@ -78,33 +80,22 @@
 			<input type = "button" value ="추천하기" class = "incrementBtn" data-type = "RECOMMEND">
 			</td>
 		</tr>
-		
-<%-- 
-		<table>
-			<c:set var="attatchList" value="${freeboard.attatchList}"></c:set>
-			<c:choose>
-				<c:when test="${empty attatchList }">
-					<tr>
-						<td>
-							이미지가 비어있습니다
-						</td>
-					</tr>
-				</c:when>
+		<tr>
+			<td colspan="2">
+			<c:url value = "/board/boardInsert.do" var = "insertURL">
+				<c:param name = "boParent" value = "${freeboard.boNo }"></c:param>
+			</c:url>
+				<input type = "button" value = "답글쓰기" class = "controlBtn" id ="reply"
+					data-gopage="${insertURL}">
 				
-				<c:otherwise>
-					<c:forEach items="${attatchList}" var ="attatch">
-						<tr>
-							<td>
-								<img  src="${cPath}/resources/boardImages/${attatch.attFilename}">
-							</td>
-						</tr>
-					</c:forEach>
-					
-				</c:otherwise>
-			
-			</c:choose>
+			<c:url value = "/board/boardUpdate.do" var = "updateURL">
+				<c:param name = "boNo" value = "${freeboard.boNo }"></c:param>
+			</c:url>	
+				<input type = "button" value = "수정하기" class = "controlBtn" id ="reply"
+					data-gopage="${updateURL}">
+			</td>
 		
-		</table> --%>
+		</tr>
 		
 		
 	</table>
@@ -137,6 +128,11 @@
 		let type = $(this).data('type');
 		$('#type').val(type);
 		 incrementForm.submit(); 
+	})
+	
+	$('.controlBtn').on('click',function(){
+		let url = $(this).data('gopage');
+		location.href = url;
 	})
 	
 

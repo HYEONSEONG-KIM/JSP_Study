@@ -1,4 +1,4 @@
-<%@page import="kr.or.ddit.vo.MemberVO"%>
+<%-- <%@page import="kr.or.ddit.vo.MemberVO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -35,7 +35,7 @@
 				${asd and asd } / ${not abc} -> true 
 		
 		비교연산 : >(gt) , <(lt) , >=(ge) , <=(le) , ==(eq -> 내부적으로는 equals 사용), !=(ne) 
-				${3 lt 4} / ${3 gt dgg } -> false/ <%-- ${true ne false }  --%>${sampleAttr eq  "페이지"}
+				${3 lt 4} / ${3 gt dgg } -> false/ ${true ne false } ${sampleAttr eq  "페이지"}
 		
 		단항연산자 : empty => 비워져있으면 true / ${empty sampleAttra }/ ${empty array1}, ${empty text1 } => 속성에서 있는지 본후, 있으면 해당 값의 길이를 비교하여 0이면 비어있는걸로 판단
 				
@@ -99,3 +99,4 @@
 
 
 
+ --%>

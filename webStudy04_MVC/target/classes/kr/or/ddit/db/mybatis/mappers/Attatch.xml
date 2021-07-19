@@ -2,4 +2,49 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.or.ddit.board.dao.AttatchDAO">
 
+	<insert id="insertAttatchs" parameterType="FreeBoardVO">
+		<selectKey resultType="int" keyProperty="startAttNo" order="BEFORE">
+			SELECT NVL(MAX(ATT_NO), 0) + 1 FROM ATTATCH
+		</selectKey>
+	
+		INSERT ALL
+		<foreach collection="attatchList" item="attatch" index="idx">
+				INTO ATTATCH (
+					ATT_NO,
+					BO_NO,
+					ATT_FILENAME,
+					ATT_SAVENAME,
+					ATT_MIME,
+					ATT_FILESIZE,
+					ATT_FANCYSIZE
+				) VALUES
+				(
+					#{startAttNo} + #{idx},
+					#{boNo, jdbcType=NUMERIC},
+					#{attatch.attFilename, jdbcType=VARCHAR},
+					#{attatch.attSavename, jdbcType=VARCHAR},
+					#{attatch.attMime, jdbcType=VARCHAR},
+					#{attatch.attFilesize, jdbcType=NUMERIC},
+					#{attatch.attFancysize, jdbcType=VARCHAR}
+				)		
+		</foreach>
+		SELECT * FROM DUAL
+	</insert>
+
+	<delete id="deleteAttatchs" parameterType="FreeBoardVO" >
+		DELETE FROM ATTATCH
+		WHERE ATT_NO IN (
+		<foreach collection="delAttrNos" item = "attNo" index="idx">
+			<if test="idx != 0 ">
+				,
+			</if>
+			#{attNo}
+		</foreach>
+		)
+	</delete>
+	
+	<select id="selectAttatch" parameterType="int" resultType="AttatchVO">
+		SELECT * FROM ATTATCH WHERE ATT_NO = #{attNo}
+	</select>
+
 </mapper>

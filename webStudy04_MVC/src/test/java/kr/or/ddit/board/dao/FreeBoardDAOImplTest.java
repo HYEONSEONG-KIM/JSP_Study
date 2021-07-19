@@ -31,7 +31,12 @@ public class FreeBoardDAOImplTest {
 
 	@Test
 	public void testInsertBoard() {
-		fail("Not yet implemented");
+	/*	FreeBoardVO board = dao.selectBoard(59);
+		board.setBoNo(null);
+		int result = dao.insertBoard(board);
+		assertEquals(1, result);
+		*/
+	
 	}
 
 	@Test
@@ -58,7 +63,7 @@ public class FreeBoardDAOImplTest {
 	/*	FreeBoardVO vo = dao.selectBoard(120);
 		System.out.println(vo.getAttatchList().get(0));
 		assertNotNull(vo);*/
-		System.out.println(CountType.valueOf("REPORT"));
+		fail("Not yet implemented");
 	}
 
 	@Test

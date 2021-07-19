@@ -109,7 +109,81 @@
 		WHERE BO_NO = #{boNo}
 	</update>
 	
+	
+	<insert id="insertBoard" parameterType="FreeBoardVO">
+		<selectKey resultType="int" keyProperty="boNo" order="BEFORE"> 
+			SELECT FREEBOARD_SEQ.NEXTVAL FROM DUAL
+		</selectKey>
+		
+		
+		INSERT INTO freeboard (
+		    BO_NO,    BO_TITLE,    BO_WRITER,
+		    BO_IP,    BO_MAIL,    BO_PASS,
+		    BO_CONTENT
+		    <if test="boParent != null and boParent gt 0">
+		    	, BO_PARENT
+		    </if>
+		) VALUES (
+		
+			#{boNo,jdbcType=NUMERIC},
+			#{boTitle,jdbcType=VARCHAR},
+			#{boWriter,jdbcType=VARCHAR},
+			#{boIp,jdbcType=VARCHAR},
+			#{boMail,jdbcType=VARCHAR},
+			#{boPass,jdbcType=VARCHAR},
+			#{boContent,jdbcType=CLOB}
+			 <if test="boParent != null and boParent gt 0">
+				, #{boParent,jdbcType=NUMERIC}
+		    </if>
+		)
+	
+		
+	</insert>
+	
+	<update id="updateBoard" parameterType="FreeBoardVO">
+		UPDATE FREEBOARD
+		SET
+			BO_TITLE = #{boTitle,jdbcType=VARCHAR},
+			BO_WRITER = #{boWriter,jdbcType=VARCHAR},
+			BO_IP = #{boIp,jdbcType=VARCHAR},
+			BO_MAIL = #{boMail,jdbcType=VARCHAR},
+			BO_PASS = #{boPass,jdbcType=VARCHAR},
+			BO_CONTENT = #{boContent,jdbcType=CLOB},
+			BO_DATE = SYSDATE
+			<if test="boParent != null and boParent gt 0">
+		    	, BO_PARENT = #{boParent,jdbcType=NUMERIC}
+		    </if>
+		WHERE
+			BO_NO = #{boNo,jdbcType=NUMERIC}
+
+	
+	</update>
+	
+	
 </mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

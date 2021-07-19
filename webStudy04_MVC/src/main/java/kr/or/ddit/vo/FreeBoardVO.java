@@ -4,19 +4,35 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 import kr.or.ddit.multipart.MultipartFile;
+import kr.or.ddit.validate.groups.DeleteGroup;
+import kr.or.ddit.validate.groups.InsertGroup;
+import kr.or.ddit.validate.groups.UpdateGroup;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NonNull;
 
 @Data
 @EqualsAndHashCode(of="boNo")
 public class FreeBoardVO implements Serializable{
 	
+	@NotNull(groups= UpdateGroup.class)
+	@Min(value = 1, groups = UpdateGroup.class)
 	private Integer boNo;
+	@NotBlank
 	private String boTitle;
+	@NotBlank
 	private String boWriter;
+	@NotBlank
 	private String boIp;
+	@Email
 	private String boMail;
+	@NotBlank
 	private transient String boPass;
 	private String boContent;
 	private String boDate;
@@ -47,4 +63,19 @@ public class FreeBoardVO implements Serializable{
 	private int[] delAttrNos;
 	
 	private List<FreeReplyVO> replyList;
+	
+	private int startAttNo;
+	
 }
+
+
+
+
+
+
+
+
+
+
+
+

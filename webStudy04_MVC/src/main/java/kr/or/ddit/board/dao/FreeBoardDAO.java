@@ -2,6 +2,8 @@ package kr.or.ddit.board.dao;
 
 import java.util.List;
 
+import org.apache.ibatis.session.SqlSession;
+
 import kr.or.ddit.vo.FreeBoardVO;
 import kr.or.ddit.vo.pagingVO;
 
@@ -11,12 +13,12 @@ import kr.or.ddit.vo.pagingVO;
  */
 public interface FreeBoardDAO {
 
-	public int insertBoard(FreeBoardVO board);
+	public int insertBoard(FreeBoardVO board, SqlSession sqlSession);
 	
 	public int selectTotalRecord(pagingVO<FreeBoardVO> paging);
 	public List<FreeBoardVO> selectBoardList(pagingVO<FreeBoardVO> paging);
 	public FreeBoardVO selectBoard(int boNo);
-	public int updateBoard(FreeBoardVO board);
+	public int updateBoard(FreeBoardVO board, SqlSession sqlSession);
 	public int deleteBoard(int boNo);
 
 	/**

@@ -24,9 +24,9 @@ public class FreeBoardDAOImpl implements FreeBoardDAO {
 			CustomSqlSessionFactoryBuilder.getSqlSessionFactory();
 	
 	@Override
-	public int insertBoard(FreeBoardVO board) {
-		// TODO Auto-generated method stub
-		return 0;
+	public int insertBoard(FreeBoardVO board, SqlSession sqlSession) {
+		
+		return sqlSession.insert("kr.or.ddit.board.dao.FreeBoardDAO.insertBoard", board);
 	}
 
 	@Override
@@ -62,9 +62,8 @@ public class FreeBoardDAOImpl implements FreeBoardDAO {
 	}
 
 	@Override
-	public int updateBoard(FreeBoardVO board) {
-		// TODO Auto-generated method stub
-		return 0;
+	public int updateBoard(FreeBoardVO board, SqlSession sqlSession) {
+		return sqlSession.update("kr.or.ddit.board.dao.FreeBoardDAO.updateBoard",board);
 	}
 
 	@Override

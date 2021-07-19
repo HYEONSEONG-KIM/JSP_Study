@@ -8,18 +8,32 @@
 <title>/board/boardList.jsp</title>
 <jsp:include page="/includee/preScript.jsp"></jsp:include>
 <script type="text/javascript" src = "${cPath}/resources/js/paging.js"></script>
+<style>
+
+.input-group input{
+	margin-left : 10px;
+}
+
+span{
+	margin-right: 5px;
+}
+#paging{
+text-align: center;
+}
+
+</style>
 </head>
 <body>
 	<div id = "searchUI">
 	<div class="input-group mb-3">
-		<select name = "searchType" class="form-select">
+		<select name = "searchType" class="form-select col-sm-3">
 			<option value>검색 항목을 선택하세요</option>
 			<option value = "title">제목</option>
 			<option value = "writer">작성자</option>
 			<option value = "content">내용</option>
 		</select>
 		
-		<input type = "text" name = "searchWrod" class="form-control">
+		<input type = "text" name = "searchWrod" class="form-control col-sm-3">
 		<input type = "date" name ="startDate"/>
 		<input type = "date" name ="endDate"/>
 		
@@ -73,10 +87,13 @@
 		<tfoot>
 			
 			<tr>
-				<td colspan="7">
+				<td colspan="6" id = "paging">
 					<div id = "pagingArea">
 						${paging.pagingHTML }
 					</div>
+				</td>
+				<td>
+					<input type = "button" value = "글쓰기" id = "boardInsert" class="btn btn-success"/>
 				</td>
 			</tr>
 			
@@ -105,6 +122,10 @@
 			location.href = "${cPath}/board/boardSelect.do?boNo=" + boNo;
 			
 		}).css("cursor", "pointer");
+		
+		$('#boardInsert').on('click', function(){
+			location.href = "${cPath}/board/boardInsert.do";
+		})
 	})
 
 </script>
