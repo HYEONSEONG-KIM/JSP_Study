@@ -27,7 +27,7 @@ public interface AttatchDAO {
 	 * @param boNo
 	 * @return
 	 */
-	public int deleteAll(int boNo);
+	public int deleteAll(int boNo, SqlSession sqlSession);
 	
 	/**
 	 * 다운로드 횟수 증가

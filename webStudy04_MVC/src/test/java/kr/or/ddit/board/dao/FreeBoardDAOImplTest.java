@@ -4,17 +4,21 @@ import static org.junit.Assert.*;
 
 import java.util.List;
 
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import kr.or.ddit.board.service.FreeBoardService.CountType;
+import kr.or.ddit.db.mybatis.CustomSqlSessionFactoryBuilder;
 import kr.or.ddit.vo.FreeBoardVO;
 import kr.or.ddit.vo.pagingVO;
 
 public class FreeBoardDAOImplTest {
 	
 	private FreeBoardDAO dao = FreeBoardDAOImpl.getInstance();
+	private SqlSessionFactory sqlSessionFactory = CustomSqlSessionFactoryBuilder.getSqlSessionFactory();
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -73,7 +77,15 @@ public class FreeBoardDAOImplTest {
 
 	@Test
 	public void testDeleteBoard() {
-		fail("Not yet implemented");
+		
+		try(
+			SqlSession sqlSession = sqlSessionFactory.openSession();
+		){
+			int result = dao.deleteBoard(59, sqlSession);
+			assertEquals(1, result);
+			
+		}
+		
 	}
 
 	@Test

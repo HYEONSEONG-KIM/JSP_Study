@@ -47,7 +47,6 @@ public class AttatchVO implements Serializable{
 	
 	public void deleteToBinary(File saveFolder) throws SecurityException{
 		File deleteFile = new File(saveFolder,attSavename);
-		System.out.println(attSavename);
 		if(deleteFile.exists()) {
 			deleteFile.delete();
 		}

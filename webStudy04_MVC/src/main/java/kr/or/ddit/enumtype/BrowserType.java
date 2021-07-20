@@ -1,7 +1,7 @@
 package kr.or.ddit.enumtype;
 
 public enum BrowserType{
-	MISE("익스플러로 구버전"), 
+	MSIE("익스플러로 구버전"), 
 	TRIDENT("익스플로러 최신버전"), 
 	OPERA("오페라"), 
 	FIREFOX("파이어폭스"), 
@@ -31,5 +31,21 @@ public enum BrowserType{
 		}
 		}
 		return finded.getBrowserName();
+	}
+	
+	
+	public static BrowserType findBrowser(String userAgent) {
+		BrowserType finded = BrowserType.OTHER;
+
+		if(userAgent != null) {
+			userAgent = userAgent.toUpperCase();
+			for(BrowserType tmp : values()){
+				if(userAgent.indexOf(tmp.name()) >= 0){
+					finded = tmp;
+					break;
+				}
+		}
+		}
+		return finded;
 	}
 }

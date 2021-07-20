@@ -36,13 +36,13 @@ public class FreeBoardInsertController {
 	@RequestMapping(value = "/board/boardInsert.do", method = RequestMethod.POST)
 	public String insertBaord(
 			@ModelAttribute("freeboard") FreeBoardVO freeBoardVO,
-			@RequestPart(value = "boardFiles", required = false) MultipartFile[] boardFile,
+			@RequestPart(value = "boFiles", required = false) MultipartFile[] boFiles,
 			HttpServletRequest req
 			) {
 		
 		String viewName = null;
-		if(boardFile != null) {
-			freeBoardVO.setBoFiles(boardFile);
+		if(boFiles != null) {
+			freeBoardVO.setBoFiles(boFiles);
 		}
 		ServiceResult result = service.createBoard(freeBoardVO); 
 		

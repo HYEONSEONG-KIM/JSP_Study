@@ -67,9 +67,8 @@ public class FreeBoardDAOImpl implements FreeBoardDAO {
 	}
 
 	@Override
-	public int deleteBoard(int boNo) {
-		// TODO Auto-generated method stub
-		return 0;
+	public int deleteBoard(int boNo, SqlSession sqlSession) {
+		return sqlSession.delete("kr.or.ddit.board.dao.FreeBoardDAO.deleteBoard", boNo);
 	}
 
 	@Override

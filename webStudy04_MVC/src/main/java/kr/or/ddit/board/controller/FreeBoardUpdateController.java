@@ -51,11 +51,11 @@ public class FreeBoardUpdateController {
 	@RequestMapping(value = "/board/boardUpdate.do", method = RequestMethod.POST)
 	public String boardUpdate(
 				@ModelAttribute("freeboard") FreeBoardVO board,
-				@RequestPart(value = "boardFiles", required = false) MultipartFile[] boardFile,
+				@RequestPart(value = "boFiles", required = false) MultipartFile[] boardFile,
 				HttpServletRequest req
 			) {
 		
-		System.out.println(board);
+		System.out.println(boardFile);
 		String viewName = null;
 		if(boardFile != null) {
 			board.setBoFiles(boardFile);
@@ -64,7 +64,6 @@ public class FreeBoardUpdateController {
 		
 		boolean valid = new ValidatorUtils<>().validate(board, errors, UpdateGroup.class);
 		String message = null;
-		req.setAttribute("message", message);
 		
 		if(valid) {
 			try {
@@ -78,10 +77,12 @@ public class FreeBoardUpdateController {
 				case INVALIDPASSWORD:
 					viewName = "board/boardForm";
 					message = "패스워드 오류";
+					req.setAttribute("message", message);
 					break;
 				default:
 					viewName = "board/boardForm";
 					message = "잠시 후 다시 시도..";
+					req.setAttribute("message", message);
 					break;
 				}
 				

@@ -147,7 +147,6 @@
 			BO_WRITER = #{boWriter,jdbcType=VARCHAR},
 			BO_IP = #{boIp,jdbcType=VARCHAR},
 			BO_MAIL = #{boMail,jdbcType=VARCHAR},
-			BO_PASS = #{boPass,jdbcType=VARCHAR},
 			BO_CONTENT = #{boContent,jdbcType=CLOB},
 			BO_DATE = SYSDATE
 			<if test="boParent != null and boParent gt 0">
@@ -158,6 +157,35 @@
 
 	
 	</update>
+	
+	<delete id="deleteBoard" parameterType="int">
+		MERGE INTO FREEBOARD C
+		USING(
+			SELECT BO_NO, (
+				SELECT COUNT(*) FROM FREEBOARD A WHERE A.BO_PARENT = B.BO_NO
+			) CNT
+			FROM FREEBOARD B
+		)D
+		ON(D.BO_NO = #{boNo} AND C.BO_NO = D.BO_NO)
+		WHEN MATCHED THEN
+		UPDATE SET
+		BO_TITLE = '삭제글',
+		BO_CONTENT = NULL,
+		BO_WRITER = '삭제글의 작성자'
+		
+		DELETE WHERE D.CNT = 0
+	
+	
+	<!-- 	DELETE FROM FREEBOARD
+		WHERE BO_NO IN
+		(
+			SELECT BO_NO
+			FROM FREEBOARD
+			START WITH BO_NO = #{boNo}
+			CONNECT BY PRIOR BO_NO = BO_PARENT
+		) -->
+		
+	</delete>
 	
 	
 </mapper>

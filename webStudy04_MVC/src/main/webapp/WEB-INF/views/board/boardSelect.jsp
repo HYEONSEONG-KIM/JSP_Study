@@ -9,6 +9,12 @@
 <jsp:include page="/includee/preScript.jsp"></jsp:include>
 <script type="text/javascript" src = "<%=request.getContextPath() %>/resources/js/jquery.form.min.js"></script>
 </head>
+<c:if test="${not empty message}">
+	<script type="text/javascript">
+		alert("${message}");
+	</script>
+	<c:remove var="message" scope="session"/>
+</c:if>
 <body>
 <table class = "table">
 		<tr>
@@ -52,7 +58,10 @@
 							<c:if test="${i ne 1}">
 								,
 							</c:if>
-							<span>${attatch.attFilename}</span>
+							<c:url value="/board/download.do" var="downloadURL">
+								<c:param name="what" value="${attatch.attNo}"></c:param>
+							</c:url>
+							<a href="${downloadURL}">${attatch.attFilename}</a>
 						</c:forEach>
 					</c:otherwise>
 				</c:choose>
@@ -91,8 +100,10 @@
 			<c:url value = "/board/boardUpdate.do" var = "updateURL">
 				<c:param name = "boNo" value = "${freeboard.boNo }"></c:param>
 			</c:url>	
-				<input type = "button" value = "수정하기" class = "controlBtn" id ="reply"
+				<input type = "button" value = "수정하기" class = "controlBtn"
 					data-gopage="${updateURL}">
+					
+				<input type = "button" value = "삭제하기"  id = "deleteBtn">
 			</td>
 		
 		</tr>
@@ -105,13 +116,26 @@
 		<input type = "hidden" name = "type" id = "type">
 		
 	</form>
+	<form name = "deleteForm" action="${cPath}/board/boardDelete.do" method="post">
+		<input type = "hidden" name = "boNo" value = "${freeboard.boNo}" required>
+		<input type = "hidden" name = "boPass" required>
+		
+	</form>
 
 </body>
 
 <script type="text/javascript">
 
+	$('#deleteBtn').on('click',function(){
+		let inputPass = prompt("비밀번호 입력");
+		document.deleteForm.boPass.value = inputPass;
+		document.deleteForm.submit();
+		
+	})
+
 	let incrementForm = $('#incrementForm')
 					.ajaxForm({
+						method : 'post',
 						dataType : 'json',
 						success : function(resp){
 							if(resp.result != "OK")
@@ -132,10 +156,41 @@
 	
 	$('.controlBtn').on('click',function(){
 		let url = $(this).data('gopage');
-		location.href = url;
+		if(url != null)
+			location.href = url;
 	})
 	
+	
+	
+/* 
+	$('#deleteBtn').on('click',function(){
+		
+		let inputPass = prompt("비밀번호 입력");
+		let url = "${cPath}/board/boardDelete.do";
+		let data = {
+				'boPass' : inputPass,
+				'boNo' : '${freeboard.boNo}'
+		} 
+		
+		$.ajax({
+			url : url,
+			data : data,
+			method : "post",
+			dataType : "json",
+			success : function(resp) {
+				console.log(resp)
+				if(resp.result == "OK"){
+					alert("삭제되었습니다")
+					location.href = "${cPath}/board/boardList.do";
+				}else if(resp.result == "INVALIDPASSWORD"){
+					alert("비밀번호가 일치하지 않습니다")
+				}else{
+					alert("서버오류...잠시 후 다시 시도해주세요")
+				}
+			}
 
+		});
+	}) */
 
 	/* $(function(){
 		$('#recommend').on('click', function(){

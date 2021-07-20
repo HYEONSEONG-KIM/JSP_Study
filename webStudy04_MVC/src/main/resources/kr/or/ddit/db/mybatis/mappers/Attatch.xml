@@ -33,18 +33,27 @@
 
 	<delete id="deleteAttatchs" parameterType="FreeBoardVO" >
 		DELETE FROM ATTATCH
-		WHERE ATT_NO IN (
-		<foreach collection="delAttrNos" item = "attNo" index="idx">
-			<if test="idx != 0 ">
-				,
-			</if>
+		WHERE ATT_NO IN 
+		<foreach collection="delAttrNos" item = "attNo"  open="("  close=")" separator=",">
+		
 			#{attNo}
 		</foreach>
-		)
+		
 	</delete>
 	
 	<select id="selectAttatch" parameterType="int" resultType="AttatchVO">
 		SELECT * FROM ATTATCH WHERE ATT_NO = #{attNo}
 	</select>
+	
+	<delete id="deleteAll" parameterType="int">
+		DELETE FROM ATTATCH
+		WHERE BO_NO = ${boNo}
+	</delete>
+	
+	<update id="incrementDownCount" parameterType="int">
+		UPDATE ATTATCH
+		SET ATT_DOWNLOAD = ATT_DOWNLOAD + 1
+		WHERE ATT_NO = #{attNo}
+	</update>
 
 </mapper>

@@ -19,7 +19,7 @@ public interface FreeBoardDAO {
 	public List<FreeBoardVO> selectBoardList(pagingVO<FreeBoardVO> paging);
 	public FreeBoardVO selectBoard(int boNo);
 	public int updateBoard(FreeBoardVO board, SqlSession sqlSession);
-	public int deleteBoard(int boNo);
+	public int deleteBoard(int boNo, SqlSession sqlSession);
 
 	/**
 	 * 조회수 증가를 위한 메서드

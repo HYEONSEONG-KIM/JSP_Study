@@ -39,14 +39,18 @@ public class AttatchDAOImpl implements AttatchDAO {
 	}
 
 	@Override
-	public int deleteAll(int boNo) {
-		// TODO Auto-generated method stub
-		return 0;
+	public int deleteAll(int boNo, SqlSession sqlSession) {
+		return sqlSession.delete("kr.or.ddit.board.dao.AttatchDAO.deleteAll", boNo);
 	}
 
 	@Override
 	public int incrementDownCount(int attNo) {
-		// TODO Auto-generated method stub
+	/*	try(
+				SqlSession sqlSession = sqlSessionFactory.openSession();
+				){
+			AttatchDAO mapper = sqlSession.getMapper(AttatchDAO.class);
+			return mapper.incrementDownCount;
+		}*/
 		return 0;
 	}
 

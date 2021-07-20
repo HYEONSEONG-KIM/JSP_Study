@@ -8,11 +8,20 @@
 <title>Insert title here</title>
 <jsp:include page="/includee/preScript.jsp"></jsp:include>
 <script type="text/javascript"
+	src = "${cPath}/resources/ckeditor/ckeditor.js"></script>
+<script type="text/javascript"
 	src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.3/dist/jquery.validate.min.js"></script>
 <script type="text/javascript"
 	src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.3/dist/additional-methods.min.js"></script>
 </head>
 <body>
+<c:if test="${not empty message }">
+	<script type="text/javascript">
+		alert("${message}")
+	</script>
+	
+</c:if>
+
 	<form id="boardForm" method="post" enctype="multipart/form-data">
 		<input type = "hidden" name = "boNo" value = "${freeboard.boNo}">
 		<input type = "text" name = "boParent" value = "${freeboard.boParent }" placeholder="답글 작성시 상위글번호">
@@ -81,7 +90,7 @@
 			
 			<tr>
 				<th>내용</th>
-				<td><textarea type="text" name="boContent" cols="50" rows="10"
+				<td><textarea id = "boContent" name="boContent" cols="50" rows="10"
 						value="${freeboard.boContent}" class="form-control"></textarea> <label
 					id="boContent-error" class="error" for="boContent">${errors.boContent}</label></td>
 			</tr>
@@ -115,6 +124,12 @@
 		$('#fileArea').append(inputTag);
 		
 	}) */
+		
+		CKEDITOR.replace('boContent',{
+			filebrowserImageUploadUrl : "${cPath}/board/uploadImage.do?type=images"
+			
+		});
+	
 	   const ATTATCHSOURCE = $("#attatchSource");
 	
 	   $("table").on("click", ".plusBtn", function(){

@@ -15,6 +15,7 @@ import kr.or.ddit.board.service.FreeBoardService;
 import kr.or.ddit.board.service.FreeBoardService.CountType;
 import kr.or.ddit.board.service.FreeBoardServiceImpl;
 import kr.or.ddit.enumtype.ServiceResult;
+import kr.or.ddit.mvc.annotation.RequestMethod;
 import kr.or.ddit.mvc.annotation.stereotype.Controller;
 import kr.or.ddit.mvc.annotation.stereotype.RequestMapping;
 import kr.or.ddit.mvc.resolvers.RequestParam;
@@ -25,7 +26,7 @@ public class FreeBoardIncrementContoller {
 
 	private FreeBoardService service = FreeBoardServiceImpl.getInstance();
 	
-	@RequestMapping("/board/increment.do")
+	@RequestMapping(value = "/board/increment.do", method= RequestMethod.POST)
 	public String Increment(
 			@RequestParam("bono") int boNo,
 			@RequestParam("type") String type,
