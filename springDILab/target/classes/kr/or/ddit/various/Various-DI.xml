@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:c="http://www.springframework.org/schema/c"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd"
+	default-init-method="init" default-destroy-method="destroy"
+	>
+
+<!-- 
+// 컨테이너가 초기화될때 동시 생성
+		// 싱글톤 사용
+		// 첫번째가 두번째보다 먼저 생성
+		// 
+
+ -->
+ 
+ 	
+	<bean id = "vo1" class="kr.or.ddit.various.VariousDIVO"
+		c:boolData="true"
+		c:ch="A"
+		c:dbl="23.4"
+		c:number="234"
+		c:text="TEXTDATA"
+		c:file="classpath:log4j2.xml"
+		
+		
+		scope="prototype"
+		
+	/>
+	
+		<bean id = "vo2" class="kr.or.ddit.various.VariousDIVO"
+ 		p:boolData="false"
+		p:ch="B"
+		p:dbl="33.5"
+		p:number="2234"
+		p:text="SETTER"
+		p:file="classpath:log4j2.xml"
+		
+		scope="singleton"
+		depends-on="vo1"
+ 	/>
+
+</beans>

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:c="http://www.springframework.org/schema/c"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.3.xsd"
+		
+		default-init-method="init"
+		>
+	<!-- 프로퍼티스, 팩토리빈 주의!!! -->
+
+	<bean id = "today" class= "java.util.Date"/>
+
+	<util:list id="sampleList" list-class="java.util.LinkedList" value-type="java.lang.String">
+		<value>listValue1</value>
+		<value>listValue2</value>
+	</util:list>
+	
+	<util:set id = "sampleSet" set-class="java.util.LinkedHashSet">
+		<ref bean="today"/>
+		<value>setValue2</value>
+	</util:set>
+	
+	<util:map id="sampleMap" map-class="java.util.HashMap" key-type="java.lang.String" value-type="java.lang.Object">
+		<entry key="key1" value="mapValue1"/>
+		<entry key="key2">
+			<ref bean="today"/>
+		</entry>
+	</util:map>
+	
+	<util:properties id= "sampleProps" location="classpath:dbInfo.properties">
+		<prop key="propName1">propValue1</prop>
+		<prop key="propName2">propValue2</prop>
+	</util:properties>
+	
+	<bean id = "sampleArray" class = "kr.or.ddit.various.ObjectArrayFactoryBean"></bean>
+	
+	<bean id = "colVO2" class = "kr.or.ddit.various.CollectionDIVO"
+		p:sampleList-ref="sampleList"
+		p:sampleSet-ref="sampleSet"
+		p:sampleMap-ref="sampleMap"
+		p:sampleProps-ref="sampleProps"
+		p:sampleArray-ref="sampleArray"
+		
+	/>
+		
+	
+	<bean id = "colVO1" class="kr.or.ddit.various.CollectionDIVO">
+		<constructor-arg name="sampleList">
+			<list>
+				<value>listValue1</value>
+				<value>listValue2</value>
+			</list>
+		</constructor-arg>
+		
+		<constructor-arg name="sampleSet">
+			<set>
+				<ref bean="today"/>
+				<value>setValue2</value>
+			</set>
+		</constructor-arg>
+		<constructor-arg name="sampleMap">
+			<map>
+				<entry key="key1" value="mapValue1"/>
+				<entry key="key2">
+					<ref bean="today"/>
+				</entry>
+			</map>
+		</constructor-arg>
+		<constructor-arg name="sampleProps">
+			<props>
+				<prop key="propName1">propValue1</prop>
+				<prop key="propName2">propValue2</prop>
+			</props>
+		</constructor-arg>
+		<constructor-arg name="sampleArray">
+			<array>
+				<ref bean="today"/>
+				<value>arrayValue2</value>
+			</array>
+		</constructor-arg>
+	</bean>
+</beans>

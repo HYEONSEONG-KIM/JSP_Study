@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:c="http://www.springframework.org/schema/c"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.3.xsd"
+		default-init-method="init"
+		>
+
+	<util:properties id="dbInfo" location="classpath:dbInfo.properties"/>
+		
+	<!-- 
+		$가아닌 #
+		*, +는 산술연산이 아닌 concat의 개념
+	 -->
+	<bean id ="infoVO1" class="kr.or.ddit.various.props.DataBaseInfoPropVO"
+		c:driverClassName="#{dbInfo['maindb.driverClassName']}"
+		c:url = "#{dbInfo['maindb.url']}"
+		c:user="#{dbInfo['maindb.user'] * 3}"
+		c:password="#{dbInfo['maindb.password']}"
+		c:initialSize="#{dbInfo['maindb.initialSize']}"
+		c:maxWait="#{dbInfo['maindb.maxWait'] + 1}"
+		c:vdivo-ref="vo1"
+	/>
+
+	<context:property-placeholder location="classpath:dbInfo.properties"/>
+	
+	<!-- placeHolder는 연산사용 불가 -->
+	<bean id = "infoVO2" class="kr.or.ddit.various.props.DataBaseInfoPropVO"
+		c:driverClassName="${maindb.driverClassName}"
+		c:url="${maindb.url}"
+		c:user="${maindb.user}"
+		c:password="${maindb.password}"
+		c:initialSize="${maindb.initialSize}"
+		c:maxWait="${maindb.maxWait}"
+		c:vdivo-ref="vo2"
+	/>
+	
+</beans>
+
+
+
+
+
+
+
+
+
+

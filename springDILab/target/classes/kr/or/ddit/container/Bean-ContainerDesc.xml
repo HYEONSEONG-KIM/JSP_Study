@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:c="http://www.springframework.org/schema/c"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd"
+	default-init-method="init" default-destroy-method="destroy"
+	>
+	
+	<!-- 
+		Spring DI container 사용 단계
+		1. core container 구성 모듈의 의존성 추가
+		2. bean configuration file의 형태로 xml(설정 파일) 작성
+			1) 컨테이너 관리 객체(Bean) 등록
+			2) 등록된 bean들 간의 의존관계 형성(injection)
+			 - constructor inject : construct-arg , c
+			 - setter inject : property , p
+		3. 어플리케이션의 엔트리 포인트에서 컨테이너 객체(applicationContext) 생성
+		4. getBean으로 필요 객체 주입 받고 사용
+	 -->
+	 
+	<!-- 컨테이너의 빈 관리 특성
+	container : 내부에서 관리하는 객체의 생명주기에 대한 관리자 
+	
+		1. 빈들의 생명주기 관리시 해당 이벤트를 처리할 수 있는 콜백 메서드 지정 가능
+			init-method(injection이 완료된 이후 호출되는 callback), 
+			destroy-method
+		2. 특별한 설정(lazy-init)이 없는 한, 등록된 모든 빈의 객체를 컨테이너가 초기화될때 생성
+		
+		3. 특별한 설정(scope)이 없는 한, 등록된 빈은 싱글톤(하나의 빈을 대상으로 한 scope)으로 관리
+			scope = "prototype"은 주입시마다 새로운 객체가 생성되는 구조이면서, 객체 생성 시점을 주입시점을로 미루게됨
+		=> prototype은 lazy-init가 true로 되어있는것과 같음
+		
+		4. 객체의 생성 순서를 직접 제어할 때, depends-on 설정 활용
+		
+	-->
+	<bean id = "sampleOracle" class = "kr.or.ddit.ioc.sample.dao.SampleDAOImpe_oracle"
+		scope="prototype"
+	/>
+	<bean id = "sampleMysql" class = "kr.or.ddit.ioc.sample.dao.SampleDAOImpl_Mysql"
+		depends-on="sampleOracle"
+	/>
+
+	<!-- setter inject 구조 -->
+	<bean id = "sampleService1" class="kr.or.ddit.ioc.sample.service.SampleServiceImpl"
+	>
+	<!-- 자바빈 규약에 의해 setter의 이름을 set과 첫글자를 소문자로 바꿔서 -->
+		<property name="dao" ref="sampleMysql"></property>
+	</bean>
+	
+	<!-- constructor inject 구조 -->
+	<bean id = "sampleService2" class="kr.or.ddit.ioc.sample.service.SampleServiceImpl">
+		<constructor-arg name="dao" ref="sampleOracle"></constructor-arg>
+	</bean>
+	
+	<!-- 
+	test = new SampleServiceImpl();
+	test.setDao(new SampleServiceImpl());
+	<bean id = "test" class="kr.or.ddit.ioc.sample.service.SampleServiceImpl">
+		<property name="dao">
+			<bean class="kr.or.ddit.ioc.sample.dao.SampleDAOImpe_oracle"></bean>
+		</property>
+	</bean>
+	 -->
+	 <!-- setter inject 구조(namespace 사용) -->
+		<!-- ref를 사용하는 이유는 객체를 생성해 놓고 재활용 할수 있기때문 -->
+	<bean id = "sampleService3" class="kr.or.ddit.ioc.sample.service.SampleServiceImpl"
+		p:dao-ref="sampleMysql"
+	/>
+	<!-- constructor inject 구조(namespace 사용) -->
+	<bean id = "sampleService4" class="kr.or.ddit.ioc.sample.service.SampleServiceImpl"
+		c:dao-ref="sampleOracle"
+	/>
+</beans>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
