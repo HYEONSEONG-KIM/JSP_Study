@@ -2,10 +2,21 @@ package kr.or.ddit.ioc.sample.service;
 
 import java.util.Date;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+import javax.annotation.Resource;
+import javax.inject.Inject;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Required;
+import org.springframework.stereotype.Service;
+
 import kr.or.ddit.ioc.sample.dao.ISampleDAO;
 import kr.or.ddit.ioc.sample.dao.SampleDAOFactory;
 import kr.or.ddit.ioc.sample.dao.SampleDAOImpe_oracle;
 
+@Service
 public class SampleServiceImpl implements ISampleService {
 
 	// 1. new 키워드로 의존 객체 직접 생성 -> 결합력 최상(망!!)
@@ -21,19 +32,25 @@ public class SampleServiceImpl implements ISampleService {
 	
 	public SampleServiceImpl() {}
 	
+	
 	public SampleServiceImpl(ISampleDAO dao) {
 		super();
 		this.dao = dao;
 	}
-
+	
+	//@Inject
+	/*@Autowired// 자동으로 의존관계 형성
+	@Qualifier("daoOracle")*/
+	@Resource(name="daoOracle")
+	@Required // 필수 전략객체 일시 필수로 인젝션해야 할때 사용
 	public void setDao(ISampleDAO dao) {
 		this.dao = dao;
 	}
-	
+	@PostConstruct
 	public void init() {
 		System.out.println(getClass().getSimpleName() + "초기화, injected dao : " + dao);
 	}
-	
+	@PreDestroy
 	public void destroy() {
 		System.out.println(getClass().getSimpleName() + "소멸");
 	}

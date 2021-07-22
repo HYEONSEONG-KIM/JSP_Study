@@ -1,5 +1,8 @@
 package kr.or.ddit.ioc.sample.dao;
 
+import org.springframework.stereotype.Repository;
+
+@Repository("daoOracle")
 public class SampleDAOImpe_oracle implements ISampleDAO {
 
 	@Override
