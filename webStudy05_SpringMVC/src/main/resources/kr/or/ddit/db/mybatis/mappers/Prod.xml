@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.ddit.prod.dao.ProdDAO">
+
+
+	<resultMap type="ProdVO" id="prodMap" autoMapping="true">
+		<id property="prodId" column="PROD_ID"/>
+		
+	<!-- 	<association property="buyer" autoMapping="true">
+			<id property="buyerId" column="BUYER_ID"/>
+		</association> -->
+		
+		<collection property="memberList" javaType="java.util.List" ofType="MemberVO" autoMapping="true">
+			<id property="memId" column="MEM_ID"/>
+		</collection>
+	
+	</resultMap>
+	
+	<select id="selectProd" parameterType="string" resultMap="prodMap">
+		<!-- MY -->
+			<!-- WITH MEMINFO AS
+		(SELECT DISTINCT MEM_ID, MEM_HP, MEM_MAIL, MEM_MILEAGE, CART_PROD
+		FROM MEMBER A LEFT OUTER JOIN CART B ON A.MEM_ID = B.CART_MEMBER)
+		,PRODINFO AS
+		(
+		SELECT PROD_ID, PROD_NAME, PROD_COST,C.LPROD_NM , B.BUYER_NAME, B.BUYER_ADD1, B.BUYER_CHARGER, B.BUYER_COMTEL, B.BUYER_ID
+		FROM PROD A INNER JOIN BUYER B ON A.PROD_BUYER = B.BUYER_ID
+		    INNER JOIN LPROD C ON A.PROD_LGU = C.LPROD_GU)
+		SELECT MEM_ID, MEM_HP, MEM_MAIL, MEM_MILEAGE, PRODINFO.*
+		FROM MEMINFO INNER JOIN PRODINFO ON MEMINFO.CART_PROD = PRODINFO.PROD_ID
+		WHERE PRODINFO.PROD_ID = #{prod_id} -->
+	<!-- alias에서 ""로 묶으면 has a관계에 따로  association 설정하지 않아도됨
+		alias에서 클래스명.타입명 으로 설정
+	-->
+	WITH CARTMEM AS(
+		SELECT DISTINCT CART_PROD,
+			MEM_ID, MEM_NAME, MEM_HP, MEM_MAIL, MEM_MILEAGE
+		FROM CART INNER JOIN MEMBER ON(CART_MEMBER = MEM_ID)
+	), PRODALL AS (
+		SELECT
+			PROD_ID,  PROD_NAME,  PROD_LGU,  PROD_BUYER,
+			PROD_COST,  PROD_PRICE,  PROD_SALE,  PROD_OUTLINE,
+			PROD_DETAIL,  PROD_IMG,  PROD_TOTALSTOCK,  
+			TO_CHAR(PROD_INSDATE, 'YYYY-MM-DD') PROD_INSDATE,
+			PROD_PROPERSTOCK,  PROD_SIZE,  PROD_COLOR,  PROD_DELIVERY,
+			PROD_UNIT,  PROD_QTYIN,  PROD_QTYSALE,  PROD_MILEAGE,
+			LPROD_NM,  
+			BUYER_NAME "buyer.buyerName", BUYER_CHARGER "buyer.buyerCharger", BUYER_ADD1 "buyer.buyAdd1" 
+		FROM PROD INNER JOIN LPROD ON (PROD_LGU = LPROD_GU)
+		INNER JOIN BUYER ON (PROD_BUYER = BUYER_ID)
+	)
+	SELECT PRODALL.*, CARTMEM.*
+	FROM PRODALL LEFT OUTER JOIN CARTMEM ON (PROD_ID = CART_PROD)
+	WHERE PROD_ID = #{prod_id}
+		
+	
+	</select>
+	
+	
+	<sql id="sameCondition">
+		FROM PROD INNER JOIN LPROD ON (PROD_LGU = LPROD_GU)
+	              INNER JOIN BUYER ON (PROD_BUYER = BUYER_ID)
+		<trim prefix=" WHERE " prefixOverrides="AND">
+			<if test="detailSearch != null">
+				<if test="@org.apache.commons.lang3.StringUtils@isNotBlank(detailSearch.prodLgu)">
+					AND PROD_LGU = #{detailSearch.prodLgu} 
+				</if>
+				<if test="@org.apache.commons.lang3.StringUtils@isNotBlank(detailSearch.prodBuyer)">
+					AND PROD_BUYER = #{detailSearch.prodBuyer} 
+				</if>
+				<if test="@org.apache.commons.lang3.StringUtils@isNotBlank(detailSearch.prodName)">
+					AND INSTR(PROD_NAME, #{detailSearch.prodName}) > 0 
+				</if>
+			</if>
+		</trim>
+	</sql>
+
+	<select id="selectTotalRecord" parameterType="PagingVO" resultType="int">
+		SELECT COUNT(*)
+		<include refid="sameCondition" />
+	</select>
+	<select id="selectProdList" parameterType="PagingVO" resultType="ProdVO">
+		WITH PRODALL AS(
+		    SELECT PROD_ID, PROD_NAME, PROD_LGU,
+		        PROD_COST, PROD_PRICE, PROD_MILEAGE, PROD_SALE
+		        , LPROD_NM
+		        , BUYER_NAME "buyer.buyerName"    
+		    <include refid="sameCondition" />
+		    ORDER BY PROD_LGU ASC , PROD_ID DESC
+		)
+		SELECT A.*
+		FROM (
+		    SELECT ROWNUM RNUM, PRODALL.*
+		    FROM PRODALL
+		) A
+		WHERE RNUM BETWEEN #{startRow} AND #{endRow}
+	</select>
+	
+	
+	
+	<insert id="insertProd" parameterType="ProdVO">
+		<!-- selectKey가 실행되어서 prodId가 생성되면 자동으로 prodVO에 셋팅 (order="BEFORE"로 설정되었을시)-->
+		<selectKey order="BEFORE" resultType="string" keyProperty="prodId">
+			SELECT #{prodLgu} || LPAD(NVL(TO_NUMBER(SUBSTR(MAX(PROD_ID),5)),0) + 1,6,0)
+			FROM PROD
+			WHERE PROD_LGU = #{prodLgu}
+				</selectKey>
+		
+			INSERT INTO PROD (
+				PROD_ID, PROD_NAME, PROD_LGU,
+				PROD_BUYER, PROD_COST, PROD_PRICE,
+				PROD_SALE, PROD_OUTLINE, PROD_DETAIL,
+				PROD_IMG, PROD_TOTALSTOCK, PROD_INSDATE,
+				PROD_PROPERSTOCK, PROD_SIZE, PROD_COLOR,
+				PROD_DELIVERY, PROD_UNIT, PROD_QTYIN,
+				PROD_QTYSALE, PROD_MILEAGE
+			) VALUES (
+				#{prodId,jdbcType=VARCHAR},
+				#{prodName,jdbcType=VARCHAR},
+				#{prodLgu,jdbcType=CHAR},
+				#{prodBuyer,jdbcType=CHAR},
+				#{prodCost,jdbcType=NUMERIC},
+				#{prodPrice,jdbcType=NUMERIC},
+				#{prodSale,jdbcType=NUMERIC},
+				#{prodOutline,jdbcType=VARCHAR},
+				#{prodDetail,jdbcType=CLOB},
+				#{prodImg,jdbcType=VARCHAR},
+				#{prodTotalstock,jdbcType=NUMERIC},
+				TO_DATE(#{prodInsdate,jdbcType=DATE}, 'YYYY-MM-DD HH24:MI:SS'),
+				#{prodProperstock,jdbcType=NUMERIC},
+				#{prodSize,jdbcType=VARCHAR},
+				#{prodColor,jdbcType=VARCHAR},
+				#{prodDelivery,jdbcType=VARCHAR},
+				#{prodUnit,jdbcType=VARCHAR},
+				#{prodQtyin,jdbcType=NUMERIC},
+				#{prodQtysale,jdbcType=NUMERIC},
+				#{prodMileage,jdbcType=NUMERIC}
+			)
+				
+		
+		
+	</insert>
+	
+	
+	
+	<update id="updateProd" parameterType="ProdVO">
+			UPDATE PROD
+			SET
+				PROD_NAME = #{prodName,jdbcType=VARCHAR},
+				PROD_COST = #{prodCost,jdbcType=NUMERIC},
+				PROD_PRICE = #{prodPrice,jdbcType=NUMERIC},
+				PROD_SALE = #{prodSale,jdbcType=NUMERIC},
+				PROD_OUTLINE = #{prodOutline,jdbcType=VARCHAR},
+				PROD_DETAIL = #{prodDetail,jdbcType=CLOB},
+				PROD_TOTALSTOCK = #{prodTotalstock,jdbcType=NUMERIC},
+				PROD_PROPERSTOCK = #{prodProperstock,jdbcType=NUMERIC},
+				PROD_SIZE = #{prodSize,jdbcType=VARCHAR},
+				PROD_COLOR = #{prodColor,jdbcType=VARCHAR},
+				PROD_DELIVERY = #{prodDelivery,jdbcType=VARCHAR},
+				PROD_UNIT = #{prodUnit,jdbcType=VARCHAR},
+				PROD_QTYIN = #{prodQtyin,jdbcType=NUMERIC},
+				PROD_QTYSALE = #{prodQtysale,jdbcType=NUMERIC},
+				PROD_MILEAGE = #{prodMileage,jdbcType=NUMERIC}
+				<if test="@org.apache.commons.lang3.StringUtils@isNotBlank(prodImg)">
+					,PROD_IMG = #{prodImg,jdbcType=VARCHAR}
+				</if>
+			WHERE PROD_ID = #{prodId,jdbcType=VARCHAR}
+	
+	
+	</update>
+	
+	
+	<!-- <sql id="searchFrag">
+		<trim prefix="WHERE" prefixOverrides="AND">
+			
+		
+			<if test="detailSearch != null">
+				<if test="@org.apache.commons.lang3.StringUtils@isNotBlank(detailSearch.prodName)">
+						AND INSTR(PROD_NAME, #{detailSearch.prodName}) > 0
+				</if>
+				
+				<if test="@org.apache.commons.lang3.StringUtils@isNotBlank(detailSearch.prodLgu)">
+						AND INSTR(PROD_LGU, #{detailSearch.prodLgu}) > 0
+				</if>
+				
+				<if test="@org.apache.commons.lang3.StringUtils@isNotBlank(detailSearch.prodBuyer)">
+						AND INSTR(PROD_BUYER, #{detailSearch.prodBuyer}) > 0
+				</if>
+			
+			</if>
+		
+		</trim>
+	
+	</sql>
+	
+	
+	<select id="selectTotalRecord" parameterType="pagingVO" resultType="int">
+		SELECT COUNT(*)
+		FROM PROD
+		<include refid="searchFrag"></include>
+	
+	</select>
+	
+	
+	
+	<select id="selectProdList" parameterType="pagingVO" resultType="ProdVO">
+			SELECT A.*
+			FROM 
+			(
+				SELECT ROWNUM RNUM, B.*
+				FROM 
+			(
+				SELECT *
+				FROM PROD
+				<include refid="searchFrag"></include>
+				ORDER BY PROD_INSDATE DESC
+			) B
+			) A
+			WHERE RNUM BETWEEN ${startRow} AND ${endRow}
+	</select>
+	
+	 -->
+	
+
+</mapper>

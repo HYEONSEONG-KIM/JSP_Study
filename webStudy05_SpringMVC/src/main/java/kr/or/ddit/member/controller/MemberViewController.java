@@ -1,0 +1,77 @@
+package kr.or.ddit.member.controller;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.UUID;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import kr.or.ddit.commons.UserNotFoundExcpetion;
+import kr.or.ddit.enumtype.MimeType;
+import kr.or.ddit.member.service.MemberService;
+import kr.or.ddit.member.service.MemberServiceImpl;
+import kr.or.ddit.vo.MemberVO;
+import oracle.sql.BLOB;
+
+/**
+ *	POJO(Plain Old Java Object 
+ *
+ */
+public class MemberViewController{
+
+	private MemberService service = MemberServiceImpl.getInstance();
+	private static final Logger logger = LoggerFactory.getLogger(MemberViewController.class);
+
+	public String view(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		
+		
+		String accept = req.getHeader("accept");
+		
+		String contentType = MimeType.findMimetext(accept);
+		resp.setContentType(contentType);
+		
+		// 파라미터 받기
+		String memId = req.getParameter("who");
+		// 검증(에러시 400번대 에러)
+		int status = 200;
+		String msg = null;
+		
+		MemberVO member = null;
+		
+		if(StringUtils.isBlank(memId)) {
+			status = HttpServletResponse.SC_BAD_REQUEST;
+			msg = "잘못된 파라미터 입니다";
+			resp.sendError(status);
+			return null;
+		}else {
+			// DB에서 회원 가져오기 (에러시 에러처리)
+			
+			try {
+				// spoke
+				member = service.retrieveMember(memId);
+				req.setAttribute("member", member);
+				return "member/memberView";
+			}catch(UserNotFoundExcpetion e) {
+				status = 404;
+				msg = e.getMessage();
+				resp.sendError(status);
+				return null;
+			}
+			
+		}
+		
+		
+		
+		
+	}
+}

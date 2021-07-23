@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.ddit.prod.dao.OthersDAO">
+
+	<select id="selectLprodList" resultType="map">
+		SELECT * FROM LPROD
+	</select>
+
+	<select id="selectBuyerList" resultType="BuyerVO">
+		SELECT DISTINCT BUYER_ID, BUYER_NAME, BUYER_LGU FROM buyer ORDER BY 1
+	</select>
+</mapper>
