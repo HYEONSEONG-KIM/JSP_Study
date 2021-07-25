@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.ddit.board.dao.BoardDAO">
+
+
+	<select id="totalRecord" parameterType="kr.or.ddit.board.vo.PagingVO" resultType="int">
+		SELECT COUNT(*) FROM FREEBOARD
+	</select>
+
+	<select id="boardList" parameterType="kr.or.ddit.board.vo.PagingVO" resultType="kr.or.ddit.board.vo.BoardVO">
+		SELECT A.*
+			FROM
+			(
+			    SELECT
+			        ROWNUM rnum, B.*
+			    FROM
+			        (
+			            SELECT
+			            BO_NO,    BO_TITLE,    BO_WRITER,
+			            BO_IP,    BO_MAIL,    BO_PASS,
+			            BO_CONTENT,    BO_DATE,    BO_REP,
+			            BO_HIT,    BO_REC,    BO_PARENT
+			            FROM FREEBOARD
+			            ORDER BY BO_DATE DESC
+			        ) B
+			    )A
+		WHERE rnum BETWEEN #{startRow} AND #{endRow}
+				
+	</select>
+	
+
+</mapper>
