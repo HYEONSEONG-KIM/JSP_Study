@@ -1,102 +1,74 @@
-<%@page import="kr.or.ddit.vo.ProdVO"%>
-<%@page import="java.util.Set"%>
-<%@page import="org.apache.commons.lang3.StringUtils"%>
-<%@page import="kr.or.ddit.vo.MemberVO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>    
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<jsp:include page="/includee/preScript.jsp"></jsp:include>
-
 <title>Insert title here</title>
-<style>
-	table, td, th{
-		border : 1px solid lightgray;
-		border-collapse: collapse;
-		border-spacing: 0px;
-	}
-	td, th{
-		width: 200px;
-		height: 50px;
-	}
-</style>
-
+<jsp:include page="/includee/preScript.jsp" />
+<c:if test="${not empty message }">
+	<script type="text/javascript">
+		alert("${message }");
+	</script>
+	<c:remove var="message" scope="session"/>
+</c:if>
 </head>
 <body>
-<c:if test="${not empty deleteMessage }">
-	<script type="text/javascript">
-		alert("${deleteMessage}");
-	</script>
-	
-	<c:remove var="deleteMessage" scope="session"/>
-
-</c:if>
-
-			<table class="table table-striped">
-
+	<table class="table table-bordered">
 		<tr>
-			<th>회원ID</th>
-			<td>${member.memId } </td>
+			<th>회원 ID</th>
+			<td>${member.memId}</td>
 		</tr>
 		<tr>
-			<th>회원PASS</th>
-			<td>${member.memPass} ></td>
-		</tr>
-		<tr>
-			<th>이름</th>
-			<td>${member.memName}</td>
-		</tr>
-		
-		<tr>
-			<th>프로필 사진</th>
-			<td>
-				<c:if test="${not empty member.base64Img }">
-					<img src = "data:image/*;base64, ${member.base64Img }"/>
+			<th>회원 명</th>
+			<td>${member.memName}
+				<%-- <c:if test="${not empty member.memImg }">
+					<img src="data:image/*;base64,${member.base64Img }"/> 
 				</c:if>
+				<c:if test="${not empty member.memPath }">
+					<img src="${cPath }${memImagesUrl }/${member.memPath }" />
+				</c:if> --%>
 			</td>
 		</tr>
-		
 		<tr>
-			<th>주민번호1</th>
+			<th>주민등록번호1</th>
 			<td>${member.memRegno1}</td>
 		</tr>
 		<tr>
-			<th>주민번호2</th>
+			<th>주민등록번호2</th>
 			<td>${member.memRegno2}</td>
 		</tr>
 		<tr>
-			<th>생년월일</th>
+			<th>생일</th>
 			<td>${member.memBir}</td>
 		</tr>
 		<tr>
-			<th>우편번호</th>
+			<th>우편 번호</th>
 			<td>${member.memZip}</td>
 		</tr>
 		<tr>
-			<th>주소</th>
-			<td><${member.memAdd1}</td>
+			<th>주소1</th>
+			<td>${member.memAdd1}</td>
 		</tr>
 		<tr>
-			<th>상세주소</th>
+			<th>주소2</th>
 			<td>${member.memAdd2}</td>
 		</tr>
 		<tr>
-			<th>집전화</th>
+			<th>집 전화 번호</th>
 			<td>${member.memHometel}</td>
 		</tr>
 		<tr>
-			<th>ㅠㅠ</th>
+			<th>회사 전화 번호</th>
 			<td>${member.memComtel}</td>
 		</tr>
 		<tr>
-			<th>휴대전화</th>
+			<th>이동 전화 번호</th>
 			<td>${member.memHp}</td>
 		</tr>
 		<tr>
-			<th>이메일</th>
+			<th>이메일 주소</th>
 			<td>${member.memMail}</td>
 		</tr>
 		<tr>
@@ -108,19 +80,21 @@
 			<td>${member.memLike}</td>
 		</tr>
 		<tr>
-			<th>비밀번호 질문</th>
+			<th>기념일 명</th>
 			<td>${member.memMemorial}</td>
 		</tr>
 		<tr>
-			<th>해답</th>
+			<th>기념일 날짜</th>
 			<td>${member.memMemorialday}</td>
 		</tr>
 		<tr>
 			<th>마일리지</th>
 			<td>${member.memMileage}</td>
 		</tr>
-		
-
+		<tr>
+			<th>탈퇴 여부</th>
+			<td>${member.memDelete?'탈퇴':''}</td>
+		</tr>
 		<tr>
 			<th>구매기록</th>
 			<td>
@@ -137,95 +111,76 @@
 						</tr>
 					</thead>
 					<tbody>
-								<c:set var="prodList" value="${member.prodList }" ></c:set>
+						<c:set var="prodList" value="${member.prodList }" />
 						<c:choose>
 							<c:when test="${empty prodList }">
 								<tr>
-									<td colspan="7">구매 기록 없음</td>
+									<td colspan="7">구매 기록 없음.</td>
 								</tr>
 							</c:when>
-							
-							
 							<c:otherwise>
-								<%--자동으로 page 스코프에 담김 --%>
-								<c:forEach items="${prodList}" var="prod" >
-									<tr>
+								<c:forEach items="${prodList }" var="prod">
+									<tr class="controlBtn" data-gopage="${pageContext.request.contextPath }/prod/prodView.do?what=${prod.prodId }">
 										<td>${prod.lprodNm}</td>
-										<td>${prod.buyer.buyerName }</td>
-										<td>${prod.buyer.buyerAdd1 }</td>
-										<td>${prod.prodName }</td>
+										<td>${prod.buyer.buyerName}</td>
+										<td>${prod.buyer.buyerAdd1}</td>
+										<td>
+												${prod.prodName}
+										</td>
 										<td>${prod.prodCost}</td>
 										<td>${prod.prodPrice}</td>
 										<td>${prod.prodMileage}</td>
 									</tr>
 								</c:forEach>
-							
 							</c:otherwise>
 						</c:choose>
-						
-					</tbody>				
+					</tbody>
 				</table>
-			
-			
 			</td>
 		</tr>
-		
-		
 		<c:if test="${sessionScope.authMember eq member}">
 			<tr>
 				<td colspan="2">
-					<input type = "button" value = "수정" id = "modify"/>
-					<input type = "button" value = "탈퇴" id = "delete"/>
-					
-					<form method="post" action="<%=request.getContextPath()%>/member/memberDelete.do">
-						<input type = "hidden" name = "memPass"/>
+					<input type="button" value="수정" class="controlBtn btn btn-primary"
+						data-gopage="${pageContext.request.contextPath }/member/memberUpdate.do"
+					/>
+					<input type="button" value="탈퇴" class="controlBtn btn btn-danger"
+						id="deleteBtn"
+					/>
+					<form id="deleteForm" method="post" action="${pageContext.request.contextPath }/member/memberDelete.do">
+						<input type="hidden" name="memPass" />
 					</form>
-				</td>
+					<script>
+						let deleteForm = $("#deleteForm");
+						$("#deleteBtn").on("click", function(event){
+							let memPass = prompt("비밀번호!");
+							if(memPass){
+								deleteForm.get(0).memPass.value = memPass;
+								deleteForm.submit();
+							}
+						});
+						$(".controlBtn").on("click", function(){
+							let gopage = $(this).data("gopage");
+							if(gopage){
+								location.href = gopage;
+							}
+						});		
+					</script>
+	 			</td>
 			</tr>
 		</c:if>
-		
-	
-		
-		
-			</table>
-		
-	
-	
+	</table>
+	<script type="text/javascript">
+		$(".controlBtn").on("click", function(){
+			let gopage = $(this).data("gopage");
+			if(gopage){
+				location.href = gopage;
+			}
+		}).css("cursor", "pointer");
+	</script>
+	<jsp:include page="/includee/footer.jsp" />	
 </body>
-<script type="text/javascript">
-
-	$('#modify').on('click',function(){
-		location.href = "<%=request.getContextPath()%>/member/memberUpdate.do"
-	})
-	
-	$('#delete').on('click',function(){
-		
-		let pass = prompt("패스워드 입력").trim();
-		if(pass == ""){
-			alert("잘못된 입력값 입니다");
-			return;
-		}
-		$('input[name="memPass"]').val(pass)
-		
-		deleteForm.submit();
-	})
-	
-	
-	let deleteForm = $('form').on('submit',function(){
-		
-	})
-	
-</script>
 </html>
-<jsp:include page="/includee/footer.jsp"></jsp:include>
-
-
-
-
-
-
-
-
 
 
 

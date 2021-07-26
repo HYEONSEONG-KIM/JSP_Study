@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -15,33 +17,43 @@ import javax.servlet.http.HttpServletResponse;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
 
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+import org.springframework.core.io.Resource;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.context.WebApplicationContext;
+
 import kr.or.ddit.enumtype.ServiceType;
 import kr.or.ddit.vo.MenuVO;
 import kr.or.ddit.vo.ServiceInfoVO;
 
-@WebServlet(value = "/index.do", loadOnStartup = 1)
-public class IndexServlet extends HttpServlet {
+@Controller
+public class IndexServlet implements ApplicationContextAware {
+	
+	private WebApplicationContext container;
 	private ServletContext application;
 
+	
+	// 자기 자신에 대한 레퍼런스 넣어줌(Inject를 안넣어 준다면)
 	@Override
-	public void init(ServletConfig config) throws ServletException {
-		super.init(config);
-		try (InputStream is = getClass().getResourceAsStream("../serviceInfo.xml");) {
-			application = getServletContext();
-			JAXBContext jaxbContext = JAXBContext.newInstance(ServiceInfoVO.class);
-			Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-			ServiceInfoVO infoVO = (ServiceInfoVO) unmarshaller.unmarshal(is);
-			application.setAttribute("serviceInfo", infoVO);
-		} catch (Exception e) {
-			throw new ServletException(e);
-		}
-
+	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+		this.container = (WebApplicationContext) applicationContext;
+		application = container.getServletContext();
 	}
+	
+	
 
-	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-		String service = req.getParameter("service");
+	@RequestMapping("/index.do")
+	public String index(
+		@RequestParam(required = false)	String service,
+			Model model
+			){
+
 		ServiceInfoVO infoVO = (ServiceInfoVO) application.getAttribute("serviceInfo");
 
 		List<MenuVO> menuList = infoVO.getMenuList();
@@ -60,19 +72,11 @@ public class IndexServlet extends HttpServlet {
 			if (index != -1) {
 				MenuVO searched = menuList.get(index);
 				contentPage = searched.getLink();
-			} else {
-				status = 404;
-				errMsg = String.format("%s 서비스는 제공 불가", service);
 			}
 		}
-		if (status == 200) {
-			String dest = "/WEB-INF/views/template.jsp";
-			req.setAttribute("contentsPage", contentPage);
-			req.getRequestDispatcher(dest).forward(req, resp);
-		} else {
-			resp.sendError(status, errMsg);
-		}
-
+		// definitions에 el에 전달해 주기 위해
+		model.addAttribute("contentsPage", contentPage);
+		return "index";
 		/*
 		 * if(service == null || service.isEmpty()) { service = "INDEX"; }
 		 * 
@@ -87,4 +91,6 @@ public class IndexServlet extends HttpServlet {
 		 */
 
 	}
+
+	
 }

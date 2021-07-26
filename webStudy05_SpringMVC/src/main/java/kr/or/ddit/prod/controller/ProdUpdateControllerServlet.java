@@ -14,9 +14,14 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.Errors;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -40,88 +45,56 @@ public class ProdUpdateControllerServlet {
 	private OthersDAO othersDAO;
 	
 	
+	@ModelAttribute("prodLguList")
+	public List<Map<String, Object>> prodLguList(){
+		List<Map<String, Object>> prodLguList = othersDAO.selectLprodList();
+		return prodLguList;
+	}
+	
+	@ModelAttribute("buyerList")
+	public List<BuyerVO> buyerList(){
+		List<BuyerVO> buyerList = othersDAO.selectBuyerList();
+		return buyerList;
+	}
+	
+	
+	
 	@GetMapping
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	protected String doGet
+		(	@RequestParam("what") String prodId,
+			Model model
+			){
 		
 		
 		String viewName = "prod/prodInsert";
-		String prodId = req.getParameter("what");
 		
-		ProdVO prod = null;
-		
+		ProdVO prod = service.retrieveProd(prodId);
 	
+	
+		model.addAttribute("prod", prod);
 		
-		if(StringUtils.isBlank(prodId)) {
-			resp.sendError(400,"필수 파라미터 누락");
-			return;
-		}
-		
-		
-		try {
-			prod = service.retrieveProd(prodId);
-		}catch (DataNotFoundException e) {
-			resp.sendError(500,e.getMessage());
-		}
-		
-		
-		List<Map<String, Object>> prodLguList = othersDAO.selectLprodList();
-		List<BuyerVO> buyerList = othersDAO.selectBuyerList();
-		
-		req.setAttribute("prod", prod);
-		req.setAttribute("prodLguList", prodLguList);
-		req.setAttribute("buyerList", buyerList);
-		
-		
-		
-		if(viewName.startsWith("redirect:")) {
-			viewName  = viewName.substring("redirect:".length());
-			resp.sendRedirect(req.getContextPath() + viewName);
-			
-		}else {
-			String prefix = "/WEB-INF/views/";
-			String suffix = ".jsp";
-			req.getRequestDispatcher(prefix + viewName + suffix).forward(req, resp);
-		}
-		
+		return viewName;
 		
 	}
 	
 	@PostMapping
-	protected void doPost(
-			@RequestPart(value = "prodImage",required = false) MultipartFile prodImage,
-			HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	protected String doPost(
+			@Validated(UpdateGroup.class) @ModelAttribute("prod") ProdVO prod,
+			Errors errors,
+			HttpServletRequest req, 
+			HttpServletResponse resp
+			) throws ServletException, IOException {
 		
-		ProdVO prod = new ProdVO();
-		
-			prod.setProdImage(prodImage);
-		
-		
-		try {
-			BeanUtils.populate(prod, req.getParameterMap());
-		} catch (IllegalAccessException | InvocationTargetException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		System.out.println(prod.getProdId());
-		List<Map<String, Object>> prodLguList = othersDAO.selectLprodList();
-		List<BuyerVO> buyerList = othersDAO.selectBuyerList();
-		
-		Map<String, List<String>> errors = new HashMap<String, List<String>>();
 		
 		req.setAttribute("prod", prod);
-		req.setAttribute("prodLguList", prodLguList);
-		req.setAttribute("buyerList", buyerList);
+		
 		req.setAttribute("errors", errors);
 		
-		
-		ValidatorUtils<ProdVO> utils = new ValidatorUtils<>();
-		
-		boolean valid = utils.validate(prod, errors, UpdateGroup.class);
 		
 		String viewName = null;
 		String message = null;
 		
-		if(!valid) {
+		if(errors.hasErrors()) {
 			viewName = "prod/prodInsert"; 
 		}else {
 			try {
@@ -141,16 +114,8 @@ public class ProdUpdateControllerServlet {
 			
 		}
 		
-		
-		if(viewName.startsWith("redirect:")) {
-			viewName  = viewName.substring("redirect:".length());
-			resp.sendRedirect(req.getContextPath() + viewName);
-			
-		}else {
-			String prefix = "/WEB-INF/views/";
-			String suffix = ".jsp";
-			req.getRequestDispatcher(prefix + viewName + suffix).forward(req, resp);
-		}
+		return viewName;
+	
 		
 	}
 }

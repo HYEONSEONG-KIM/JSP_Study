@@ -11,6 +11,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import kr.or.ddit.commons.exception.DataNotFoundException;
@@ -55,6 +56,7 @@ public class ProdServiceImpl implements ProdService {
 	
 	// 차후에 spring을 이용하면, AOP 방법론에 따라 Platform transaction Maneger 를 이용하여 해결
 	@Override
+	@Transactional
 	public ServiceResult createProd(ProdVO prod) {
 		// ---> 트랜잭션 시작, sqlSession open
 		
@@ -100,6 +102,7 @@ public class ProdServiceImpl implements ProdService {
 		
 	}
 
+	@Transactional
 	@Override
 	public ServiceResult modifyProd(ProdVO prod) {
 		

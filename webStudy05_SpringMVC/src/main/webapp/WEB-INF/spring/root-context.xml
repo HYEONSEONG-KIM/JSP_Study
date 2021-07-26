@@ -8,10 +8,11 @@
 		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.3.xsd">
 
 	<context:component-scan base-package="kr.or.ddit">
+		<context:include-filter type="annotation" expression="org.aspectj.lang.annotation.Aspect"/>
 		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
 		<context:exclude-filter type="annotation" expression="org.springframework.web.bind.annotation.ControllerAdvice"/>
-		
 	</context:component-scan>
 
+	<!-- 파일경로 하드코딩하지 않기위해 상위 컨테이너에 등록 -->
 	<util:properties id = "appInfo" location="classpath:kr/or/ddit/appInfo.properties"></util:properties>
 </beans>

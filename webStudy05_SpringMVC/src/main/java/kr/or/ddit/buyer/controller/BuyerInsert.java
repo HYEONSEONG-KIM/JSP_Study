@@ -1,29 +1,21 @@
-package kr.or.ddit.buyer.controller;
+/*package kr.or.ddit.buyer.controller;
 
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.multipart.MultipartFile;
 
 import kr.or.ddit.buyer.service.buyerService;
 import kr.or.ddit.buyer.service.buyerServiceImpl;
 import kr.or.ddit.enumtype.ServiceResult;
-import kr.or.ddit.multipart.MultipartFile;
-import kr.or.ddit.mvc.annotation.RequestMethod;
-import kr.or.ddit.mvc.annotation.stereotype.Controller;
-import kr.or.ddit.mvc.annotation.stereotype.RequestMapping;
-import kr.or.ddit.mvc.resolvers.ModelAttribute;
-import kr.or.ddit.mvc.resolvers.RequestPart;
 import kr.or.ddit.prod.dao.OthersDAO;
 import kr.or.ddit.prod.dao.OthersDAOImpl;
 import kr.or.ddit.utils.ValidatorUtils;
@@ -91,3 +83,4 @@ public class BuyerInsert {
 
 	
 }
+*/

@@ -28,13 +28,18 @@
 		c:realDataSource-ref="realDataSource"
 	/>
 	
+	<!-- 트랜잭션 관리자 등록 -->
 	<bean id= "transactionManager" class = "org.springframework.jdbc.datasource.DataSourceTransactionManager"
 		p:dataSource-ref="dataSource"
 	/>
 	
+	<!-- CamelCase 설정  -->
 	<bean id = "configuration" class = "org.apache.ibatis.session.Configuration"
 		p:mapUnderscoreToCamelCase="true"
 	/>
+	
+	<!-- sqlSessionFactory객체를 등록하여 setter주입을 통해 db자원등록, 
+	mapper에 대한 경로 설정, TypeAlias 경로 설정, configuration설정 -->
 	
 	<bean id = "sqlSessionFactory" class = "org.mybatis.spring.SqlSessionFactoryBean"
 		p:dataSource-ref="dataSource"
@@ -43,6 +48,8 @@
 		p:configuration-ref="configuration"
 	/>
 	
+	<!-- sqlSessionFactory 객체를 sqlSession에 주입 -> dao를 직접 구현하기 않는 한 자동으로 
+		sqlSession 관리 -->
 	<bean id = "sqlSession" class="org.mybatis.spring.SqlSessionTemplate"
 		c:sqlSessionFactory-ref="sqlSessionFactory"
 	/>

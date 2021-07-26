@@ -21,8 +21,11 @@
 		p:validationMessageSource-ref="messageSource"
 	/>
 	
+	<!-- 정적 자원을 읽어들이기 위해 등록 -->
 	<resources location="/resources/" mapping="/resources/**" cache-period="0"></resources>
 	
+	
+	<!-- View Resolver -->
 	<!-- 이녀석은 없으면 바로 404...그래서 뒷순서로!! -->
 	<beans:bean id = "IRVR" class = "org.springframework.web.servlet.view.InternalResourceViewResolver"
 		p:prefix="/WEB-INF/views/"
@@ -34,7 +37,6 @@
 		p:order="1"
 	/>
 	
-	
 	<beans:bean id = "downloadView" class= "kr.or.ddit.board.view.DownloadView"/>
 
 	<!-- 타일즈의 xml읽어줌 -->
@@ -45,6 +47,7 @@
 	<beans:bean id = "TVR"  class = "org.springframework.web.servlet.view.tiles3.TilesViewResolver"
 		p:order="2"
 	/>
+	
 	
 	<!-- 어댑터가 이 id로 사용해야 하므로 무조건!! -->
 	<beans:bean id = "multipartResolver" class = "org.springframework.web.multipart.support.StandardServletMultipartResolver" />

@@ -1,9 +1,13 @@
 package kr.or.ddit.commons;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
 /**
  *	인증처리 하는 과정에서 사용자가 존재하지 않을때 발생시킬 예외 
  * 
  */
+@ResponseStatus(code= HttpStatus.NOT_FOUND)
 public class UserNotFoundExcpetion extends RuntimeException{
 
 	public UserNotFoundExcpetion() {

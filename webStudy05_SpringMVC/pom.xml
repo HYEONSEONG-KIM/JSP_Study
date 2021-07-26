@@ -251,6 +251,14 @@
 		<version>1.9.6</version>
 	</dependency>
 	
+	<!-- ================================= -->
+	<dependency>
+    <groupId>org.apache.tiles</groupId>
+    <artifactId>tiles-el</artifactId>
+    <version>3.0.8</version>
+  </dependency>
+	
+	
 	
   </dependencies>
   

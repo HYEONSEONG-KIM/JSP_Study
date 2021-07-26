@@ -1,4 +1,4 @@
-package kr.or.ddit.buyer.dao;
+/*package kr.or.ddit.buyer.dao;
 
 import java.util.List;
 
@@ -79,3 +79,4 @@ public class BuyerDAOImpl implements BuyerDAO {
 	
 
 }
+*/

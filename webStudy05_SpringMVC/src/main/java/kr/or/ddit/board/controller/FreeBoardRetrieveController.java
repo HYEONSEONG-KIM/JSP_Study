@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.aop.support.AopUtils;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,8 +25,12 @@ import kr.or.ddit.vo.pagingVO;
 @Controller
 public class FreeBoardRetrieveController {
 	
-	@Inject
 	private FreeBoardService service;
+	@Inject
+	public void setService(FreeBoardService service) {
+		this.service = service;
+		System.err.printf("%s, proxy 여부 : %b\n",service.getClass().getName(), AopUtils.isAopProxy(service));
+	}
 	private static final Logger logger = LoggerFactory.getLogger(FreeBoardRetrieveController.class);
 	
 	

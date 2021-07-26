@@ -39,6 +39,20 @@ public class ProdInsertController{
 	
 	Logger logger = LoggerFactory.getLogger(ProdInsertController.class);
 	
+	@ModelAttribute("prodLguList")
+	public List<Map<String, Object>> prodLguList(){
+		List<Map<String, Object>> prodLguList = othersDAO.selectLprodList();
+		return prodLguList;
+	}
+	
+	@ModelAttribute("buyerList")
+	public List<BuyerVO> buyerList(){
+		List<BuyerVO> buyerList = othersDAO.selectBuyerList();
+		return buyerList;
+	}
+	
+	
+	
 	@GetMapping
 	public String form(HttpServletRequest req) {
 		
@@ -51,8 +65,6 @@ public class ProdInsertController{
 		
 		return "prod/prodInsert";
 		
-		
-		
 	}
 	
 	
@@ -62,11 +74,6 @@ public class ProdInsertController{
 			Errors errors,
 			HttpServletRequest req) {
 
-
-		
-		
-		
-		
 		
 		
 		String viewName = null;
@@ -86,11 +93,6 @@ public class ProdInsertController{
 				break;
 
 			default:
-				List<Map<String, Object>> prodLguList = othersDAO.selectLprodList();
-				List<BuyerVO> buyerList = othersDAO.selectBuyerList();
-				
-				req.setAttribute("prodLguList", prodLguList);
-				req.setAttribute("buyerList", buyerList);
 				
 				viewName = "prod/prodInsert";
 				message = "등록에 실패하였습니다. 잠시 후 다시 시도해 주세요";

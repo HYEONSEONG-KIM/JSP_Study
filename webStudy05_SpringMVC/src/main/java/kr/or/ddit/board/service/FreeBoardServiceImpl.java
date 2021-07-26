@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import kr.or.ddit.board.dao.AttatchDAO;
 import kr.or.ddit.board.dao.FreeBoardDAO;
@@ -25,6 +26,7 @@ import kr.or.ddit.vo.FreeBoardVO;
 import kr.or.ddit.vo.pagingVO;
 import lombok.extern.slf4j.Slf4j;
 
+//AOP 개발자 본인이 작업해야 할 기능만 신경쓰면 된다는 개념..
 @Service
 @Slf4j
 public class FreeBoardServiceImpl implements FreeBoardService {
@@ -56,6 +58,7 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 		
 		try {
 			for(AttatchVO attatch : attatchList) {
+				if(1==1) throw new RuntimeException("트랜잭션 관리 여부 확인용 강제발생 예외");
 				attatch.saveToBinary(saveFolder);
 			}
 			return rowcnt;
@@ -105,8 +108,8 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 		
 	}
 	
-	
-	
+	// 이거 하나로 끝나는거!! -> 선언적 프로그래밍
+	@Transactional
 	@Override
 	public ServiceResult createBoard(FreeBoardVO board) {
 		
@@ -156,6 +159,7 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 		return board;
 	}
 
+	@Transactional
 	@Override
 	public ServiceResult modifyBoard(FreeBoardVO board) {
 
@@ -197,6 +201,7 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 
 
 
+	@Transactional
 	@Override
 	public ServiceResult removeBoard(FreeBoardVO board) {
 		

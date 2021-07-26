@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.inject.Inject;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -18,15 +19,21 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import kr.or.ddit.member.service.AuthenticateService;
 import kr.or.ddit.member.service.AuthenticateServiceImpl;
 import kr.or.ddit.vo.MemberVO;
 
-@WebServlet("/login/loginCheck.do")
-public class LoginCheckServlet extends HttpServlet {
+@Controller
+public class LoginCheckServlet {
 
-	private AuthenticateService service = new AuthenticateServiceImpl();
+	@Inject
+	private AuthenticateService service;
 	
 	private boolean validate(MemberVO param, Map<String, String> errors) {
 		boolean valid = true;
@@ -53,18 +60,22 @@ public class LoginCheckServlet extends HttpServlet {
 	}
 	
 	
-	@Override
-	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	@RequestMapping("/login/loginCheck.do")
+	public String login(
+			@RequestParam("mem_id") String id ,
+			@RequestParam("mem_pass") String pass,
+			Model model, 
+			HttpSession session,
+			RedirectAttributes redirectAttributes
+			) {
 		
-		//1. 파라미터 확보
-		String id = req.getParameter("mem_id");
-		String pass = req.getParameter("mem_pass");
+		
 		
 		//2. 검증
-		HttpSession session = req.getSession();
 		Map<String, String> errors = new HashMap<String, String>();
 		
 		MemberVO param = new MemberVO(id,pass);
+		System.out.println(param);
 		
 		boolean vaild = validate(param, errors);
 		String goPage = null;
@@ -100,26 +111,21 @@ public class LoginCheckServlet extends HttpServlet {
 					//	2) 실패 : login form page로 이동
 					goPage = "/login/loginForm.jsp";
 					redirect = true;
-					session.setAttribute("message", "비밀번호 오류");
-					session.setAttribute("failId", id);
+					redirectAttributes.addFlashAttribute("message", "비밀번호 오류");
 					
 				}
 			}catch(UserNotFoundExcpetion e) {
 				goPage = "/login/loginForm.jsp";
 				redirect = true;
-				session.setAttribute("message", e.getMessage());
+				redirectAttributes.addFlashAttribute("message", e.getMessage());
 			}
 			
 		
 		}
 		
-		if(redirect) {
-			resp.sendRedirect(req.getContextPath() + goPage);
-		}else {
-			RequestDispatcher rd = req.getRequestDispatcher(goPage);
-			rd.forward(req, resp);
-		}
-	
+		model.addAttribute("contentsPage", goPage);
+		return "index";
+		
 		
 	}
 	

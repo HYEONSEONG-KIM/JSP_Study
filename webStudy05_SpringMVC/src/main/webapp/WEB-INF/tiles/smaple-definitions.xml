@@ -26,4 +26,12 @@
     <put-attribute name="content" value="/WEB-INF/views/member/{1}.jsp" />
   </definition>
 
+	<definition name="index" extends="abstractParent">
+		<put-attribute name="content" expression="${contentsPage}"></put-attribute>
+	</definition>
 </tiles-definitions>
+
+
+
+
+

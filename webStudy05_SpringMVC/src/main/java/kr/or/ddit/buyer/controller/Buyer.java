@@ -4,25 +4,23 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import kr.or.ddit.buyer.service.buyerService;
 import kr.or.ddit.buyer.service.buyerServiceImpl;
 import kr.or.ddit.commons.exception.DataNotFoundException;
-import kr.or.ddit.mvc.annotation.stereotype.Controller;
-import kr.or.ddit.mvc.annotation.stereotype.RequestMapping;
-import kr.or.ddit.mvc.resolvers.RequestParam;
 import kr.or.ddit.vo.BuyerVO;
 import kr.or.ddit.vo.pagingVO;
 
-@Controller
+//@Controller
 public class Buyer {
 
 	private buyerService service = buyerServiceImpl.getInstance();
