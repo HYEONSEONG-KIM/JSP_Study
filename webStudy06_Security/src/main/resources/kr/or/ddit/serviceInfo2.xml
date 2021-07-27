@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<serviceInfo>
+
+	<folder>
+
+		<menuList>
+			<menu>
+				<code>STANDARD</code>
+				<link>/02/standard.jsp</link>
+				<text>표준JSP</text>
+			</menu>
+			
+			<menu>
+				<code>CALENDAR</code>
+				<link>/04/calendarTea.jsp</link>
+				<text>달력</text>
+			</menu>
+			
+			<menu>
+				<code>FACTORIAL</code>
+				<link>/05/factorial.jsp</link>
+				<text>팩토리얼연산</text>
+			</menu>
+			
+			<menu>
+				<code>CALCULATOR</code>
+				<link>/10/calculator.jsp</link>
+				<text>5칙연산기</text>
+			</menu>
+		</menuList>
+		
+		
+		<menuList>
+			<menu>
+				<code>STANDARD</code>
+				<link>/02/standard.jsp</link>
+				<text>표준JSP</text>
+			</menu>
+			
+			<menu>
+				<code>CALENDAR</code>
+				<link>/04/calendarTea.jsp</link>
+				<text>달력</text>
+			</menu>
+			
+			<menu>
+				<code>FACTORIAL</code>
+				<link>/05/factorial.jsp</link>
+				<text>팩토리얼연산</text>
+			</menu>
+			
+			<menu>
+				<code>CALCULATOR</code>
+				<link>/10/calculator.jsp</link>
+				<text>5칙연산기</text>
+			</menu>
+		</menuList>
+		
+	</folder>
+</serviceInfo>
