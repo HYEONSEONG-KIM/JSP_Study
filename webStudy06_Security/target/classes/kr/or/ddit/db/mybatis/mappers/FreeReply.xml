@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.ddit.board.dao.FreeReplyDAO">
+	
+	<select id="totalReplyRecored" parameterType="int" resultType="int">
+		SELECT COUNT(*) FROM FREEREPLY WHERE BO_NO = #{boNo}
+	</select>
+	
+	<select id="boardReplyList" resultType="kr.or.ddit.vo.FreeReplyVO" parameterType="kr.or.ddit.vo.pagingVO">
+		SELECT * 
+		FROM
+		(
+		    SELECT
+		        ROWNUM rnum, A.*
+		        FROM(
+		            SELECT
+		               *
+		            FROM
+		                FREEREPLY
+                    WHERE BO_NO = #{boNo}
+                    ORDER BY REP_DATE DESC
+		         ) A
+		)
+		WHERE rnum BETWEEN #{startRow} AND #{endRow}
+	</select>
+	
+	
+	<select id="selectReply" parameterType="int" resultType="kr.or.ddit.vo.FreeReplyVO">
+		SELECT * FROM FREEREPLY
+		WHERE REP_NO = #{rep_no}
+	</select>
+
+	<insert id="insertBoardReply" parameterType="kr.or.ddit.vo.FreeBoardVO">
+		<selectKey order="BEFORE" keyProperty="repNo" resultType="int">
+			SELECT REPLY_RENUM_SEQ.NEXTVAL FROM DUAL
+		</selectKey>
+		
+		INSERT INTO FREEREPLY (
+   			REP_NO,    BO_NO,    REP_CONTENT,
+    		REP_WRITER,    REP_MAIL,    REP_PASS,    REP_DATE
+    		 <if test="repParent != null and repParent gt 0">
+    		,REP_PARENT
+		    </if>
+		) VALUES (
+				#{repNo,jdbcType=NUMERIC},
+				#{boNo,jdbcType=NUMERIC},
+				#{repContent,jdbcType=VARCHAR},
+				#{repWriter,jdbcType=VARCHAR},
+				#{repMail,jdbcType=VARCHAR},
+				#{repPass,jdbcType=VARCHAR},
+				SYSDATE
+
+			 <if test="repParent != null and repParent gt 0">
+			,#{repParent,jdbcType=NUMERIC}
+		    </if>
+			
+		)
+	</insert>
+	
+	<delete id="deleteBoardReply" parameterType="int">
+		DELETE FROM FREEREPLY
+		WHERE REP_NO = #{repNo}
+	</delete>
+
+</mapper>
