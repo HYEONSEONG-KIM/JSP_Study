@@ -25,6 +25,11 @@ public class pagingVO<T>{
 	private int endRow;
 	private int startPage;
 	private int endPage;
+	private int boNo;
+	
+	public void setBoNo(int boNo) {
+		this.boNo = boNo;
+	}
 	
 	private SearchVO simpleSearch; // 단순 키워드 검색
 

@@ -19,6 +19,7 @@ import kr.or.ddit.vo.AttatchVO;
 public class DownloadView extends org.springframework.web.servlet.view.AbstractView {
 
 	private static final String DISPOSITION = "Content-Disposition";
+	//appInfo properties 파일에 파일 다운로드 할 경로 설정 후 사용
 	@Value("#{appInfo.attatchPath}")
 	private String uploadPath;
 	

@@ -40,6 +40,7 @@ public class FreeReplyController {
 			@RequestParam(required = false, defaultValue = "1") int page
 			) {
 		pagingVO<FreeReplyVO> paging = new pagingVO<>(3,3);
+		paging.setBoNo(boNo);
 		paging.setCurrentPage(page);
 		service.retrieveReply(paging, boNo);
 		
