@@ -90,6 +90,39 @@ public class pagingVO<T>{
 		
 		return html.toString();
 	}
+	
+	public String getPagingHTMLPlus() {
+//		<a href = "?page=1"></a>
+		StringBuffer html = new StringBuffer();
+		System.out.println(totalPage);
+		System.out.println(currentPage);
+		if(totalPage == currentPage) {
+			return null;
+		}else {
+			html.append("<input type ='button' class = 'nextReply' data-page = '" + (currentPage+1) + "' value = '더보기'>");
+		}
+		
+	/*	if(startPage > 1) {
+			html.append(String.format(LINKPTRN, startPage-1, "◀"));
+		}
+		
+		endPage = endPage > totalPage? totalPage : endPage;
+		for(int page = startPage; page <= endPage; page++) {
+			if(currentPage == page) {
+				html.append("<span class = 'btn btn-dark'>" + page+"</span>");
+			}else {
+				html.append(String.format(LINKPTRN, page, page));
+			}
+		}
+		if(endPage < totalPage) {
+			html.append(String.format(LINKPTRN, endPage + 1, "▶"));
+		}*/
+		
+		return html.toString();
+	}
+	
+	
+	
 }
 
 

@@ -122,7 +122,13 @@
 		
 	</table>
 	<div id= "replyArea">
-	</div>	
+	</div>
+	<div id = "replyPagingArea">
+	</div>
+	
+
+	
+	
 	
 	<form id = "replyrForm">
 		
@@ -172,11 +178,18 @@
 		<input type = "hidden" name = "type" id = "type">
 		
 	</form>
+	
 	<form name = "deleteForm" action="${cPath}/board/boardDelete.do" method="post">
 		<input type = "hidden" name = "boNo" value = "${freeboard.boNo}" required>
 		<input type = "hidden" name = "boPass" required>
 		
 	</form>
+	
+	<form id = "replyView" action="${cPath}/reply/">
+		
+	
+	</form>
+	
 
 	<div style="display:none" class = "replyList">
 		<table>
@@ -206,13 +219,16 @@
 	
 	const REPLYFORM = $('.replyList');
 	let replyArea = $('#replyArea');
+	let replyPagingArea = $('#replyPagingArea')
 	
-	function replyList(){
+	
+	function replyList(page){
 		
 		let url = "${cPath}/reply/";
 		let boNo = ${freeboard.boNo};
 		let data = {
-				'boNo' : boNo
+				'boNo' : boNo,
+				'page' : page
 		}
 		 $.ajax({
 			url : url,
@@ -220,7 +236,7 @@
 			dataType : "json",
 			success : function(resp) {
 				
-				replyArea.empty();
+				replyPagingArea.empty();
 				
 				let reply = []
 				let tables = []
@@ -234,13 +250,19 @@
 					newReplyForm.show();
 					tables.push(newReplyForm);
 				})
-					replyArea.html(tables);
-				
+					replyArea.append(tables);
+					replyPagingArea.append(resp.pagingHTMLPlus);
 				}
 			});
 	}
 	
 	replyList();
+	
+	replyPagingArea.on('click','.nextReply', function(){
+		let replyPage = $(this).data('page');
+		replyList(replyPage);
+		
+	})
 	
 	
 	let replyrForm = $('#replyrForm');
